@@ -67,14 +67,17 @@ function getDatabasePoolConfig(): {
     "";
 
   const connectionString = raw.trim().replace(/\.+$/, "");
+  const isLocal =
+    connectionString.includes("localhost") ||
+    connectionString.includes("127.0.0.1");
+
   let uri = connectionString;
 
   if (uri && !uri.includes("sslmode=")) {
     const separator = uri.includes("?") ? "&" : "?";
-    uri = `${uri}${separator}sslmode=require`;
+    uri = `${uri}${separator}${isLocal ? "sslmode=disable" : "sslmode=require"}`;
   }
 
-  const isLocal = uri.includes("localhost") || uri.includes("127.0.0.1");
   const needsSsl = Boolean(uri) && !isLocal;
 
   return {
