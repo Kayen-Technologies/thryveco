@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+/*
+ * ============================================================
+ * THRYVE CO. — Design System
+ * Source: Figma file 6X4FDZeL0ux7dY4zucMhe5
+ * ============================================================
+ *
+ * Color Palette:
+ *   Primary    Burgundy    #6B0F1A
+ *   Accent     Gold        #C9A96E
+ *   Background Cream       #F5EFE0
+ *   Surface    White       #FFFFFF
+ *   Text       Near-black  #1C1B1A
+ *   Muted      Grey        #929292
+ *
+ * Typography:
+ *   Heading    → Playfair Display (400, 500, 600, 700 — italic variants)
+ *   Body       → Open Sans (400, 600)
+ *   Decorative → Pinyon Script (large quotes)
+ *
+ * ============================================================
+ */
+
+@theme {
+  /* ── Brand Colors ───────────────────────────────────────── */
+  --color-primary:       #6B0F1A;   /* burgundy — hero, quote band, footer */
+  --color-primary-dark:  #3D0710;   /* deeper burgundy for hover states */
+  --color-accent:        #C9A96E;   /* gold — hero emphasis, highlights */
+  --color-accent-dark:   #A8854A;   /* gold hover */
+
+  --color-bg:            #F5EFE0;   /* cream — main page background */
+  --color-bg-surface:    #FFFFFF;   /* cards, buttons, panels */
+  --color-bg-warm:       #FCFAF7;   /* light text on dark sections */
+
+  --color-text:          #1C1B1A;   /* headlines, body on light */
+  --color-text-muted:    #929292;   /* supporting copy, captions */
+  --color-text-on-dark:  #FCFAF7;   /* text on burgundy/dark backgrounds */
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-heading:        'Playfair Display', Georgia, serif;
+  --font-body:           'Open Sans', system-ui, sans-serif;
+  --font-decorative:     'Pinyon Script', cursive;
+
+  /* ── Font Sizes (fluid, Figma-derived) ──────────────────── */
+  --text-display:        clamp(3rem,   6vw, 6rem);    /* hero / giant text */
+  --text-h1:             clamp(2.25rem, 4vw, 4rem);
+  --text-h2:             clamp(1.75rem, 2.5vw, 2.75rem);
+  --text-h3:             clamp(1.25rem, 1.5vw, 1.75rem);
+  --text-lead:           1.25rem;
+  --text-body:           1rem;
+  --text-sm:             0.875rem;
+  --text-xs:             0.75rem;
+
+  /* ── Letter Spacing ─────────────────────────────────────── */
+  --tracking-heading:    -0.01em;
+  --tracking-caps:        0.08em;   /* uppercase labels */
+
+  /* ── Spacing / Layout ────────────────────────────────────── */
+  --spacing-container-x: 56px;
+  --spacing-section-y:   120px;
+  --spacing-section-gap: 80px;
+  --spacing-gap-xs:       8px;
+  --spacing-gap-sm:      16px;
+  --spacing-gap-md:      32px;
+  --spacing-gap-lg:      64px;
+  --spacing-gap-xl:      96px;
+
+  /* ── Border Radius ───────────────────────────────────────── */
+  --radius-pill:         100px;   /* buttons */
+  --radius-card:          12px;   /* image cards */
+  --radius-input:          8px;   /* form inputs */
+
+  /* ── Breakpoints ─────────────────────────────────────────── */
+  --breakpoint-xs:       375px;
+  --breakpoint-sm:       640px;
+  --breakpoint-md:       768px;
+  --breakpoint-lg:      1024px;
+  --breakpoint-xl:      1280px;
+  --breakpoint-2xl:     1440px;
+
+  /* ── Motion ─────────────────────────────────────────────── */
+  --ease-out-expo:       cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast:       150ms;
+  --duration-base:       300ms;
+  --duration-slow:       600ms;
+}
+
+/* ── Base ────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography ─────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  letter-spacing: var(--tracking-heading);
+  line-height: 1.2;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-decorative {
+  font-family: var(--font-decorative);
+}
+
+/* ── Rich text (Lexical output) ─────────────────────────────── */
+.prose-thryve p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.prose-thryve h2,
+.prose-thryve h3,
+.prose-thryve h4 {
+  font-family: var(--font-heading);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.prose-thryve ul,
+.prose-thryve ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose-thryve li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-thryve a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ── Layout Utilities ───────────────────────────────────────── */
+.container-x {
+  padding-inline: var(--spacing-container-x);
+}
+
+@media (max-width: 767px) {
+  .container-x {
+    padding-inline: 24px;
+  }
+}
+
+.section-y {
+  padding-block-start: var(--spacing-section-y);
+}
+
+/* ── Brand Sections ─────────────────────────────────────────── */
+.bg-primary-section {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-dark);
+}
+
+.bg-cream-section {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.bg-surface-section {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text);
+}
+
+/* ── Marquee Animation ──────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+.marquee-container:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}

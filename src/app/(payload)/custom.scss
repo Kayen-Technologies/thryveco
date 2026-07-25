@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Open+Sans:wght@400;600&display=swap");
+@import "~@payloadcms/ui/scss";
+
+@layer payload {
+  :root,
+  html[data-theme="light"] {
+    --theme-bg:              #f5efe0;
+    --theme-text:            #1c1b1a;
+    --theme-input-bg:        #ffffff;
+    --theme-border-color:    #e2d9c9;
+    --theme-elevation-800:   #1c1b1a;
+    --theme-elevation-500:   #929292;
+    --theme-elevation-400:   #b0a090;
+    --theme-elevation-150:   #e2d9c9;
+    --theme-elevation-100:   #faf6ee;
+    --theme-elevation-0:     #ffffff;
+    --theme-success-500:     #6b0f1a;
+    --theme-success-600:     #3d0710;
+    --font-body:             "Open Sans", system-ui, sans-serif;
+  }
+
+  html {
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Login page */
+  .template-minimal {
+    background: linear-gradient(160deg, #f5efe0 0%, #efe5d0 100%);
+  }
+
+  .template-minimal__wrap {
+    max-width: 480px;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Primary buttons → burgundy */
+  .form-submit button,
+  .btn.btn--style-primary,
+  a.btn.btn--style-primary,
+  button.btn.btn--style-primary,
+  button[type="submit"] {
+    --color:            #ffffff;
+    --bg-color:         #6b0f1a;
+    --hover-bg:         #3d0710;
+    --hover-color:      #ffffff;
+    --btn-border:       1px solid #6b0f1a;
+    --hover-btn-border: 1px solid #3d0710;
+
+    background-color: var(--bg-color) !important;
+    border-radius: 999px !important;
+    color: var(--color) !important;
+    font-weight: 600;
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+
+    &:hover:not(:disabled):not(.btn--disabled),
+    &:focus-visible:not(:disabled):not(.btn--disabled) {
+      background-color: var(--hover-bg) !important;
+      border-color: #3d0710 !important;
+      box-shadow: 0 4px 12px rgba(107, 15, 26, 0.2);
+      color: var(--hover-color) !important;
+    }
+  }
+
+  /* Secondary buttons */
+  .btn.btn--style-secondary,
+  a.btn.btn--style-secondary,
+  button.btn.btn--style-secondary {
+    --color:            #6b0f1a;
+    --bg-color:         #ffffff;
+    --hover-bg:         #faf0e6;
+    --hover-color:      #3d0710;
+    --btn-border:       1px solid #6b0f1a;
+    --hover-btn-border: 1px solid #3d0710;
+
+    background-color: var(--bg-color) !important;
+    border-radius: 999px !important;
+    color: var(--color) !important;
+    font-weight: 600;
+    transition: background-color 150ms ease, border-color 150ms ease;
+
+    &:hover:not(:disabled):not(.btn--disabled),
+    &:focus-visible:not(:disabled):not(.btn--disabled) {
+      background-color: var(--hover-bg) !important;
+      border-color: #3d0710 !important;
+      color: var(--hover-color) !important;
+    }
+  }
+
+  /* Form inputs */
+  .field-type.email input,
+  .field-type.password input,
+  .field-type.text input,
+  .field-type.number input,
+  .field-type textarea textarea,
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    background: #ffffff !important;
+    border: 1px solid #e2d9c9 !important;
+    border-radius: 8px !important;
+    color: #1c1b1a !important;
+    min-height: 44px;
+
+    &:hover:not(:disabled) {
+      border-color: #6b0f1a !important;
+    }
+
+    &:focus,
+    &:focus-visible {
+      border-color: #6b0f1a !important;
+      box-shadow: 0 0 0 3px rgba(107, 15, 26, 0.12) !important;
+      outline: none;
+    }
+  }
+
+  .field-type .field-label,
+  label.field-label {
+    color: #1c1b1a;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .field-type .field-description {
+    color: #929292;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .required {
+    color: #6b0f1a;
+  }
+
+  /* Dashboard */
+  .dashboard {
+    background: #f5efe0;
+  }
+
+  .collections__card-list .card {
+    background: #ffffff !important;
+    border: 1px solid #e2d9c9 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+
+    &:hover {
+      border-color: #6b0f1a !important;
+      box-shadow: 0 4px 12px rgba(107, 15, 26, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .card__title {
+      color: #1c1b1a !important;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  /* Sidebar nav */
+  .nav {
+    background: #ffffff;
+    border-right: 1px solid #e2d9c9;
+
+    a, .nav__link {
+      color: #1c1b1a;
+
+      &:hover, &.active {
+        color: #6b0f1a;
+      }
+    }
+  }
+
+  /* App header */
+  .app-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2d9c9;
+  }
+}
