@@ -185,35 +185,36 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Create case studies that appear on /works and /works/[slug].
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
 export interface Work {
   id: number;
+  /**
+   * Project name (e.g. Casa Muse). Slug auto-fills from this.
+   */
   title: string;
   /**
-   * URL-safe identifier (e.g. casa-muse). Used in /works/[slug].
+   * URL path: /works/[slug]
    */
   slug: string;
+  /**
+   * Client or brand name shown on the listing card.
+   */
   client: string;
   /**
-   * Short brand tagline shown on the case study hero.
+   * e.g. Interior Design, Skincare, Fine Jewellery
    */
-  tagline?: string | null;
+  industry?: string | null;
   /**
-   * Service tags shown on the case study card (e.g. Branding, Strategy).
+   * Full-width image at the top of the case study page.
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
   heroImage?: (number | null) | Media;
   /**
-   * Thumbnail shown on the Works listing page.
+   * Introduce the brand. Who they are, what makes them special.
    */
-  coverImage?: (number | null) | Media;
   overview?: {
     root: {
       type: string;
@@ -229,6 +230,9 @@ export interface Work {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * What problem or opportunity brought them to you?
+   */
   problem?: {
     root: {
       type: string;
@@ -244,6 +248,9 @@ export interface Work {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * How did you solve it? Multiple paragraphs welcome.
+   */
   solution?: {
     root: {
       type: string;
@@ -259,13 +266,40 @@ export interface Work {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * List of deliverables (e.g. Brand Strategy, Social Content).
+   */
+  deliverables?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Outcomes and metrics (e.g. 42% engagement increase).
+   */
+  results?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional testimonial quote from the client.
+   */
   feedback?: {
+    /**
+     * The quote text.
+     */
     quote?: string | null;
     /**
-     * Name and role, e.g. Jane D., Founder of CASA MUSE
+     * e.g. Jane D., Founder of Casa Muse
      */
     attribution?: string | null;
   };
+  /**
+   * Images shown in the burgundy gallery section.
+   */
   galleryImages?:
     | {
         image: number | Media;
@@ -273,9 +307,42 @@ export interface Work {
       }[]
     | null;
   /**
-   * Lower numbers appear first on the Works page.
+   * Two images below The Brand section.
+   */
+  brandImages?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Series pill on the case study page.
+   */
+  seriesLabel?: string | null;
+  /**
+   * Tags shown on the /works card.
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Thumbnail for /works listing.
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * Optional short tagline for metadata.
+   */
+  tagline?: string | null;
+  /**
+   * Lower = appears first.
    */
   sortOrder?: number | null;
+  /**
+   * Date shown on the case study page.
+   */
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -300,12 +367,22 @@ export interface JournalPost {
    * Estimated read time in minutes.
    */
   readTime?: number | null;
+  /**
+   * Shown in the meta pill as "By {author}".
+   */
   author?: string | null;
   /**
    * Short summary shown on the Journal listing grid.
    */
   excerpt?: string | null;
+  /**
+   * Subtitle shown below the article title on the post page.
+   */
+  deck?: string | null;
   heroImage?: (number | null) | Media;
+  /**
+   * Write your article here. Supports headings, paragraphs, images, and links.
+   */
   body?: {
     root: {
       type: string;
@@ -321,6 +398,76 @@ export interface JournalPost {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Optional structured layout. Only used if Article Content above is empty.
+   */
+  articleBlocks?:
+    | (
+        | {
+            items?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraphs';
+          }
+        | {
+            heading: string;
+            paragraphs?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'headingGroup';
+          }
+        | {
+            media: number | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'image';
+          }
+        | {
+            /**
+             * Number of images per row
+             */
+            columns?: ('2' | '3' | '4') | null;
+            images?:
+              | {
+                  media: number | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageGrid';
+          }
+        | {
+            /**
+             * Opening sentence in full opacity.
+             */
+            lead: string;
+            /**
+             * Middle sentence shown at reduced opacity.
+             */
+            muted: string;
+            /**
+             * Closing sentence in full opacity.
+             */
+            end: string;
+            ctaLabel: string;
+            ctaHref: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'closingCta';
+          }
+      )[]
+    | null;
   publishedAt: string;
   updatedAt: string;
   createdAt: string;
@@ -476,18 +623,23 @@ export interface WorksSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   client?: T;
-  tagline?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  industry?: T;
   heroImage?: T;
-  coverImage?: T;
   overview?: T;
   problem?: T;
   solution?: T;
+  deliverables?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  results?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
   feedback?:
     | T
     | {
@@ -500,6 +652,21 @@ export interface WorksSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  brandImages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  seriesLabel?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  coverImage?: T;
+  tagline?: T;
   sortOrder?: T;
   publishedAt?: T;
   updatedAt?: T;
@@ -517,8 +684,69 @@ export interface JournalPostsSelect<T extends boolean = true> {
   readTime?: T;
   author?: T;
   excerpt?: T;
+  deck?: T;
   heroImage?: T;
   body?: T;
+  articleBlocks?:
+    | T
+    | {
+        paragraphs?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        headingGroup?:
+          | T
+          | {
+              heading?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        image?:
+          | T
+          | {
+              media?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageGrid?:
+          | T
+          | {
+              columns?: T;
+              images?:
+                | T
+                | {
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        closingCta?:
+          | T
+          | {
+              lead?: T;
+              muted?: T;
+              end?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -623,6 +851,10 @@ export interface SiteSetting {
    * Logo for dark/burgundy backgrounds.
    */
   logoDark?: (number | null) | Media;
+  /**
+   * Brand card image shown in the footer lower band.
+   */
+  footerImage?: (number | null) | Media;
   copyrightYear: number;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -649,6 +881,13 @@ export interface HomePage {
     body?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    image?: (number | null) | Media;
+  };
+  marquee?: {
+    /**
+     * Portrait photo used in the scrolling marquee strip.
+     */
+    image?: (number | null) | Media;
   };
   /**
    * Words that scroll across the marquee strip between sections.
@@ -692,6 +931,7 @@ export interface HomePage {
     subtext?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -754,12 +994,23 @@ export interface WorksPage {
   id: number;
   hero?: {
     headline?: string | null;
-    tagline?: string | null;
+    subheadline?: string | null;
+    /**
+     * Decorative backdrop image on the right side of the hero.
+     */
+    heroImage?: (number | null) | Media;
+  };
+  portfolio?: {
+    title?: string | null;
   };
   cta?: {
-    headline?: string | null;
+    topLine?: string | null;
+    topLineAccent?: string | null;
+    bottomLine?: string | null;
+    bottomLineAccent?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    backgroundImage?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -773,6 +1024,10 @@ export interface JournalPage {
   hero?: {
     headline?: string | null;
     tagline?: string | null;
+    image?: (number | null) | Media;
+  };
+  entriesSection?: {
+    title?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -785,7 +1040,11 @@ export interface AboutPage {
   id: number;
   hero?: {
     headline?: string | null;
+    /**
+     * Italic champagne line below the headline.
+     */
     tagline?: string | null;
+    image?: (number | null) | Media;
   };
   founderSection?: {
     headline?: string | null;
@@ -812,23 +1071,14 @@ export interface AboutPage {
     image?: (number | null) | Media;
   };
   founderStory?: {
-    body?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
+    headlineLead?: string | null;
+    headlineMuted?: string | null;
+    headlineEnd?: string | null;
+    paragraphOne?: string | null;
+    paragraphTwo?: string | null;
+    storyImage?: (number | null) | Media;
     /**
-     * Images arranged in the collage grid alongside the story text.
+     * Three images arranged in the staggered collage.
      */
     photos?:
       | {
@@ -842,27 +1092,17 @@ export interface AboutPage {
     attribution?: string | null;
   };
   whatThryve?: {
-    headline?: string | null;
-    body?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
+    intro?: string | null;
+    agencyCopy?: string | null;
+    aspirationCopy?: string | null;
+    image?: (number | null) | Media;
   };
   cta?: {
     headline?: string | null;
+    subtext?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -901,6 +1141,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   logo?: T;
   logoDark?: T;
+  footerImage?: T;
   copyrightYear?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -928,6 +1169,12 @@ export interface HomePageSelect<T extends boolean = true> {
         body?: T;
         ctaLabel?: T;
         ctaHref?: T;
+        image?: T;
+      };
+  marquee?:
+    | T
+    | {
+        image?: T;
       };
   marqueeWords?:
     | T
@@ -970,6 +1217,7 @@ export interface HomePageSelect<T extends boolean = true> {
         subtext?: T;
         ctaLabel?: T;
         ctaHref?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1029,14 +1277,24 @@ export interface WorksPageSelect<T extends boolean = true> {
     | T
     | {
         headline?: T;
-        tagline?: T;
+        subheadline?: T;
+        heroImage?: T;
+      };
+  portfolio?:
+    | T
+    | {
+        title?: T;
       };
   cta?:
     | T
     | {
-        headline?: T;
+        topLine?: T;
+        topLineAccent?: T;
+        bottomLine?: T;
+        bottomLineAccent?: T;
         ctaLabel?: T;
         ctaHref?: T;
+        backgroundImage?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1052,6 +1310,12 @@ export interface JournalPageSelect<T extends boolean = true> {
     | {
         headline?: T;
         tagline?: T;
+        image?: T;
+      };
+  entriesSection?:
+    | T
+    | {
+        title?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1067,6 +1331,7 @@ export interface AboutPageSelect<T extends boolean = true> {
     | {
         headline?: T;
         tagline?: T;
+        image?: T;
       };
   founderSection?:
     | T
@@ -1080,7 +1345,12 @@ export interface AboutPageSelect<T extends boolean = true> {
   founderStory?:
     | T
     | {
-        body?: T;
+        headlineLead?: T;
+        headlineMuted?: T;
+        headlineEnd?: T;
+        paragraphOne?: T;
+        paragraphTwo?: T;
+        storyImage?: T;
         photos?:
           | T
           | {
@@ -1097,15 +1367,19 @@ export interface AboutPageSelect<T extends boolean = true> {
   whatThryve?:
     | T
     | {
-        headline?: T;
-        body?: T;
+        intro?: T;
+        agencyCopy?: T;
+        aspirationCopy?: T;
+        image?: T;
       };
   cta?:
     | T
     | {
         headline?: T;
+        subtext?: T;
         ctaLabel?: T;
         ctaHref?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

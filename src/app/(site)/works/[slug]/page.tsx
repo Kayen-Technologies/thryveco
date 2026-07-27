@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import RichText from "@/components/RichText";
-import { getWork, getWorks } from "@/lib/payload";
+import CaseStudyGallery from "@/components/works/CaseStudyGallery";
+import CaseStudyHero from "@/components/works/CaseStudyHero";
+import CaseStudyListSection from "@/components/works/CaseStudyListSection";
+import CaseStudyQuote from "@/components/works/CaseStudyQuote";
+import CaseStudyTextSection from "@/components/works/CaseStudyTextSection";
+import WorksCta from "@/components/works/WorksCta";
+import { WORKS_DEFAULTS } from "@/components/works/defaults";
+import { getWorksPage, getWork, getWorks } from "@/lib/payload";
+import { resolveCaseStudy } from "@/lib/works/case-study";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -25,73 +32,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function WorkPage({ params }: Props) {
   const { slug } = await params;
-  const work = await getWork(slug);
+  const [work, worksPage] = await Promise.all([getWork(slug), getWorksPage()]);
 
   if (!work) notFound();
 
+  const caseStudy = resolveCaseStudy(work);
+
   return (
-    <main>
-      <section className="bg-cream-section container-x section-y">
-        <p
-          style={{
-            fontSize: "var(--text-xs)",
-            color: "var(--color-text-muted)",
-            textTransform: "uppercase",
-            letterSpacing: "var(--tracking-caps)",
-            marginBottom: "1rem",
-          }}
-        >
-          {work.client}
-        </p>
-        <h1
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontSize: "var(--text-h1)",
-            fontWeight: 500,
-            marginBottom: "1rem",
-          }}
-        >
-          {work.title}
-        </h1>
-        {work.tagline && (
-          <p style={{ fontSize: "var(--text-lead)", color: "var(--color-text-muted)" }}>
-            {work.tagline}
-          </p>
-        )}
-      </section>
+    <main className="case-study-page">
+      <CaseStudyHero
+        title={caseStudy.title}
+        seriesLabel={caseStudy.seriesLabel}
+        publishedLabel={caseStudy.publishedLabel}
+        heroImage={caseStudy.heroImage}
+      />
 
-      {work.overview && (
-        <section className="container-x py-16">
-          <RichText content={work.overview} />
-        </section>
-      )}
+      {caseStudy.brandContent ? (
+        <CaseStudyTextSection
+          title="The Brand"
+          content={caseStudy.brandContent}
+          images={caseStudy.brandImages}
+          className="case-study-section--brand"
+        />
+      ) : null}
 
-      {work.problem && (
-        <section className="bg-surface-section container-x py-16">
-          <h2 className="font-heading mb-6 text-[var(--text-h2)]">The Problem</h2>
-          <RichText content={work.problem} />
-        </section>
-      )}
+      {caseStudy.challengeContent ? (
+        <CaseStudyTextSection title="The Challenge" content={caseStudy.challengeContent} />
+      ) : null}
 
-      {work.solution && (
-        <section className="container-x py-16">
-          <h2 className="font-heading mb-6 text-[var(--text-h2)]">The Solution</h2>
-          <RichText content={work.solution} />
-        </section>
-      )}
+      {caseStudy.approachContent ? (
+        <CaseStudyTextSection title="The Approach" content={caseStudy.approachContent} />
+      ) : null}
 
-      {work.feedback?.quote && (
-        <section className="bg-primary-section container-x py-16">
-          <blockquote className="font-heading max-w-3xl text-2xl italic leading-relaxed text-[var(--color-text-on-dark)]">
-            &ldquo;{work.feedback.quote}&rdquo;
-          </blockquote>
-          {work.feedback.attribution && (
-            <cite className="mt-4 block text-sm not-italic text-[var(--color-text-on-dark)]/80">
-              — {work.feedback.attribution}
-            </cite>
-          )}
-        </section>
-      )}
+      <CaseStudyListSection title="What We Delivered" items={caseStudy.deliverables} variant="spacious" />
+
+      <CaseStudyGallery images={caseStudy.galleryImages} />
+
+      <CaseStudyListSection title="The Results" items={caseStudy.results} variant="results" />
+
+      {caseStudy.quote ? (
+        <CaseStudyQuote quote={caseStudy.quote} attribution={caseStudy.attribution} />
+      ) : null}
+
+      <WorksCta
+        topLine={worksPage?.cta?.topLine ?? WORKS_DEFAULTS.cta.topLine}
+        topLineAccent={worksPage?.cta?.topLineAccent ?? WORKS_DEFAULTS.cta.topLineAccent}
+        bottomLine={worksPage?.cta?.bottomLine ?? WORKS_DEFAULTS.cta.bottomLine}
+        bottomLineAccent={worksPage?.cta?.bottomLineAccent ?? WORKS_DEFAULTS.cta.bottomLineAccent}
+        ctaLabel={worksPage?.cta?.ctaLabel ?? WORKS_DEFAULTS.cta.ctaLabel}
+        ctaHref={worksPage?.cta?.ctaHref ?? WORKS_DEFAULTS.cta.ctaHref}
+      />
     </main>
   );
 }

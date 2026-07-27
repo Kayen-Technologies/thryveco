@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Button from "@/components/Button";
 
 export default function NotFound() {
   return (
@@ -10,12 +10,12 @@ export default function NotFound() {
       <p className="mb-8 max-w-md text-[var(--color-text-muted)]">
         The page you&apos;re looking for doesn&apos;t exist or may have moved.
       </p>
-      <Link
+      <Button
         href="/"
-        className="inline-flex h-[50px] items-center justify-center rounded-[var(--radius-pill)] bg-[var(--color-primary)] px-8 text-sm font-semibold text-[var(--color-text-on-dark)]"
+        variant="inverse"
       >
         Back to home
-      </Link>
+      </Button>
     </main>
   );
 }

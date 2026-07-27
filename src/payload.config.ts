@@ -108,6 +108,7 @@ export default buildConfig({
   db: postgresAdapter({
     pool: getDatabasePoolConfig(),
     push: false,
+    blocksAsJSON: true,
   }),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN

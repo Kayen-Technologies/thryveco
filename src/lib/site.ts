@@ -22,6 +22,7 @@ export type SiteConfig = {
   copyrightYear: number;
   logoUrl?: string;
   logoDarkUrl?: string;
+  footerImageUrl?: string;
 };
 
 export const site: SiteConfig = {
@@ -50,4 +51,6 @@ export const site: SiteConfig = {
     { label: "About", href: "/about" },
   ],
   copyrightYear: 2026,
+  logoUrl: "/assets/home/nav-monogram-dark.svg",
+  logoDarkUrl: "/assets/home/nav-monogram.svg",
 };

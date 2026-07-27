@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 
 import { isAdmin } from "@/access/isAdmin";
 import { publicOrPublished } from "@/access/publicOrPublished";
+import { journalArticleBlocks } from "@/collections/blocks/journalArticleBlocks";
 
 export const JournalPosts: CollectionConfig = {
   slug: "journal-posts",
@@ -56,13 +57,23 @@ export const JournalPosts: CollectionConfig = {
     {
       name: "author",
       type: "text",
-      defaultValue: "Michelle Teschmaker",
+      defaultValue: "Thryve & Co.",
+      admin: {
+        description: 'Shown in the meta pill as "By {author}".',
+      },
     },
     {
       name: "excerpt",
       type: "textarea",
       admin: {
         description: "Short summary shown on the Journal listing grid.",
+      },
+    },
+    {
+      name: "deck",
+      type: "textarea",
+      admin: {
+        description: "Subtitle shown below the article title on the post page.",
       },
     },
     {
@@ -73,7 +84,20 @@ export const JournalPosts: CollectionConfig = {
     {
       name: "body",
       type: "richText",
-      label: "Article Body",
+      label: "Article Content",
+      admin: {
+        description: "Write your article here. Supports headings, paragraphs, images, and links.",
+      },
+    },
+    {
+      name: "articleBlocks",
+      type: "blocks",
+      label: "Structured Blocks (Advanced)",
+      blocks: journalArticleBlocks,
+      admin: {
+        description: "Optional structured layout. Only used if Article Content above is empty.",
+        initCollapsed: true,
+      },
     },
     {
       name: "publishedAt",

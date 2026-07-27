@@ -24,7 +24,29 @@ export const JournalPage: GlobalConfig = {
           type: "text",
           defaultValue: "Thoughts, perspective & a little creative obsession.",
         },
-        { name: "tagline", type: "textarea" },
+        {
+          name: "tagline",
+          type: "textarea",
+          defaultValue:
+            "We write about the things we care about aesthetics, strategy, social media, and everything happening in the creative world around us. Pull up a seat.",
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
+      ],
+    },
+    {
+      name: "entriesSection",
+      type: "group",
+      label: "Entries Section",
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          defaultValue: "Journal Entry",
+        },
       ],
     },
   ],

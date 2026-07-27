@@ -31,5 +31,12 @@ export function getMediaUrl(
     return undefined;
   }
 
-  return normalizeMediaUrl(media.url);
+  const url = normalizeMediaUrl(media.url);
+  if (!url) return undefined;
+
+  // Bust Next.js image optimizer cache when CMS media is replaced in place.
+  const version = media.updatedAt ?? String(media.id);
+  const separator = url.includes("?") ? "&" : "?";
+
+  return `${url}${separator}v=${encodeURIComponent(version)}`;
 }

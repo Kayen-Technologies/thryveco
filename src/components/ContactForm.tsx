@@ -2,6 +2,8 @@
 
 import { useState, type FormEvent } from "react";
 
+import Button from "@/components/Button";
+
 type FormData = {
   name: string;
   email: string;
@@ -140,13 +142,14 @@ export default function ContactForm() {
         />
       </div>
 
-      <button
+      <Button
+        variant="inverse"
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex h-[50px] items-center justify-center self-start rounded-[var(--radius-pill)] bg-[var(--color-primary)] px-10 text-sm font-semibold uppercase tracking-[var(--tracking-caps)] text-[var(--color-text-on-dark)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+        className="self-start"
       >
         {status === "submitting" ? "Sending..." : "Send Message"}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -19,8 +19,24 @@ export const AboutPage: GlobalConfig = {
       type: "group",
       label: "Hero",
       fields: [
-        { name: "headline", type: "text", defaultValue: "About Thryve Co." },
-        { name: "tagline", type: "textarea" },
+        {
+          name: "headline",
+          type: "text",
+          defaultValue: "We're not here to fit in",
+        },
+        {
+          name: "tagline",
+          type: "text",
+          defaultValue: "We never were",
+          admin: {
+            description: "Italic champagne line below the headline.",
+          },
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
       ],
     },
     {
@@ -54,16 +70,42 @@ export const AboutPage: GlobalConfig = {
       label: "Founder Story Section",
       fields: [
         {
-          name: "body",
-          type: "richText",
-          label: "Story Body",
+          name: "headlineLead",
+          type: "text",
+          defaultValue: "It started, like ",
+        },
+        {
+          name: "headlineMuted",
+          type: "text",
+          defaultValue: "most good things do, with a camera and a ",
+        },
+        {
+          name: "headlineEnd",
+          type: "text",
+          defaultValue: "lot of curiosity.",
+        },
+        {
+          name: "paragraphOne",
+          type: "textarea",
+          label: "Story Paragraph 1",
+        },
+        {
+          name: "paragraphTwo",
+          type: "textarea",
+          label: "Story Paragraph 2",
+        },
+        {
+          name: "storyImage",
+          type: "upload",
+          relationTo: "media",
+          label: "Story Portrait",
         },
         {
           name: "photos",
           type: "array",
           label: "Photo Collage",
           admin: {
-            description: "Images arranged in the collage grid alongside the story text.",
+            description: "Three images arranged in the staggered collage.",
           },
           fields: [
             {
@@ -85,7 +127,7 @@ export const AboutPage: GlobalConfig = {
         {
           name: "attribution",
           type: "text",
-          defaultValue: "Michelle Teschmaker",
+          defaultValue: "Michelle Teschmaker, Founder & Creative Director",
         },
       ],
     },
@@ -95,13 +137,24 @@ export const AboutPage: GlobalConfig = {
       label: "What Thryve Means",
       fields: [
         {
-          name: "headline",
-          type: "text",
-          defaultValue: "What Thryve Means",
+          name: "intro",
+          type: "textarea",
+          label: "Intro Paragraph",
         },
         {
-          name: "body",
-          type: "richText",
+          name: "agencyCopy",
+          type: "textarea",
+          label: "Agency Paragraph",
+        },
+        {
+          name: "aspirationCopy",
+          type: "textarea",
+          label: "Aspiration Paragraph",
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
         },
       ],
     },
@@ -113,10 +166,20 @@ export const AboutPage: GlobalConfig = {
         {
           name: "headline",
           type: "text",
-          defaultValue: "Ready to build something together?",
+          defaultValue: "Ready to build a brand people remember?",
         },
-        { name: "ctaLabel", type: "text", defaultValue: "Book a Call" },
+        {
+          name: "subtext",
+          type: "text",
+          defaultValue: "Beautiful brands start here",
+        },
+        { name: "ctaLabel", type: "text", defaultValue: "Book A Discovery Call" },
         { name: "ctaHref", type: "text", defaultValue: "/contact" },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
       ],
     },
   ],

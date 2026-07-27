@@ -55,6 +55,7 @@ function mapSiteSettings(doc: SiteSetting | null): SiteConfig {
     copyrightYear: doc.copyrightYear ?? fallback.copyrightYear,
     logoUrl: getMediaUrl(doc.logo),
     logoDarkUrl: getMediaUrl(doc.logoDark),
+    footerImageUrl: getMediaUrl(doc.footerImage),
   };
 }
 

@@ -74,17 +74,37 @@ export const HomePage: GlobalConfig = {
         {
           name: "ctaLabel",
           type: "text",
-          defaultValue: "Our Studio",
+          defaultValue: "Book a Discovery Call",
         },
         {
           name: "ctaHref",
           type: "text",
-          defaultValue: "/studio",
+          defaultValue: "/contact",
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
         },
       ],
     },
 
     // ── Marquee ───────────────────────────────────────────────────
+    {
+      name: "marquee",
+      type: "group",
+      label: "Marquee",
+      fields: [
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          admin: {
+            description: "Portrait photo used in the scrolling marquee strip.",
+          },
+        },
+      ],
+    },
     {
       name: "marqueeWords",
       type: "array",
@@ -137,7 +157,7 @@ export const HomePage: GlobalConfig = {
         {
           name: "headline",
           type: "text",
-          defaultValue: "Brands We've Built",
+          defaultValue: "Every brand has a story. We make sure it's one worth remembering.",
         },
         {
           name: "works",
@@ -160,7 +180,7 @@ export const HomePage: GlobalConfig = {
         {
           name: "quote",
           type: "textarea",
-          defaultValue: "Good brands are built. Great brands are Thryved.",
+          defaultValue: "Growth should look as good as it performs.",
         },
         {
           name: "attribution",
@@ -203,12 +223,17 @@ export const HomePage: GlobalConfig = {
         {
           name: "ctaLabel",
           type: "text",
-          defaultValue: "Book a Call",
+          defaultValue: "Book A Discovery Call",
         },
         {
           name: "ctaHref",
           type: "text",
           defaultValue: "/contact",
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
         },
       ],
     },

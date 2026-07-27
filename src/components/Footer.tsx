@@ -3,41 +3,51 @@ import Link from "next/link";
 
 import { getSiteSettings } from "@/lib/cms/site-settings";
 
+const FOOTER_LOGO_FALLBACK = "/assets/footer/logo-ampersand.svg";
+const FOOTER_BRAND_CARD_FALLBACK = "/assets/footer/brand-card.jpg";
+
+const SOCIAL_ICONS: Record<string, string> = {
+  Instagram: "/assets/footer/social-instagram.svg",
+  TikTok: "/assets/footer/social-tiktok.svg",
+};
+
 export default async function Footer() {
   const site = await getSiteSettings();
+  const brandCardSrc = site.footerImageUrl ?? FOOTER_BRAND_CARD_FALLBACK;
 
   return (
-    <footer className="bg-[var(--color-primary)] text-[var(--color-text-on-dark)]">
-      <div className="container-x py-24">
-        <div className="mx-auto max-w-[900px] text-center">
-          {site.logoDarkUrl ? (
-            <Image
-              src={site.logoDarkUrl}
-              alt={site.siteName}
-              width={96}
-              height={103}
-              className="mx-auto mb-8 h-[103px] w-auto object-contain"
-            />
-          ) : (
-            <p className="font-decorative mb-8 text-6xl text-[var(--color-accent)]">
-              &amp;
-            </p>
-          )}
-          <p className="font-heading text-[clamp(2rem,4vw,4rem)] leading-tight">
-            {site.tagline}
-          </p>
+    <footer className="site-footer">
+      <div className="site-footer__hero">
+        <Image
+          src={FOOTER_LOGO_FALLBACK}
+          alt={site.siteName}
+          width={96}
+          height={103}
+          className="site-footer__logo"
+        />
+        <p className="site-footer__tagline">{site.tagline}</p>
+      </div>
+
+      <div className="site-footer__divider" aria-hidden="true" />
+
+      <div className="site-footer__lower">
+        <div className="site-footer__brand-card">
+          <Image
+            src={brandCardSrc}
+            alt=""
+            fill
+            sizes="(max-width: 767px) 100vw, 295px"
+            className="site-footer__brand-card-image"
+          />
         </div>
 
-        <div className="mx-auto mt-20 grid max-w-[900px] gap-12 md:grid-cols-3">
-          <div>
-            <p className="mb-8 text-xl font-semibold">Menu</p>
-            <ul className="space-y-6 text-xl">
+        <div className="site-footer__columns">
+          <div className="site-footer__column">
+            <p className="site-footer__column-title">Menu</p>
+            <ul className="site-footer__list">
               {site.footerLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="transition-opacity hover:opacity-80"
-                  >
+                  <Link href={link.href} className="site-footer__link">
                     {link.label}
                   </Link>
                 </li>
@@ -45,22 +55,19 @@ export default async function Footer() {
             </ul>
           </div>
 
-          <div>
-            <p className="mb-8 text-xl font-semibold">Get In Touch</p>
-            <ul className="space-y-6 text-xl">
+          <div className="site-footer__column">
+            <p className="site-footer__column-title">Get In Touch</p>
+            <ul className="site-footer__list">
               <li>{site.location}</li>
               <li>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="transition-opacity hover:opacity-80"
-                >
+                <a href={`mailto:${site.email}`} className="site-footer__link">
                   {site.email}
                 </a>
               </li>
               <li>
                 <a
                   href={`tel:${site.phone.replace(/\s/g, "")}`}
-                  className="transition-opacity hover:opacity-80"
+                  className="site-footer__link"
                 >
                   {site.phone}
                 </a>
@@ -68,20 +75,29 @@ export default async function Footer() {
             </ul>
           </div>
 
-          <div>
-            <p className="mb-8 text-xl font-semibold">Socials</p>
-            <ul className="space-y-4">
+          <div className="site-footer__column site-footer__column--socials">
+            <p className="site-footer__column-title">Socials</p>
+            <ul className="site-footer__social-list">
               {site.socialLinks.map((social) => (
                 <li key={social.label}>
                   <a
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-full bg-[var(--color-bg-surface)] py-1 pl-3 pr-1 text-base text-[var(--color-text)]"
+                    className="site-footer__social-pill"
                   >
                     <span>{social.label}</span>
-                    <span className="flex size-7 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs text-white">
-                      ↗
+                    <span className="site-footer__social-icon" aria-hidden="true">
+                      {SOCIAL_ICONS[social.label] ? (
+                        <Image
+                          src={SOCIAL_ICONS[social.label]}
+                          alt=""
+                          width={14}
+                          height={14}
+                        />
+                      ) : (
+                        <span>↗</span>
+                      )}
                     </span>
                   </a>
                 </li>
@@ -89,14 +105,18 @@ export default async function Footer() {
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="mx-auto mt-20 flex max-w-[900px] flex-col gap-4 border-t border-white/20 pt-8 text-sm opacity-70 md:flex-row md:items-center md:justify-between">
-          <Link href="/terms">Terms of Service</Link>
-          <p>
-            © {site.copyrightYear} {site.siteName} All rights reserved
-          </p>
-          <Link href="/privacy">Privacy Policy</Link>
-        </div>
+      <div className="site-footer__legal">
+        <Link href="/terms" className="site-footer__legal-link">
+          Terms of Service
+        </Link>
+        <p className="site-footer__copyright">
+          © {site.copyrightYear} {site.siteName} All rights reserved
+        </p>
+        <Link href="/privacy" className="site-footer__legal-link">
+          Privacy Policy
+        </Link>
       </div>
     </footer>
   );

@@ -41,7 +41,10 @@ function emptyPaginated<T>(): Paginated<T> {
 async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try {
     return await fn();
-  } catch {
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("[payload] CMS query failed:", error);
+    }
     return fallback;
   }
 }

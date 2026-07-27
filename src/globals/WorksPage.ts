@@ -24,17 +24,74 @@ export const WorksPage: GlobalConfig = {
           type: "text",
           defaultValue: "Good brands are built. Great brands are Thryved.",
         },
-        { name: "tagline", type: "textarea" },
+        {
+          name: "subheadline",
+          type: "textarea",
+          defaultValue:
+            "A collection of brands we've helped find their voice, their aesthetic, and their people.",
+        },
+        {
+          name: "heroImage",
+          type: "upload",
+          relationTo: "media",
+          admin: {
+            description: "Decorative backdrop image on the right side of the hero.",
+          },
+        },
+      ],
+    },
+    {
+      name: "portfolio",
+      type: "group",
+      label: "Portfolio Section",
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          defaultValue: "Brands We've Built",
+        },
       ],
     },
     {
       name: "cta",
       type: "group",
-      label: "CTA",
+      label: "CTA Section",
       fields: [
-        { name: "headline", type: "text", defaultValue: "Let's build something great." },
-        { name: "ctaLabel", type: "text", defaultValue: "Book a Call" },
-        { name: "ctaHref", type: "text", defaultValue: "/contact" },
+        {
+          name: "topLine",
+          type: "text",
+          defaultValue: "READY TO BUILD A BRAND",
+        },
+        {
+          name: "topLineAccent",
+          type: "text",
+          defaultValue: "PEOPLE REMEMBER?",
+        },
+        {
+          name: "bottomLine",
+          type: "text",
+          defaultValue: "BEAUTIFUL BRANDS",
+        },
+        {
+          name: "bottomLineAccent",
+          type: "text",
+          defaultValue: "START HERE",
+        },
+        {
+          name: "ctaLabel",
+          type: "text",
+          defaultValue: "Book A Discovery Call",
+        },
+        {
+          name: "ctaHref",
+          type: "text",
+          defaultValue: "/contact",
+        },
+        {
+          name: "backgroundImage",
+          type: "upload",
+          relationTo: "media",
+        },
       ],
     },
   ],

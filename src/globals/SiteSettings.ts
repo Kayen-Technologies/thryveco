@@ -23,7 +23,7 @@ export const SiteSettings: GlobalConfig = {
     {
       name: "tagline",
       type: "text",
-      defaultValue: "Your Brand's New Creative Friend",
+      defaultValue: "Making brands feel as good as they look.",
     },
     {
       name: "location",
@@ -32,7 +32,7 @@ export const SiteSettings: GlobalConfig = {
     },
     {
       name: "email",
-      type: "email",
+      type: "text",
       defaultValue: "hello@thryve&co.agency",
     },
     {
@@ -107,6 +107,14 @@ export const SiteSettings: GlobalConfig = {
       relationTo: "media",
       admin: {
         description: "Logo for dark/burgundy backgrounds.",
+      },
+    },
+    {
+      name: "footerImage",
+      type: "upload",
+      relationTo: "media",
+      admin: {
+        description: "Brand card image shown in the footer lower band.",
       },
     },
     {

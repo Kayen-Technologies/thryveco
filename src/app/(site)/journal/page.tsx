@@ -1,10 +1,45 @@
 import type { Metadata } from "next";
+
+import JournalEntriesSection from "@/components/journal/JournalEntriesSection";
+import type { JournalEntryCardData } from "@/components/journal/JournalEntryCard";
+import JournalHero from "@/components/journal/JournalHero";
+import { JOURNAL_DEFAULTS, type JournalMediaSrc } from "@/components/journal/defaults";
+import { getMediaUrl } from "@/lib/cms/media";
 import { getJournalPage, getJournalPosts } from "@/lib/payload";
+import type { JournalPost, Media } from "@/payload-types";
 
 export const metadata: Metadata = {
   title: "Journal",
   description: "Thoughts, perspective & a little creative obsession.",
 };
+
+function mediaSource(
+  media: number | Media | null | undefined,
+  fallback: JournalMediaSrc,
+): JournalMediaSrc {
+  const src = getMediaUrl(media);
+
+  if (!src || !media || typeof media === "number") return fallback;
+
+  return { src, alt: media.alt };
+}
+
+function mapPost(post: JournalPost): JournalEntryCardData {
+  const fallbackPost = JOURNAL_DEFAULTS.posts.find((entry) => entry.slug === post.slug);
+  const fallbackImage = fallbackPost?.image ?? {
+    src: "/assets/journal/journal-post-01.jpg",
+    alt: post.title,
+  };
+
+  return {
+    slug: post.slug,
+    title: post.title,
+    category: post.category,
+    readTime: post.readTime,
+    excerpt: post.excerpt ?? fallbackPost?.excerpt ?? "",
+    image: mediaSource(post.heroImage, fallbackImage),
+  };
+}
 
 export default async function JournalPage() {
   const [page, { docs: posts }] = await Promise.all([
@@ -12,67 +47,20 @@ export default async function JournalPage() {
     getJournalPosts(),
   ]);
 
-  return (
-    <main>
-      <section className="bg-cream-section container-x section-y">
-        <h1
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontSize: "var(--text-h1)",
-            fontWeight: 500,
-            maxWidth: "700px",
-          }}
-        >
-          {page?.hero?.headline ?? "Thoughts, perspective & a little creative obsession."}
-        </h1>
-      </section>
+  const entries = posts.map((post) => mapPost(post));
 
-      {posts.length > 0 && (
-        <section className="container-x" style={{ paddingBlock: "var(--spacing-section-gap)" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-              gap: "var(--spacing-gap-md)",
-            }}
-          >
-            {posts.map((post) => (
-              <a
-                key={post.id}
-                href={`/journal/${post.slug}`}
-                style={{
-                  display: "block",
-                  background: "var(--color-bg-surface)",
-                  borderRadius: "var(--radius-card)",
-                  padding: "2rem",
-                  textDecoration: "none",
-                  color: "var(--color-text)",
-                  border: "1px solid #e2d9c9",
-                }}
-              >
-                <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
-                  <span style={{ fontSize: "var(--text-xs)", color: "var(--color-primary)", textTransform: "uppercase", letterSpacing: "var(--tracking-caps)", fontWeight: 600 }}>
-                    {post.category}
-                  </span>
-                  {post.readTime && (
-                    <span style={{ fontSize: "var(--text-xs)", color: "var(--color-text-muted)" }}>
-                      {post.readTime} min read
-                    </span>
-                  )}
-                </div>
-                <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "var(--text-h3)", fontWeight: 500, marginBottom: "0.75rem" }}>
-                  {post.title}
-                </h2>
-                {post.excerpt && (
-                  <p style={{ fontSize: "var(--text-sm)", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
-                    {post.excerpt}
-                  </p>
-                )}
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+  return (
+    <main className="journal-page">
+      <JournalHero
+        headline={page?.hero?.headline ?? JOURNAL_DEFAULTS.hero.headline}
+        tagline={page?.hero?.tagline ?? JOURNAL_DEFAULTS.hero.tagline}
+        image={mediaSource(page?.hero?.image, JOURNAL_DEFAULTS.hero.image)}
+      />
+
+      <JournalEntriesSection
+        title={page?.entriesSection?.title ?? JOURNAL_DEFAULTS.entriesSection.title}
+        entries={entries}
+      />
     </main>
   );
 }
