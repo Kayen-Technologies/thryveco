@@ -7,13 +7,24 @@ import CaseStudyListSection from "@/components/works/CaseStudyListSection";
 import CaseStudyQuote from "@/components/works/CaseStudyQuote";
 import CaseStudyTextSection from "@/components/works/CaseStudyTextSection";
 import WorksCta from "@/components/works/WorksCta";
-import { WORKS_DEFAULTS } from "@/components/works/defaults";
+import { WORKS_DEFAULTS, type WorksMediaSrc } from "@/components/works/defaults";
+import { getMediaUrl } from "@/lib/cms/media";
 import { getWorksPage, getWork, getWorks } from "@/lib/payload";
+import type { Media } from "@/payload-types";
 import { resolveCaseStudy } from "@/lib/works/case-study";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+function mediaSource(
+  media: number | Media | null | undefined,
+  fallback: WorksMediaSrc,
+): WorksMediaSrc {
+  const src = getMediaUrl(media);
+  if (!src || !media || typeof media === "number") return fallback;
+  return { src, alt: media.alt };
+}
 
 export async function generateStaticParams() {
   const { docs } = await getWorks();
@@ -81,6 +92,10 @@ export default async function WorkPage({ params }: Props) {
         bottomLineAccent={worksPage?.cta?.bottomLineAccent ?? WORKS_DEFAULTS.cta.bottomLineAccent}
         ctaLabel={worksPage?.cta?.ctaLabel ?? WORKS_DEFAULTS.cta.ctaLabel}
         ctaHref={worksPage?.cta?.ctaHref ?? WORKS_DEFAULTS.cta.ctaHref}
+        backgroundImage={mediaSource(
+          worksPage?.cta?.backgroundImage,
+          WORKS_DEFAULTS.cta.backgroundImage,
+        )}
       />
     </main>
   );

@@ -945,6 +945,10 @@ export interface StudioPage {
   hero?: {
     headline?: string | null;
     tagline?: string | null;
+    image?: (number | null) | Media;
+  };
+  servicesSection?: {
+    title?: string | null;
   };
   /**
    * Stacked service cards on the Studio page.
@@ -952,13 +956,21 @@ export interface StudioPage {
   services?:
     | {
         /**
-         * e.g. The Thryve Blueprint
+         * e.g. Service 01 - The Thryve Blueprint
+         */
+        serviceLabel: string;
+        /**
+         * Internal service name, e.g. The Thryve Blueprint
          */
         title: string;
         /**
-         * Short descriptor shown on the card.
+         * Large display title before accent, e.g. Strategy & Con
          */
-        tagline?: string | null;
+        displayTitlePrefix: string;
+        /**
+         * Accent portion overlaid on image stack, e.g. sulting
+         */
+        displayTitleAccent: string;
         description?: string | null;
         includes?:
           | {
@@ -966,22 +978,38 @@ export interface StudioPage {
               id?: string | null;
             }[]
           | null;
-        image?: (number | null) | Media;
+        stackImages?:
+          | {
+              image: number | Media;
+              id?: string | null;
+            }[]
+          | null;
+        ctaLabel?: string | null;
+        ctaHref?: string | null;
         id?: string | null;
       }[]
     | null;
+  howItWorksSection?: {
+    title?: string | null;
+  };
   howItWorks?:
     | {
         step: number;
         title: string;
         description?: string | null;
+        /**
+         * Image displayed when this step is active
+         */
+        image?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
   cta?: {
     headline?: string | null;
+    subtext?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1233,12 +1261,20 @@ export interface StudioPageSelect<T extends boolean = true> {
     | {
         headline?: T;
         tagline?: T;
+        image?: T;
+      };
+  servicesSection?:
+    | T
+    | {
+        title?: T;
       };
   services?:
     | T
     | {
+        serviceLabel?: T;
         title?: T;
-        tagline?: T;
+        displayTitlePrefix?: T;
+        displayTitleAccent?: T;
         description?: T;
         includes?:
           | T
@@ -1246,8 +1282,20 @@ export interface StudioPageSelect<T extends boolean = true> {
               item?: T;
               id?: T;
             };
-        image?: T;
+        stackImages?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        ctaLabel?: T;
+        ctaHref?: T;
         id?: T;
+      };
+  howItWorksSection?:
+    | T
+    | {
+        title?: T;
       };
   howItWorks?:
     | T
@@ -1255,14 +1303,17 @@ export interface StudioPageSelect<T extends boolean = true> {
         step?: T;
         title?: T;
         description?: T;
+        image?: T;
         id?: T;
       };
   cta?:
     | T
     | {
         headline?: T;
+        subtext?: T;
         ctaLabel?: T;
         ctaHref?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

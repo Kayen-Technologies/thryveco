@@ -19,7 +19,7 @@ export default function Navbar({ site, variant = "light" }: NavbarProps) {
 
   const isJournalPage = pathname === "/journal";
   const isWorksListingPage = pathname === "/works";
-  const isOverlayNav = pathname === "/" || pathname === "/about";
+  const isOverlayNav = pathname === "/" || pathname === "/about" || pathname === "/studio";
   const effectiveVariant = isOverlayNav ? "light" : variant;
   const bookingLabel = isOverlayNav ? "Book a Call" : site.bookingLabel;
   const textColor =

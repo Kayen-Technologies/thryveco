@@ -24,43 +24,43 @@ export default function WorksCta({
 }: WorksCtaProps) {
   return (
     <section className="works-cta">
-      <div className="works-cta__media">
+      <div className="works-cta__bg-wrap" aria-hidden="true">
         <Image
           src={backgroundImage.src}
           alt={backgroundImage.alt}
           fill
           sizes="100vw"
-          className="works-cta__bg-image"
-        />
-        <div className="works-cta__overlay" />
-      </div>
-
-      <div className="works-cta__mask">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/works/cta-mask.svg"
-          alt=""
-          className="works-cta__mask-image"
+          className="works-cta__bg"
         />
       </div>
+      <div className="works-cta__overlay" aria-hidden="true" />
 
       <div className="works-cta__content">
-        <div className="works-cta__text works-cta__text--top">
-          <span className="works-cta__line">{topLine}</span>
-          <span className="works-cta__line works-cta__line--accent">
-            {topLineAccent}
-          </span>
-        </div>
+        <div className="works-cta__frame">
+          {/* White frame with rectangular aperture — Figma node 181:373 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/works/cta-mask.svg"
+            alt=""
+            aria-hidden="true"
+            className="works-cta__mask"
+          />
 
-        <Link href={ctaHref} className="works-cta__button">
-          {ctaLabel}
-        </Link>
+          <div className="works-cta__copy works-cta__copy--top">
+            <p className="works-cta__line works-cta__line--offset-a">{topLine}</p>
+            <p className="works-cta__line works-cta__line--offset-b">{topLineAccent}</p>
+          </div>
 
-        <div className="works-cta__text works-cta__text--bottom">
-          <span className="works-cta__line">{bottomLine}</span>
-          <span className="works-cta__line works-cta__line--accent">
-            {bottomLineAccent}
-          </span>
+          <div className="works-cta__cta-wrap">
+            <Link href={ctaHref} className="works-cta__cta">
+              {ctaLabel}
+            </Link>
+          </div>
+
+          <div className="works-cta__copy works-cta__copy--bottom">
+            <p className="works-cta__line works-cta__line--offset-a">{bottomLine}</p>
+            <p className="works-cta__line works-cta__line--offset-b">{bottomLineAccent}</p>
+          </div>
         </div>
       </div>
     </section>

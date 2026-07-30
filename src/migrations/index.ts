@@ -24,6 +24,14 @@ import * as migration_20260727_210000_works_case_study_schema from './20260727_2
 import * as migration_20260727_210500_fix_works_case_study_version_tables from './20260727_210500_fix_works_case_study_version_tables';
 import * as migration_20260727_211000_seed_casa_muse_case_study from './20260727_211000_seed_casa_muse_case_study';
 import * as migration_20260727_220000_refresh_homepage_hero_intro_media from './20260727_220000_refresh_homepage_hero_intro_media';
+import * as migration_20260728_130000_refresh_works_cta_media from './20260728_130000_refresh_works_cta_media';
+import * as migration_20260728_140000_seed_studio_page_figma from './20260728_140000_seed_studio_page_figma';
+import * as migration_20260728_150000_refresh_studio_hero_media from './20260728_150000_refresh_studio_hero_media';
+import * as migration_20260728_160000_update_studio_services_figma from './20260728_160000_update_studio_services_figma';
+import * as migration_20260728_185600_refresh_studio_service_images from './20260728_185600_refresh_studio_service_images';
+import * as migration_20260728_194600_seed_studio_how_it_works from './20260728_194600_seed_studio_how_it_works';
+import * as migration_20260728_200700_add_how_it_works_image_field from './20260728_200700_add_how_it_works_image_field';
+import * as migration_20260728_200800_seed_studio_how_step_images from './20260728_200800_seed_studio_how_step_images';
 
 export const migrations = [
   {
@@ -150,5 +158,45 @@ export const migrations = [
     up: migration_20260727_220000_refresh_homepage_hero_intro_media.up,
     down: migration_20260727_220000_refresh_homepage_hero_intro_media.down,
     name: '20260727_220000_refresh_homepage_hero_intro_media'
+  },
+  {
+    up: migration_20260728_130000_refresh_works_cta_media.up,
+    down: migration_20260728_130000_refresh_works_cta_media.down,
+    name: '20260728_130000_refresh_works_cta_media'
+  },
+  {
+    up: migration_20260728_140000_seed_studio_page_figma.up,
+    down: migration_20260728_140000_seed_studio_page_figma.down,
+    name: '20260728_140000_seed_studio_page_figma'
+  },
+  {
+    up: migration_20260728_150000_refresh_studio_hero_media.up,
+    down: migration_20260728_150000_refresh_studio_hero_media.down,
+    name: '20260728_150000_refresh_studio_hero_media'
+  },
+  {
+    up: migration_20260728_160000_update_studio_services_figma.up,
+    down: migration_20260728_160000_update_studio_services_figma.down,
+    name: '20260728_160000_update_studio_services_figma'
+  },
+  {
+    up: migration_20260728_185600_refresh_studio_service_images.up,
+    down: migration_20260728_185600_refresh_studio_service_images.down,
+    name: '20260728_185600_refresh_studio_service_images'
+  },
+  {
+    up: migration_20260728_194600_seed_studio_how_it_works.up,
+    down: migration_20260728_194600_seed_studio_how_it_works.down,
+    name: '20260728_194600_seed_studio_how_it_works'
+  },
+  {
+    up: migration_20260728_200700_add_how_it_works_image_field.up,
+    down: migration_20260728_200700_add_how_it_works_image_field.down,
+    name: '20260728_200700_add_how_it_works_image_field'
+  },
+  {
+    up: migration_20260728_200800_seed_studio_how_step_images.up,
+    down: migration_20260728_200800_seed_studio_how_step_images.down,
+    name: '20260728_200800_seed_studio_how_step_images'
   },
 ];

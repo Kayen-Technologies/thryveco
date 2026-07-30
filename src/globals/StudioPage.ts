@@ -19,8 +19,34 @@ export const StudioPage: GlobalConfig = {
       type: "group",
       label: "Hero",
       fields: [
-        { name: "headline", type: "text", defaultValue: "The Studio" },
-        { name: "tagline", type: "textarea" },
+        {
+          name: "headline",
+          type: "text",
+          defaultValue: "This is Where The Magic Happens",
+        },
+        {
+          name: "tagline",
+          type: "textarea",
+          defaultValue:
+            "Four ways to work with us. One non-negotiable standard your brand leaves here looking and feeling undeniably itself.",
+        },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
+      ],
+    },
+    {
+      name: "servicesSection",
+      type: "group",
+      label: "Services Section",
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          defaultValue: "The Four Services",
+        },
       ],
     },
     {
@@ -32,15 +58,28 @@ export const StudioPage: GlobalConfig = {
       },
       fields: [
         {
+          name: "serviceLabel",
+          type: "text",
+          required: true,
+          admin: { description: "e.g. Service 01 - The Thryve Blueprint" },
+        },
+        {
           name: "title",
           type: "text",
           required: true,
-          admin: { description: "e.g. The Thryve Blueprint" },
+          admin: { description: "Internal service name, e.g. The Thryve Blueprint" },
         },
         {
-          name: "tagline",
+          name: "displayTitlePrefix",
           type: "text",
-          admin: { description: "Short descriptor shown on the card." },
+          required: true,
+          admin: { description: "Large display title before accent, e.g. Strategy & Con" },
+        },
+        {
+          name: "displayTitleAccent",
+          type: "text",
+          required: true,
+          admin: { description: "Accent portion overlaid on image stack, e.g. sulting" },
         },
         {
           name: "description",
@@ -50,14 +89,44 @@ export const StudioPage: GlobalConfig = {
           name: "includes",
           type: "array",
           label: "What's Included",
+          fields: [{ name: "item", type: "text", required: true }],
+        },
+        {
+          name: "stackImages",
+          type: "array",
+          label: "Stacked Images",
+          minRows: 4,
+          maxRows: 4,
           fields: [
-            { name: "item", type: "text", required: true },
+            {
+              name: "image",
+              type: "upload",
+              relationTo: "media",
+              required: true,
+            },
           ],
         },
         {
-          name: "image",
-          type: "upload",
-          relationTo: "media",
+          name: "ctaLabel",
+          type: "text",
+          defaultValue: "Book a Discovery Call",
+        },
+        {
+          name: "ctaHref",
+          type: "text",
+          defaultValue: "/contact",
+        },
+      ],
+    },
+    {
+      name: "howItWorksSection",
+      type: "group",
+      label: "How It Works Section",
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          defaultValue: "How it Works",
         },
       ],
     },
@@ -69,6 +138,12 @@ export const StudioPage: GlobalConfig = {
         { name: "step", type: "number", required: true },
         { name: "title", type: "text", required: true },
         { name: "description", type: "textarea" },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          admin: { description: "Image displayed when this step is active" },
+        },
       ],
     },
     {
@@ -76,9 +151,23 @@ export const StudioPage: GlobalConfig = {
       type: "group",
       label: "CTA",
       fields: [
-        { name: "headline", type: "text", defaultValue: "Ready to start?" },
-        { name: "ctaLabel", type: "text", defaultValue: "Book a Call" },
+        {
+          name: "headline",
+          type: "text",
+          defaultValue: "Ready to build a brand people remember?",
+        },
+        {
+          name: "subtext",
+          type: "text",
+          defaultValue: "Beautiful brands start here",
+        },
+        { name: "ctaLabel", type: "text", defaultValue: "Book A Discovery Call" },
         { name: "ctaHref", type: "text", defaultValue: "/contact" },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
       ],
     },
   ],
