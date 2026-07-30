@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import type { AboutMediaSrc } from "@/components/about/defaults";
+import Reveal from "@/components/motion/Reveal";
 
 type AboutOriginStoryProps = Readonly<{
   headlineLead: string;
@@ -22,14 +23,16 @@ export default function AboutOriginStory({
   return (
     <section className="about-origin">
       <div className="about-origin__inner">
-        <h2 className="about-origin__headline">
-          <span>{headlineLead}</span>
-          <span className="about-origin__headline-muted">{headlineMuted}</span>
-          <span>{headlineEnd}</span>
-        </h2>
+        <Reveal>
+          <h2 className="about-origin__headline">
+            <span>{headlineLead}</span>
+            <span className="about-origin__headline-muted">{headlineMuted}</span>
+            <span>{headlineEnd}</span>
+          </h2>
+        </Reveal>
 
         <div className="about-origin__grid">
-          <div className="about-origin__portrait">
+          <Reveal className="about-origin__portrait" y={40} delay={0.08}>
             <Image
               src={image.src}
               alt={image.alt}
@@ -37,11 +40,11 @@ export default function AboutOriginStory({
               sizes="(max-width: 1024px) 90vw, 593px"
               className="about-origin__portrait-image"
             />
-          </div>
-          <div className="about-origin__copy">
-            <p>{paragraphOne}</p>
-            <p>{paragraphTwo}</p>
-          </div>
+          </Reveal>
+          <Reveal className="about-origin__copy" stagger y={28} delay={0.12}>
+            <p data-reveal>{paragraphOne}</p>
+            <p data-reveal>{paragraphTwo}</p>
+          </Reveal>
         </div>
       </div>
     </section>

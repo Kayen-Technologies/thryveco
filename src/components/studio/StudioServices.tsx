@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import Button from "@/components/Button";
+import Reveal from "@/components/motion/Reveal";
 import type { StudioServiceDefault } from "@/components/studio/defaults";
 import StudioServiceStack from "@/components/studio/StudioServiceStack";
 
@@ -279,9 +280,9 @@ export default function StudioServices({
   if (!scrollEnabled) {
     return (
       <section className="studio-services studio-services--static" ref={sectionRef}>
-        <div className="studio-services__static-intro">
+        <Reveal className="studio-services__static-intro">
           <h2 className="studio-services__title">{sectionTitle}</h2>
-        </div>
+        </Reveal>
 
         {services.map((service) => (
           <article key={service.serviceLabel} className="studio-services__static-item">
@@ -304,7 +305,9 @@ export default function StudioServices({
       <div className="studio-services__track" ref={trackRef}>
         <div className="studio-services__frame" ref={frameRef}>
           <header className="studio-services__header">
-            <h2 className="studio-services__title">{sectionTitle}</h2>
+            <Reveal>
+              <h2 className="studio-services__title">{sectionTitle}</h2>
+            </Reveal>
             <p className="studio-services__label" aria-live="polite">
               {services[activeIndex]?.serviceLabel}
             </p>

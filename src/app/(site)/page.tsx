@@ -75,6 +75,9 @@ export default async function HomePage() {
         headline={page?.hero?.headline ?? HOME_DEFAULTS.hero.headline}
         emphasis={page?.hero?.headlineEmphasis ?? HOME_DEFAULTS.hero.emphasis}
         image={mediaSource(page?.hero?.heroImage, HOME_DEFAULTS.hero.image)}
+        videoSrc={
+          getMediaUrl(page?.hero?.heroVideo) ?? HOME_DEFAULTS.hero.videoSrc
+        }
       />
       <HomeIntro
         headline={page?.intro?.headline ?? HOME_DEFAULTS.intro.headline}

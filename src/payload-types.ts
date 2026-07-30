@@ -874,7 +874,14 @@ export interface HomePage {
     tagline?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
+    /**
+     * Poster / static fallback image shown under the video and for reduced-motion.
+     */
     heroImage?: (number | null) | Media;
+    /**
+     * Full-bleed muted looping background video (mp4/webm). Falls back to hero image when empty.
+     */
+    heroVideo?: (number | null) | Media;
   };
   intro?: {
     headline?: string | null;
@@ -1189,6 +1196,7 @@ export interface HomePageSelect<T extends boolean = true> {
         ctaLabel?: T;
         ctaHref?: T;
         heroImage?: T;
+        heroVideo?: T;
       };
   intro?:
     | T

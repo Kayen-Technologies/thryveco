@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import type { StudioMediaSrc } from "@/components/studio/defaults";
+import Reveal from "@/components/motion/Reveal";
 
 type StudioStep = {
   step: number;
@@ -17,26 +18,102 @@ type StudioHowItWorksProps = Readonly<{
   steps: readonly StudioStep[];
 }>;
 
+const COPY_FADE_MS = 160;
+
 export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps) {
   const sortedSteps = [...steps].sort((a, b) => a.step - b.step);
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeStep = sortedSteps[activeIndex] ?? sortedSteps[0];
+  const [copyIndex, setCopyIndex] = useState(0);
+  const [copyVisible, setCopyVisible] = useState(true);
+  const fadeTimerRef = useRef<number | null>(null);
+  const copyStep = sortedSteps[copyIndex] ?? sortedSteps[0];
 
-  if (!activeStep) return null;
+  useEffect(() => {
+    return () => {
+      if (fadeTimerRef.current !== null) {
+        window.clearTimeout(fadeTimerRef.current);
+      }
+    };
+  }, []);
+
+  if (!copyStep) return null;
+
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const selectStep = (index: number) => {
+    if (index < 0 || index >= sortedSteps.length) return;
+    if (index === activeIndex && index === copyIndex && copyVisible) return;
+
+    setActiveIndex(index);
+
+    if (prefersReducedMotion()) {
+      if (fadeTimerRef.current !== null) {
+        window.clearTimeout(fadeTimerRef.current);
+        fadeTimerRef.current = null;
+      }
+      setCopyIndex(index);
+      setCopyVisible(true);
+      return;
+    }
+
+    setCopyVisible(false);
+    if (fadeTimerRef.current !== null) {
+      window.clearTimeout(fadeTimerRef.current);
+    }
+    fadeTimerRef.current = window.setTimeout(() => {
+      setCopyIndex(index);
+      setCopyVisible(true);
+      fadeTimerRef.current = null;
+    }, COPY_FADE_MS);
+  };
+
+  const onTabListKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (sortedSteps.length < 2) return;
+
+    let nextIndex: number | null = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (activeIndex + 1) % sortedSteps.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex = (activeIndex - 1 + sortedSteps.length) % sortedSteps.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = sortedSteps.length - 1;
+    }
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+    selectStep(nextIndex);
+    const nextTab = event.currentTarget.querySelector<HTMLButtonElement>(
+      `#studio-how-tab-${nextIndex}`,
+    );
+    nextTab?.focus();
+  };
 
   return (
     <section className="studio-how">
       <div className="studio-how__inner">
-        <h2 className="studio-how__title">{title}</h2>
+        <Reveal>
+          <h2 className="studio-how__title">{title}</h2>
+        </Reveal>
 
         <div className="studio-how__layout">
           <div className="studio-how__panel">
-            <div className="studio-how__copy">
-              <h3 className="studio-how__step-title">{activeStep.title}</h3>
-              <p className="studio-how__step-description">{activeStep.description}</p>
+            <div
+              className={`studio-how__copy${copyVisible ? "" : " studio-how__copy--fading"}`}
+              aria-live="polite"
+            >
+              <h3 className="studio-how__step-title">{copyStep.title}</h3>
+              <p className="studio-how__step-description">{copyStep.description}</p>
             </div>
 
-            <div className="studio-how__steps" role="tablist" aria-label="How it works steps">
+            <div
+              className="studio-how__steps"
+              role="tablist"
+              aria-label="How it works steps"
+              onKeyDown={onTabListKeyDown}
+            >
               {sortedSteps.map((step, index) => (
                 <button
                   key={step.step}
@@ -45,8 +122,11 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
                   aria-selected={index === activeIndex}
                   aria-controls={`studio-how-panel-${index}`}
                   id={`studio-how-tab-${index}`}
-                  className={`studio-how__step-pill${index === activeIndex ? " studio-how__step-pill--active" : ""}`}
-                  onClick={() => setActiveIndex(index)}
+                  tabIndex={index === activeIndex ? 0 : -1}
+                  className={`studio-how__step-pill${
+                    index === activeIndex ? " studio-how__step-pill--active" : ""
+                  }`}
+                  onClick={() => selectStep(index)}
                 >
                   {step.step}
                 </button>
@@ -68,7 +148,10 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
                 fill
                 sizes="(max-width: 1023px) 100vw, 50vw"
                 className={`studio-how__image${index === activeIndex ? " studio-how__image--active" : ""}`}
-                style={{ opacity: index === activeIndex ? 1 : 0, transition: "opacity 0.4s ease-in-out" }}
+                style={{
+                  opacity: index === activeIndex ? 1 : 0,
+                  transition: "opacity 0.4s ease-in-out",
+                }}
                 priority={index === 0}
               />
             ))}

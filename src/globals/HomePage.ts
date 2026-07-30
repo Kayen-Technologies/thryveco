@@ -52,6 +52,17 @@ export const HomePage: GlobalConfig = {
           name: "heroImage",
           type: "upload",
           relationTo: "media",
+          admin: {
+            description: "Poster / static fallback image shown under the video and for reduced-motion.",
+          },
+        },
+        {
+          name: "heroVideo",
+          type: "upload",
+          relationTo: "media",
+          admin: {
+            description: "Full-bleed muted looping background video (mp4/webm). Falls back to hero image when empty.",
+          },
         },
       ],
     },

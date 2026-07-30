@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import Reveal from "@/components/motion/Reveal";
 import { WORKS_DEFAULTS, type WorksMediaSrc } from "@/components/works/defaults";
 import WorksCaseStudyCard from "@/components/works/WorksCaseStudyCard";
 import WorksCta from "@/components/works/WorksCta";
@@ -58,11 +59,11 @@ export default async function WorksPage() {
       />
 
       <section className="works-portfolio">
-        <div className="works-portfolio__header">
+        <Reveal className="works-portfolio__header">
           <h2 className="works-portfolio__title">
             {page?.portfolio?.title ?? WORKS_DEFAULTS.portfolio.title}
           </h2>
-        </div>
+        </Reveal>
 
         <div className="works-portfolio__list">
           {mappedWorks.map((work) => (

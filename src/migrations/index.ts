@@ -32,6 +32,7 @@ import * as migration_20260728_185600_refresh_studio_service_images from './2026
 import * as migration_20260728_194600_seed_studio_how_it_works from './20260728_194600_seed_studio_how_it_works';
 import * as migration_20260728_200700_add_how_it_works_image_field from './20260728_200700_add_how_it_works_image_field';
 import * as migration_20260728_200800_seed_studio_how_step_images from './20260728_200800_seed_studio_how_step_images';
+import * as migration_20260730_132600_homepage_hero_video from './20260730_132600_homepage_hero_video';
 
 export const migrations = [
   {
@@ -198,5 +199,10 @@ export const migrations = [
     up: migration_20260728_200800_seed_studio_how_step_images.up,
     down: migration_20260728_200800_seed_studio_how_step_images.down,
     name: '20260728_200800_seed_studio_how_step_images'
+  },
+  {
+    up: migration_20260730_132600_homepage_hero_video.up,
+    down: migration_20260730_132600_homepage_hero_video.down,
+    name: '20260730_132600_homepage_hero_video'
   },
 ];

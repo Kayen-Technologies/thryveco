@@ -20,8 +20,13 @@ export type MediaSeed = {
 export const HOMEPAGE_MEDIA_SEED: MediaSeed[] = [
   {
     filename: "hero.jpg",
-    alt: "Thryve & Co home hero background",
-    caption: "Figma homepage hero",
+    alt: "Founder reviewing work on a tablet",
+    caption: "Figma homepage hero poster",
+  },
+  {
+    filename: "hero.mp4",
+    alt: "Thryve & Co home hero background video",
+    caption: "Figma homepage hero video",
   },
   {
     filename: "intro-portrait.jpg",
@@ -164,6 +169,7 @@ type HomeGlobal = {
     ctaLabel?: string | null;
     ctaHref?: string | null;
     heroImage?: number | null;
+    heroVideo?: number | null;
   };
   intro?: {
     headline?: string | null;
@@ -240,6 +246,7 @@ export async function linkHomepageMedia({
         ctaLabel: current.hero?.ctaLabel ?? "Book a Call",
         ctaHref: current.hero?.ctaHref ?? "/contact",
         heroImage: mediaByFilename.get("hero.jpg") ?? current.hero?.heroImage ?? null,
+        heroVideo: mediaByFilename.get("hero.mp4") ?? current.hero?.heroVideo ?? null,
       },
       intro: {
         headline: current.intro?.headline ?? "Growth should look as good as it performs.",
@@ -289,6 +296,7 @@ export async function clearHomepageMediaLinks({
         ctaLabel: current.hero?.ctaLabel ?? "Book a Call",
         ctaHref: current.hero?.ctaHref ?? "/contact",
         heroImage: null,
+        heroVideo: null,
       },
       intro: {
         headline: current.intro?.headline ?? "Growth should look as good as it performs.",

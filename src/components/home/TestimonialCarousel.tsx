@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type TouchEvent } from "react";
 
 import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import Typography from "@/components/Typography";
+import Reveal from "@/components/motion/Reveal";
 
 export type Testimonial = {
   quote: string;
@@ -50,6 +51,10 @@ function TestimonialCard({
   );
 }
 
+const MOBILE_FADE_MS = 160;
+const DESKTOP_STAGE_MS = 700;
+const SWIPE_THRESHOLD_PX = 48;
+
 export default function TestimonialCarousel({
   headline,
   body,
@@ -57,6 +62,11 @@ export default function TestimonialCarousel({
 }: TestimonialCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<-1 | 1 | null>(null);
+  const [centerHidden, setCenterHidden] = useState(false);
+  const [mobileBusy, setMobileBusy] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const regionRef = useRef<HTMLElement>(null);
+  const moveRef = useRef<(nextDirection: -1 | 1) => void>(() => undefined);
 
   useEffect(() => {
     if (direction === null) return;
@@ -64,30 +74,77 @@ export default function TestimonialCarousel({
     const timer = window.setTimeout(() => {
       setActiveIndex((current) => (current + direction + items.length) % items.length);
       setDirection(null);
-    }, 700);
+    }, DESKTOP_STAGE_MS);
 
     return () => window.clearTimeout(timer);
   }, [direction, items.length]);
 
   const move = (nextDirection: -1 | 1) => {
-    if (direction !== null) return;
+    if (direction !== null || mobileBusy) return;
+    if (items.length < 2) return;
 
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.matchMedia("(max-width: 767px)").matches
-    ) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setActiveIndex((current) => (current + nextDirection + items.length) % items.length);
+      return;
+    }
+
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      setMobileBusy(true);
+      setCenterHidden(true);
+      window.setTimeout(() => {
+        setActiveIndex((current) => (current + nextDirection + items.length) % items.length);
+        setCenterHidden(false);
+        window.setTimeout(() => setMobileBusy(false), MOBILE_FADE_MS);
+      }, MOBILE_FADE_MS);
       return;
     }
 
     setDirection(nextDirection);
   };
+
+  moveRef.current = move;
+
+  useEffect(() => {
+    const region = regionRef.current;
+    if (!region || items.length < 2) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveRef.current(-1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        moveRef.current(1);
+      }
+    };
+
+    region.addEventListener("keydown", onKeyDown);
+    return () => region.removeEventListener("keydown", onKeyDown);
+  }, [items.length]);
+
+  const onTouchStart = (event: TouchEvent) => {
+    touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+  };
+
+  const onTouchEnd = (event: TouchEvent) => {
+    const startX = touchStartX.current;
+    touchStartX.current = null;
+    if (startX === null || items.length < 2) return;
+
+    const endX = event.changedTouches[0]?.clientX ?? startX;
+    const delta = endX - startX;
+    if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
+
+    move(delta < 0 ? 1 : -1);
+  };
+
   const itemAt = (offset: number) =>
     items[(activeIndex + offset + items.length) % items.length];
   const showSides = items.length > 1;
   let stageAnimationClass = "";
   if (direction === 1) stageAnimationClass = "home-testimonial-stage--next";
   if (direction === -1) stageAnimationClass = "home-testimonial-stage--previous";
+  if (centerHidden) stageAnimationClass = "home-testimonial-stage--center-hidden";
 
   if (items.length === 0) return null;
 
@@ -98,22 +155,29 @@ export default function TestimonialCarousel({
       className="overflow-hidden py-20 md:min-h-255.5 md:py-[130px]"
     >
       <Container>
-        {/* Section header — max-width 777px centered, Figma node 104:435 */}
-          <div className="mx-auto flex max-w-194.25 flex-col items-center gap-6 text-center">
-          <Typography
-            variant="section"
-            className="tracking-[1.12px]"
-          >
-            {headline}
-          </Typography>
-          <Typography variant="body" className="text-text-muted">
-            {body}
-          </Typography>
-        </div>
+        <Reveal
+          className="mx-auto flex max-w-194.25 flex-col items-center gap-6 text-center"
+          stagger
+        >
+          <div data-reveal>
+            <Typography variant="section" className="tracking-[1.12px]">
+              {headline}
+            </Typography>
+          </div>
+          <div data-reveal>
+            <Typography variant="body" className="text-text-muted">
+              {body}
+            </Typography>
+          </div>
+        </Reveal>
 
         <section
+          ref={regionRef}
           className="mt-10 outline-none"
           aria-label="Client testimonials"
+          tabIndex={0}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <div
             aria-live="polite"
@@ -122,7 +186,7 @@ export default function TestimonialCarousel({
           >
             {[-2, -1, 0, 1, 2].map((slot) => (
               <TestimonialCard
-                key={`${itemAt(slot).name}-${itemAt(slot).role ?? ""}`}
+                key={`${itemAt(slot).name}-${itemAt(slot).role ?? ""}-${slot}`}
                 item={itemAt(slot)}
                 slot={slot}
                 className={slot === 0 ? "max-w-[calc(100vw-48px)]" : ""}
@@ -135,7 +199,7 @@ export default function TestimonialCarousel({
               <Button
                 variant="icon"
                 aria-label="Previous testimonial"
-                disabled={direction !== null}
+                disabled={direction !== null || mobileBusy}
                 onClick={() => move(-1)}
               >
                 <Image
@@ -149,7 +213,7 @@ export default function TestimonialCarousel({
               <Button
                 variant="icon"
                 aria-label="Next testimonial"
-                disabled={direction !== null}
+                disabled={direction !== null || mobileBusy}
                 onClick={() => move(1)}
               >
                 <Image

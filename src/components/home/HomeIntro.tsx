@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import type { HomeMediaSrc } from "@/components/home/defaults";
+import Reveal from "@/components/motion/Reveal";
 
 type HomeIntroProps = Readonly<{
   headline: string;
@@ -24,8 +25,8 @@ export default function HomeIntro({
     <Section tone="cream" padded={false} className="home-intro overflow-hidden">
       <Container>
         <div className="home-intro__grid">
-          <div className="home-intro__copy">
-            <div className="home-intro__text">
+          <Reveal className="home-intro__copy" stagger>
+            <div className="home-intro__text" data-reveal>
               <h2 className="home-intro__headline">{headline}</h2>
               <div className="home-intro__body">
                 {paragraphs.map((paragraph) => (
@@ -33,12 +34,14 @@ export default function HomeIntro({
                 ))}
               </div>
             </div>
-            <Button href={ctaHref} variant="primary">
-              {ctaLabel}
-            </Button>
-          </div>
+            <div data-reveal>
+              <Button href={ctaHref} variant="primary">
+                {ctaLabel}
+              </Button>
+            </div>
+          </Reveal>
 
-          <div className="home-intro__media">
+          <Reveal className="home-intro__media" y={40} delay={0.12}>
             <Image
               src={image.src}
               alt={image.alt}
@@ -46,7 +49,7 @@ export default function HomeIntro({
               sizes="(max-width: 1023px) 100vw, 541px"
               className="home-intro__image"
             />
-          </div>
+          </Reveal>
         </div>
       </Container>
     </Section>

@@ -9,7 +9,7 @@ const mediaStaticDir = path.resolve(process.cwd(), "public/media");
 export const Media: CollectionConfig = {
   slug: "media",
   upload: {
-    mimeTypes: ["image/*"],
+    mimeTypes: ["image/*", "video/mp4", "video/webm"],
     staticDir: mediaStaticDir,
   },
   admin: {

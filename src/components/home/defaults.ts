@@ -3,7 +3,11 @@ export const HOME_DEFAULTS = {
   hero: {
     headline: "Your Brand's New Creative Friend",
     emphasis: "Creative Friend",
-    image: { src: "/assets/home/hero.jpg", alt: "" },
+    image: {
+      src: "/assets/home/hero.jpg",
+      alt: "Founder reviewing work on a tablet",
+    },
+    videoSrc: "/assets/home/hero.mp4",
   },
   intro: {
     headline: "Growth should look as good as it performs.",

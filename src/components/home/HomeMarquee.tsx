@@ -74,6 +74,7 @@ export default function HomeMarquee({
   secondaryWord,
   image,
 }: HomeMarqueeProps) {
+  const viewportRef = useRef<HTMLDivElement>(null);
   const segmentRef = useRef<HTMLDivElement>(null);
   const baseStageRef = useRef<HTMLDivElement>(null);
   const overlayStageRef = useRef<HTMLDivElement>(null);
@@ -104,6 +105,22 @@ export default function HomeMarquee({
     return () => observer.disconnect();
   }, [primaryWord, secondaryWord]);
 
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const root = viewport?.closest(".home-marquee");
+    if (!viewport || !(root instanceof HTMLElement)) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        root.classList.toggle("home-marquee--offscreen", !entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+
+    io.observe(root);
+    return () => io.disconnect();
+  }, []);
+
   const segmentContent = { primaryWord, secondaryWord };
 
   return (
@@ -112,7 +129,7 @@ export default function HomeMarquee({
       padded={false}
       className="home-marquee marquee-container relative overflow-hidden"
     >
-      <div className="home-marquee__viewport">
+      <div ref={viewportRef} className="home-marquee__viewport">
         <div className="home-marquee__photo-static" aria-hidden="true">
           <Image
             src={image.src}

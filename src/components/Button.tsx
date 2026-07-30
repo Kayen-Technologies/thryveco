@@ -46,8 +46,10 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const classes = [
-    "inline-flex shrink-0 items-center justify-center font-body text-base transition-opacity",
-    "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]",
+    "btn inline-flex shrink-0 items-center justify-center font-body text-base",
+    "transition-[opacity,transform] duration-300 ease-out will-change-transform",
+    "hover:opacity-90 hover:-translate-y-px",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]",
     disabled ? "pointer-events-none opacity-70" : "",
     variantClassNames[variant],
     className,
