@@ -16,6 +16,13 @@ export const JOURNAL_DEFAULTS = {
   entriesSection: {
     title: "Journal Entry",
   },
+  cta: {
+    headline: "Ready to build a brand people remember?",
+    subtext: "Beautiful brands start here",
+    ctaLabel: "Book A Discovery Call",
+    ctaHref: "/contact",
+    image: { src: "/assets/home/final-cta.jpg", alt: "Creative studio workspace" },
+  },
   posts: [
     {
       slug: "your-aesthetic-is-your-most-powerful-business-tool",

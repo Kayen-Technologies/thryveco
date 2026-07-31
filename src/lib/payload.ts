@@ -84,6 +84,13 @@ export async function getAboutPage() {
   }, null);
 }
 
+export async function getContactPage() {
+  return safe(async () => {
+    const payload = await getPayloadClient();
+    return payload.findGlobal({ slug: "contact-page", depth: 2 });
+  }, null);
+}
+
 export async function getWorks(options?: { limit?: number }) {
   return safe(async () => {
     const payload = await getPayloadClient();

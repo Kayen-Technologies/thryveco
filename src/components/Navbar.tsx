@@ -13,15 +13,51 @@ type NavbarProps = {
   variant?: "light" | "dark";
 };
 
+function LogoMark({
+  src,
+  alt,
+  className = "",
+}: Readonly<{
+  src: string;
+  alt: string;
+  className?: string;
+}>) {
+  const classes = `h-[50px] w-[49px] object-contain ${className}`.trim();
+
+  if (src.endsWith(".svg")) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} width={49} height={50} className={classes} />;
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={49}
+      height={50}
+      priority
+      className={classes}
+    />
+  );
+}
+
 export default function Navbar({ site, variant = "light" }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const isJournalPage = pathname === "/journal";
   const isWorksListingPage = pathname === "/works";
-  const isOverlayNav = pathname === "/" || pathname === "/about" || pathname === "/studio";
-  const effectiveVariant = isOverlayNav ? "light" : variant;
-  const bookingLabel = isOverlayNav ? "Book a Call" : site.bookingLabel;
+  const isContactPage = pathname === "/contact";
+  const isOverlayNav =
+    pathname === "/" ||
+    pathname === "/about" ||
+    pathname === "/studio" ||
+    isContactPage;
+  const overlayVariant = isOverlayNav ? "light" : variant;
+  // Contact sits on cream under the nav — charcoal links, not light-on-dark.
+  const effectiveVariant = isContactPage ? "dark" : overlayVariant;
+  const bookingLabel =
+    isOverlayNav && !isContactPage ? "Book a Call" : site.bookingLabel;
   const textColor =
     effectiveVariant === "light"
       ? "text-[var(--color-text-on-dark)]"
@@ -29,7 +65,9 @@ export default function Navbar({ site, variant = "light" }: NavbarProps) {
   const overlayLogoSrc = "/assets/home/nav-monogram.svg";
   const creamBgLogoSrc = "/assets/home/nav-monogram-dark.svg";
   const useWhiteLogo =
-    isJournalPage || isWorksListingPage || (isOverlayNav && effectiveVariant === "light");
+    isJournalPage ||
+    isWorksListingPage ||
+    (isOverlayNav && !isContactPage && effectiveVariant === "light");
   const logoSrc = useWhiteLogo
     ? overlayLogoSrc
     : effectiveVariant === "light"
@@ -74,25 +112,16 @@ export default function Navbar({ site, variant = "light" }: NavbarProps) {
           aria-label={`${site.siteName} home`}
         >
           {logoSrc ? (
-            logoSrc.endsWith(".svg") ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+            <>
+              <LogoMark
                 src={logoSrc}
                 alt={site.siteName}
-                width={49}
-                height={50}
-                className="h-[50px] w-[49px] object-contain"
+                className={isContactPage ? "lg:hidden" : ""}
               />
-            ) : (
-              <Image
-                src={logoSrc}
-                alt={site.siteName}
-                width={49}
-                height={50}
-                priority
-                className="h-[50px] w-[49px] object-contain"
-              />
-            )
+              {isContactPage && (
+                <LogoMark src={overlayLogoSrc} alt="" className="hidden lg:block" />
+              )}
+            </>
           ) : (
             <span
               className={`font-heading text-xl font-medium tracking-tight ${textColor}`}

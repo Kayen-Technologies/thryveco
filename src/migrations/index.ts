@@ -33,6 +33,7 @@ import * as migration_20260728_194600_seed_studio_how_it_works from './20260728_
 import * as migration_20260728_200700_add_how_it_works_image_field from './20260728_200700_add_how_it_works_image_field';
 import * as migration_20260728_200800_seed_studio_how_step_images from './20260728_200800_seed_studio_how_step_images';
 import * as migration_20260730_132600_homepage_hero_video from './20260730_132600_homepage_hero_video';
+import * as migration_20260731_101600_seed_contact_page_figma from './20260731_101600_seed_contact_page_figma';
 
 export const migrations = [
   {
@@ -204,5 +205,10 @@ export const migrations = [
     up: migration_20260730_132600_homepage_hero_video.up,
     down: migration_20260730_132600_homepage_hero_video.down,
     name: '20260730_132600_homepage_hero_video'
+  },
+  {
+    up: migration_20260731_101600_seed_contact_page_figma.up,
+    down: migration_20260731_101600_seed_contact_page_figma.down,
+    name: '20260731_101600_seed_contact_page_figma'
   },
 ];

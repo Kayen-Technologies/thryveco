@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { DEFAULT_FINAL_CTA_CLOSING_LINE, type HomeMediaSrc } from "@/components/home/defaults";
 import Reveal from "@/components/motion/Reveal";
@@ -48,6 +48,7 @@ export default function FinalCta({
 }: FinalCtaProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const bgMotionRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
 
   const [headlineLine1, headlineLine2] = splitIntoTwoLines(headline);
   const closing = subtext?.trim() || DEFAULT_FINAL_CTA_CLOSING_LINE;
@@ -81,6 +82,26 @@ export default function FinalCta({
     return () => {
       ctx.revert();
     };
+  }, []);
+
+  useEffect(() => {
+    const cta = ctaRef.current;
+    if (!cta) return;
+
+    const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (motionMq.matches) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        cta.classList.add("final-cta__cta--pulse");
+        io.disconnect();
+      },
+      { threshold: 0.4 },
+    );
+
+    io.observe(cta);
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -120,7 +141,7 @@ export default function FinalCta({
 
           <div className="final-cta__cta-wrap">
             <div data-reveal>
-              <Link href={ctaHref} className="final-cta__cta">
+              <Link ref={ctaRef} href={ctaHref} className="final-cta__cta">
                 {ctaLabel}
               </Link>
             </div>

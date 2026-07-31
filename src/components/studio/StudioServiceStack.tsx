@@ -11,7 +11,11 @@ export default function StudioServiceStack({ images, className = "" }: StudioSer
   const layers = images.slice(0, 4);
 
   return (
-    <div className={`studio-services__stack ${className}`.trim()} aria-hidden="true">
+    <div
+      className={`studio-services__stack ${className}`.trim()}
+      aria-hidden="true"
+      data-reveal
+    >
       {layers.map((image, index) => (
         <div
           key={`${image.src}-${index}`}

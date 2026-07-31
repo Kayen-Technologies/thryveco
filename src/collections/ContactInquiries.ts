@@ -10,7 +10,7 @@ export const ContactInquiries: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "email", "subject", "createdAt"],
+    defaultColumns: ["name", "email", "service", "brandName", "createdAt"],
     group: "Submissions",
   },
   access: {
@@ -33,11 +33,49 @@ export const ContactInquiries: CollectionConfig = {
     {
       name: "subject",
       type: "text",
+      admin: {
+        description: "Legacy subject field. Kept for older submissions.",
+      },
     },
     {
       name: "message",
       type: "textarea",
-      required: true,
+      admin: {
+        description:
+          "Legacy message field (nullable). New form submissions may store a readable summary here.",
+      },
+    },
+    {
+      name: "service",
+      type: "text",
+    },
+    {
+      name: "brandName",
+      type: "text",
+    },
+    {
+      name: "socialLink",
+      type: "text",
+    },
+    {
+      name: "challenge",
+      type: "textarea",
+    },
+    {
+      name: "brandGoal",
+      type: "textarea",
+    },
+    {
+      name: "timeline",
+      type: "text",
+    },
+    {
+      name: "referralSource",
+      type: "text",
+    },
+    {
+      name: "additionalNotes",
+      type: "textarea",
     },
   ],
 };

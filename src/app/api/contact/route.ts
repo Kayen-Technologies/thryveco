@@ -26,7 +26,10 @@ export async function POST(request: Request) {
     const validation = validateContactPayload(body);
 
     if (!validation.ok) {
-      return NextResponse.json({ error: validation.error }, { status: 400 });
+      return NextResponse.json(
+        { error: validation.error, errors: validation.errors },
+        { status: 400 },
+      );
     }
 
     await saveContactInquiry(validation.data);

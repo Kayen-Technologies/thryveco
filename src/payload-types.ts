@@ -100,6 +100,7 @@ export interface Config {
     'works-page': WorksPage;
     'journal-page': JournalPage;
     'about-page': AboutPage;
+    'contact-page': ContactPage;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
@@ -108,6 +109,7 @@ export interface Config {
     'works-page': WorksPageSelect<false> | WorksPageSelect<true>;
     'journal-page': JournalPageSelect<false> | JournalPageSelect<true>;
     'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -481,8 +483,22 @@ export interface ContactInquiry {
   id: number;
   name: string;
   email: string;
+  /**
+   * Legacy subject field. Kept for older submissions.
+   */
   subject?: string | null;
-  message: string;
+  /**
+   * Legacy message field (nullable). New form submissions may store a readable summary here.
+   */
+  message?: string | null;
+  service?: string | null;
+  brandName?: string | null;
+  socialLink?: string | null;
+  challenge?: string | null;
+  brandGoal?: string | null;
+  timeline?: string | null;
+  referralSource?: string | null;
+  additionalNotes?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -761,6 +777,14 @@ export interface ContactInquiriesSelect<T extends boolean = true> {
   email?: T;
   subject?: T;
   message?: T;
+  service?: T;
+  brandName?: T;
+  socialLink?: T;
+  challenge?: T;
+  brandGoal?: T;
+  timeline?: T;
+  referralSource?: T;
+  additionalNotes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1144,6 +1168,59 @@ export interface AboutPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: number;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  hero?: {
+    headline?: string | null;
+    body?: string | null;
+    image?: (number | null) | Media;
+  };
+  form?: {
+    heading?: string | null;
+    intro?: string | null;
+    nameLabel?: string | null;
+    emailLabel?: string | null;
+    serviceLabel?: string | null;
+    brandNameLabel?: string | null;
+    socialLinkLabel?: string | null;
+    challengeLabel?: string | null;
+    brandGoalLabel?: string | null;
+    timelineLabel?: string | null;
+    referralLabel?: string | null;
+    additionalNotesLabel?: string | null;
+    submitLabel?: string | null;
+    successTitle?: string | null;
+    successBody?: string | null;
+    serviceOptions?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    timelineOptions?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    referralOptions?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1439,6 +1516,65 @@ export interface AboutPageSelect<T extends boolean = true> {
         ctaLabel?: T;
         ctaHref?: T;
         image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  hero?:
+    | T
+    | {
+        headline?: T;
+        body?: T;
+        image?: T;
+      };
+  form?:
+    | T
+    | {
+        heading?: T;
+        intro?: T;
+        nameLabel?: T;
+        emailLabel?: T;
+        serviceLabel?: T;
+        brandNameLabel?: T;
+        socialLinkLabel?: T;
+        challengeLabel?: T;
+        brandGoalLabel?: T;
+        timelineLabel?: T;
+        referralLabel?: T;
+        additionalNotesLabel?: T;
+        submitLabel?: T;
+        successTitle?: T;
+        successBody?: T;
+        serviceOptions?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        timelineOptions?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        referralOptions?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

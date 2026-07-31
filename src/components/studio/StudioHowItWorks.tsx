@@ -18,7 +18,7 @@ type StudioHowItWorksProps = Readonly<{
   steps: readonly StudioStep[];
 }>;
 
-const COPY_FADE_MS = 160;
+const COPY_FADE_MS = 400;
 
 export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps) {
   const sortedSteps = [...steps].sort((a, b) => a.step - b.step);

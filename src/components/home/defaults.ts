@@ -64,7 +64,7 @@ export const HOME_DEFAULTS = {
     ],
   },
   quote: {
-    quote: "Growth should look as good as it performs.",
+    quote: "Beautiful brands aren't an accident. They're built, on purpose, one detail at a time.",
     attribution: "Thryve & Co Creative Agency",
   },
   testimonials: {

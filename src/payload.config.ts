@@ -18,6 +18,7 @@ import { StudioPage } from "./globals/StudioPage";
 import { WorksPage } from "./globals/WorksPage";
 import { JournalPage } from "./globals/JournalPage";
 import { AboutPage } from "./globals/AboutPage";
+import { ContactPage } from "./globals/ContactPage";
 
 import {
   revalidateSiteAfterChange,
@@ -45,6 +46,7 @@ const contentGlobals = [
   WorksPage,
   JournalPage,
   AboutPage,
+  ContactPage,
 ].map((global) => ({
   ...global,
   hooks: {

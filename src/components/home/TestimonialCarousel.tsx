@@ -67,6 +67,7 @@ export default function TestimonialCarousel({
   const touchStartX = useRef<number | null>(null);
   const regionRef = useRef<HTMLElement>(null);
   const moveRef = useRef<(nextDirection: -1 | 1) => void>(() => undefined);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
 
   useEffect(() => {
     if (direction === null) return;
@@ -105,6 +106,18 @@ export default function TestimonialCarousel({
   moveRef.current = move;
 
   useEffect(() => {
+    if (items.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (autoplayPaused) return;
+
+    const id = window.setInterval(() => {
+      moveRef.current(1);
+    }, 7000);
+
+    return () => window.clearInterval(id);
+  }, [autoplayPaused, items.length]);
+
+  useEffect(() => {
     const region = regionRef.current;
     if (!region || items.length < 2) return;
 
@@ -124,6 +137,7 @@ export default function TestimonialCarousel({
 
   const onTouchStart = (event: TouchEvent) => {
     touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+    setAutoplayPaused(true);
   };
 
   const onTouchEnd = (event: TouchEvent) => {
@@ -177,7 +191,14 @@ export default function TestimonialCarousel({
           aria-label="Client testimonials"
           tabIndex={0}
           onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
+          onTouchEnd={(event) => {
+            onTouchEnd(event);
+            setAutoplayPaused(false);
+          }}
+          onMouseEnter={() => setAutoplayPaused(true)}
+          onMouseLeave={() => setAutoplayPaused(false)}
+          onFocus={() => setAutoplayPaused(true)}
+          onBlur={() => setAutoplayPaused(false)}
         >
           <div
             aria-live="polite"

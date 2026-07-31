@@ -34,7 +34,7 @@ function ServicePanel({
     <>
       <StudioServiceStack images={service.stackImages} />
 
-      <div className="studio-services__display-title-wrap">
+      <div className="studio-services__display-title-wrap" data-reveal>
         <p className="studio-services__display-title">
           <span>{service.displayTitlePrefix}</span>
           <span className="studio-services__display-title-accent">{service.displayTitleAccent}</span>
@@ -43,9 +43,11 @@ function ServicePanel({
         <img src={underlineSrc} alt="" aria-hidden="true" className="studio-services__underline" />
       </div>
 
-      <p className="studio-services__description">{service.description}</p>
+      <p className="studio-services__description" data-reveal>
+        {service.description}
+      </p>
 
-      <div className="studio-services__includes">
+      <div className="studio-services__includes" data-reveal>
         <p className="studio-services__includes-heading">What&apos;s included</p>
         <ul className="studio-services__includes-list">
           {service.includes.map((item) => (
@@ -58,7 +60,7 @@ function ServicePanel({
         </ul>
       </div>
 
-      <div className="studio-services__cta-wrap">
+      <div className="studio-services__cta-wrap" data-reveal>
         <Button href={service.ctaHref} variant="primary" className="studio-services__cta">
           {service.ctaLabel}
         </Button>
@@ -154,6 +156,15 @@ export default function StudioServices({
               scale: index === 0 ? 1 : 0.92,
               y: index === 0 ? 0 : 60,
             });
+
+            const layers = imageStack.querySelectorAll(".studio-services__stack-layer");
+            layers.forEach((layer, layerIndex) => {
+              const depthMultiplier = 1 - layerIndex * 0.25;
+              gsap.set(layer, {
+                y: index === 0 ? 0 : 24 * depthMultiplier,
+                force3D: true,
+              });
+            });
           }
 
           [textContent, description, includes, cta].forEach((el, elIndex) => {
@@ -232,6 +243,16 @@ export default function StudioServices({
               { scale: 0.92, y: -40, duration: segmentDuration * 0.7 },
               segmentStart,
             );
+
+            const currentLayers = currentStack.querySelectorAll(".studio-services__stack-layer");
+            currentLayers.forEach((layer, layerIndex) => {
+              const depthMultiplier = 1 - layerIndex * 0.25;
+              timeline.to(
+                layer,
+                { y: -24 * depthMultiplier, duration: segmentDuration * 0.6 },
+                segmentStart,
+              );
+            });
           }
 
           currentTextElements.forEach((el, elIdx) => {
@@ -254,6 +275,15 @@ export default function StudioServices({
               { scale: 1, y: 0, duration: segmentDuration * 0.7 },
               segmentStart + segmentDuration * 0.3,
             );
+
+            const nextLayers = nextStack.querySelectorAll(".studio-services__stack-layer");
+            nextLayers.forEach((layer) => {
+              timeline.to(
+                layer,
+                { y: 0, duration: segmentDuration * 0.7 },
+                segmentStart + segmentDuration * 0.3,
+              );
+            });
           }
 
           nextTextElements.forEach((el, elIdx) => {
@@ -287,9 +317,9 @@ export default function StudioServices({
         {services.map((service) => (
           <article key={service.serviceLabel} className="studio-services__static-item">
             <p className="studio-services__label">{service.serviceLabel}</p>
-            <div className="studio-services__static-stage">
+            <Reveal className="studio-services__static-stage" stagger y={28} start="top 85%">
               <ServicePanel service={service} underlineSrc={underlineSrc} bulletSrc={bulletSrc} />
-            </div>
+            </Reveal>
           </article>
         ))}
       </section>

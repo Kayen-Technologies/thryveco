@@ -4,6 +4,7 @@ import JournalEntriesSection from "@/components/journal/JournalEntriesSection";
 import type { JournalEntryCardData } from "@/components/journal/JournalEntryCard";
 import JournalHero from "@/components/journal/JournalHero";
 import { JOURNAL_DEFAULTS, type JournalMediaSrc } from "@/components/journal/defaults";
+import FinalCta from "@/components/home/FinalCta";
 import { getMediaUrl } from "@/lib/cms/media";
 import { getJournalPage, getJournalPosts } from "@/lib/payload";
 import type { JournalPost, Media } from "@/payload-types";
@@ -60,6 +61,14 @@ export default async function JournalPage() {
       <JournalEntriesSection
         title={page?.entriesSection?.title ?? JOURNAL_DEFAULTS.entriesSection.title}
         entries={entries}
+      />
+
+      <FinalCta
+        headline={JOURNAL_DEFAULTS.cta.headline}
+        subtext={JOURNAL_DEFAULTS.cta.subtext}
+        ctaLabel={JOURNAL_DEFAULTS.cta.ctaLabel}
+        ctaHref={JOURNAL_DEFAULTS.cta.ctaHref}
+        image={JOURNAL_DEFAULTS.cta.image}
       />
     </main>
   );

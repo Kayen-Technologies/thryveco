@@ -17,6 +17,9 @@ export default function FeaturedWorkSection({
   body,
   works,
 }: FeaturedWorkSectionProps) {
+  const primaryWorks = works.slice(0, 2);
+  const secondaryWorks = works.slice(2);
+
   return (
     <Section tone="cream" padded={false} className="overflow-hidden pt-20 md:pt-[130px]">
       <Container className="pb-[72px] text-center">
@@ -34,9 +37,17 @@ export default function FeaturedWorkSection({
           </div>
         </Reveal>
       </Container>
-      {works.map((work) => (
+      {primaryWorks.map((work) => (
         <FeaturedWorkBand key={work.slug} {...work} />
       ))}
+
+      {secondaryWorks.length > 0 ? (
+        <div className="featured-work-grid">
+          {secondaryWorks.map((work) => (
+            <FeaturedWorkBand key={work.slug} {...work} variant="compact" />
+          ))}
+        </div>
+      ) : null}
     </Section>
   );
 }

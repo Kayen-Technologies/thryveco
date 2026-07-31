@@ -19,6 +19,7 @@ export default function HomeHero({ headline, emphasis, image, videoSrc }: HomeHe
   const videoRef = useRef<HTMLVideoElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const [motionAllowed, setMotionAllowed] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -26,6 +27,13 @@ export default function HomeHero({ headline, emphasis, image, videoSrc }: HomeHe
     update();
     motionMq.addEventListener("change", update);
     return () => motionMq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -80,7 +88,7 @@ export default function HomeHero({ headline, emphasis, image, videoSrc }: HomeHe
       {showVideo ? (
         <video
           ref={videoRef}
-          className="home-hero__video"
+          className="home-hero__video home-hero__zoom"
           autoPlay
           muted
           loop
@@ -98,7 +106,7 @@ export default function HomeHero({ headline, emphasis, image, videoSrc }: HomeHe
         fill
         priority
         sizes="100vw"
-        className={`home-hero__image${showVideo ? " home-hero__image--under-video" : ""}`}
+        className={`home-hero__image home-hero__zoom${showVideo ? " home-hero__image--under-video" : ""}`}
       />
 
       <div className="home-hero__overlay" aria-hidden="true" />
@@ -123,6 +131,13 @@ export default function HomeHero({ headline, emphasis, image, videoSrc }: HomeHe
             )}
           </h1>
         </div>
+      </div>
+
+      <div
+        className={`home-hero__scroll-cue${scrolled ? " home-hero__scroll-cue--hidden" : ""}`}
+        aria-hidden="true"
+      >
+        <span className="home-hero__scroll-cue-icon" />
       </div>
     </section>
   );
