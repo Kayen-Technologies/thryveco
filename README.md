@@ -32,7 +32,51 @@ Admin: [http://localhost:3000/admin](http://localhost:3000/admin) — create the
 | `npm run db:migrate` | Run Payload migrations |
 | `npm run generate:types` | Regenerate `payload-types.ts` |
 | `npm run vercel-build` | Migrate + build (Vercel) |
+| `npm run db:clone-to-prod` | Replace the production database with a copy of local |
+| `npm run media:upload` | Upload `public/media` files referenced by the DB into Vercel Blob |
+| `npm run prod:verify` | Compare production against local (row counts + Blob coverage) |
 
 ## Environment
 
 See `.env.local.example` for required variables.
+
+## Deploying to Vercel
+
+### One-time project setup
+
+1. Import the repo at [vercel.com](https://vercel.com). Next.js is auto-detected.
+2. Set **Build Command** to `npm run vercel-build` so migrations run before the build.
+3. Create a **Blob** store under Storage and connect it (injects `BLOB_READ_WRITE_TOKEN`).
+4. Add the environment variables from `.env.local.example` with production values.
+   `NEXT_PUBLIC_SERVER_URL` and `NEXT_PUBLIC_SITE_URL` must be the live origin.
+
+### Seeding production with local content
+
+The migration chain cannot be replayed from an empty database: several early
+migrations seed content through the Payload local API, which builds its queries
+from the *current* config, so they reference tables that later migrations create.
+Production is therefore baselined from a copy of local rather than migrated from
+scratch.
+
+Create `.env.production.local` (gitignored) with the production values:
+
+```bash
+DATABASE_URL=postgresql://...          # production Postgres
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
+```
+
+Then:
+
+```bash
+CONFIRM=WIPE_PROD npm run db:clone-to-prod   # drops + replaces the prod schema
+npm run media:upload -- --dry-run            # preview the Blob transfer
+npm run media:upload                         # upload the media files
+npm run prod:verify                          # confirm parity
+```
+
+The dump includes `payload_migrations`, so `payload migrate` is a no-op on the
+next deploy and future migrations apply on top of this baseline.
+
+Media is served through `/api/media/file/<filename>`, which the Blob adapter
+resolves by filename. Blob keys must match the `filename` column exactly — the
+adapter runs with `addRandomSuffix` disabled and no prefix.

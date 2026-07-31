@@ -24,6 +24,9 @@
 /public/media/**
 !/public/media/.gitkeep
 
+# local database dumps
+/.tmp/
+
 # misc
 .DS_Store
 *.pem
