@@ -46,20 +46,30 @@ function LogoMark({
 export default function Navbar({ site, variant = "light", currentPath }: NavbarProps) {
   const clientPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Prefer server-provided path, fall back to client hook
-  const pathname = currentPath ?? clientPathname ?? "/";
+  // Force re-render after mount to ensure correct client-side state
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use client pathname once mounted; before mount, use server-provided or default to "/"
+  const rawPathname = mounted ? clientPathname : (currentPath || clientPathname);
+  const pathname = rawPathname && rawPathname.length > 0 ? rawPathname : "/";
 
   const isJournalPage = pathname === "/journal";
   const isWorksListingPage = pathname === "/works";
   const isContactPage = pathname === "/contact";
-  // Handle both "/" and "" for homepage
-  const isHomePage = pathname === "/" || pathname === "";
-  const isOverlayNav =
+  const isHomePage = pathname === "/";
+  
+  // Before mount, default to overlay mode (correct for home, about, studio)
+  // This prevents wrong colors flash on the most important pages
+  const isOverlayNav = !mounted ? true : (
     isHomePage ||
     pathname === "/about" ||
     pathname === "/studio" ||
-    isContactPage;
+    isContactPage
+  );
   const overlayVariant = isOverlayNav ? "light" : variant;
   // Contact sits on cream under the nav — charcoal links, not light-on-dark.
   const effectiveVariant = isContactPage ? "dark" : overlayVariant;
