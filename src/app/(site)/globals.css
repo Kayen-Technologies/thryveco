@@ -226,6 +226,7 @@ h6 {
   overflow: hidden;
   height: var(--hero-height);
   min-height: 520px;
+  margin-top: calc(-1 * var(--spacing-nav-h));
 }
 
 .home-hero__video,
@@ -1570,6 +1571,7 @@ h6 {
   overflow: hidden;
   min-height: min(100svh, 640px);
   height: clamp(640px, 100svh, 900px);
+  margin-top: calc(-1 * var(--spacing-nav-h));
 }
 
 .about-hero__media {
@@ -3802,6 +3804,7 @@ h6 {
   overflow: hidden;
   height: var(--hero-height);
   min-height: 520px;
+  margin-top: calc(-1 * var(--spacing-nav-h));
 }
 
 .studio-hero__media {

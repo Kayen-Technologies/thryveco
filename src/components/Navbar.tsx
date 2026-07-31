@@ -11,6 +11,8 @@ import type { SiteConfig } from "@/lib/cms/site-settings";
 type NavbarProps = {
   site: SiteConfig;
   variant?: "light" | "dark";
+  /** Pass from server component to avoid hydration mismatch with usePathname */
+  currentPath?: string;
 };
 
 function LogoMark({
@@ -41,15 +43,20 @@ function LogoMark({
   );
 }
 
-export default function Navbar({ site, variant = "light" }: NavbarProps) {
-  const pathname = usePathname();
+export default function Navbar({ site, variant = "light", currentPath }: NavbarProps) {
+  const clientPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Prefer server-provided path, fall back to client hook
+  const pathname = currentPath ?? clientPathname ?? "/";
 
   const isJournalPage = pathname === "/journal";
   const isWorksListingPage = pathname === "/works";
   const isContactPage = pathname === "/contact";
+  // Handle both "/" and "" for homepage
+  const isHomePage = pathname === "/" || pathname === "";
   const isOverlayNav =
-    pathname === "/" ||
+    isHomePage ||
     pathname === "/about" ||
     pathname === "/studio" ||
     isContactPage;
@@ -76,7 +83,7 @@ export default function Navbar({ site, variant = "light" }: NavbarProps) {
 
   useEffect(() => {
     setIsOpen(false);
-  }, [pathname]);
+  }, [clientPathname]);
 
   useEffect(() => {
     if (!isOpen) return;
