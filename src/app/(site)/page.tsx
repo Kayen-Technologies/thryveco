@@ -39,7 +39,7 @@ function mapFeaturedWork(
     href: `/works/${work.slug}`,
     name: work.client || work.title,
     category: work.industry ?? work.tagline ?? "",
-    tags: work.tags?.map(({ tag }) => tag) ?? fallback?.tags ?? [],
+    tags: work.tags?.map(({ tag }) => tag) ?? [...(fallback?.tags ?? [])],
     image,
   };
 }
