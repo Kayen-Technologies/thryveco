@@ -1,17 +1,13 @@
-import fs from "node:fs";
 import path from "node:path";
 
 import type { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
 
 import { STUDIO_DEFAULTS } from "@/components/studio/defaults";
 
+import { upsertSeedMedia } from "./upsertSeedMedia";
+
 type Payload = MigrateUpArgs["payload"];
 type Req = MigrateUpArgs["req"];
-
-type MediaDoc = {
-  id: number;
-  filesize?: number | null;
-};
 
 export type StudioMediaSeed = {
   filename: string;
@@ -74,10 +70,6 @@ function sourcePath(filename: string): string {
   return path.resolve(process.cwd(), "public", "assets", "studio", filename);
 }
 
-function publicMediaPath(filename: string): string {
-  return path.resolve(process.cwd(), "public", "media", filename);
-}
-
 export async function upsertStudioMedia({
   payload,
   req,
@@ -87,60 +79,14 @@ export async function upsertStudioMedia({
   req: Req;
   seed: StudioMediaSeed;
 }): Promise<number> {
-  const filePath = sourcePath(seed.filename);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Missing seeded media file: ${filePath}`);
-  }
-
-  const sourceSize = fs.statSync(filePath).size;
-  const existing = await payload.find({
-    collection: "media",
-    where: { filename: { equals: seed.filename } },
-    limit: 1,
-    depth: 0,
-    overrideAccess: true,
+  return upsertSeedMedia({
+    payload,
     req,
+    filePath: sourcePath(seed.filename),
+    filename: seed.filename,
+    alt: seed.alt,
+    caption: seed.caption,
   });
-
-  if (existing.docs.length > 0) {
-    const doc = existing.docs[0] as MediaDoc;
-    const fileChanged = doc.filesize !== sourceSize;
-    const missingOnDisk = !fs.existsSync(publicMediaPath(seed.filename));
-
-    if (fileChanged || missingOnDisk) {
-      const updated = await payload.update({
-        collection: "media",
-        id: doc.id,
-        data: { alt: seed.alt, caption: seed.caption },
-        filePath,
-        overrideAccess: true,
-        req,
-        depth: 0,
-      });
-      return (updated as MediaDoc).id;
-    }
-
-    const updated = await payload.update({
-      collection: "media",
-      id: doc.id,
-      data: { alt: seed.alt, caption: seed.caption },
-      overrideAccess: true,
-      req,
-      depth: 0,
-    });
-    return (updated as MediaDoc).id;
-  }
-
-  const created = await payload.create({
-    collection: "media",
-    data: { alt: seed.alt, caption: seed.caption },
-    filePath,
-    overrideAccess: true,
-    req,
-    depth: 0,
-  });
-
-  return (created as MediaDoc).id;
 }
 
 export async function seedAllStudioMedia({

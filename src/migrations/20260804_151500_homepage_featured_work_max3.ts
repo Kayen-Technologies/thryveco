@@ -1,9 +1,9 @@
-import fs from "node:fs";
 import path from "node:path";
 
 import type { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
 
-type MediaDoc = { id: number; filesize?: number | null };
+import { upsertSeedMedia } from "./lib/upsertSeedMedia";
+
 type WorkDoc = { id: number };
 
 const FEATURED_WORKS = [
@@ -59,61 +59,6 @@ const FEATURED_WORKS = [
 
 function sourcePath(filename: string): string {
   return path.resolve(process.cwd(), "public", "assets", "home", filename);
-}
-
-async function upsertMedia(
-  { payload, req }: Pick<MigrateUpArgs, "payload" | "req">,
-  seed: (typeof FEATURED_WORKS)[number],
-): Promise<number> {
-  const filePath = sourcePath(seed.filename);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Missing seeded media file: ${filePath}`);
-  }
-
-  const sourceSize = fs.statSync(filePath).size;
-  const existing = await payload.find({
-    collection: "media",
-    where: { filename: { equals: seed.filename } },
-    limit: 1,
-    depth: 0,
-    overrideAccess: true,
-    req,
-  });
-
-  if (existing.docs.length > 0) {
-    const doc = existing.docs[0] as MediaDoc;
-    if (doc.filesize !== sourceSize) {
-      await payload.update({
-        collection: "media",
-        id: doc.id,
-        data: { alt: seed.alt },
-        filePath,
-        overrideAccess: true,
-        req,
-        depth: 0,
-      });
-    } else {
-      await payload.update({
-        collection: "media",
-        id: doc.id,
-        data: { alt: seed.alt },
-        overrideAccess: true,
-        req,
-        depth: 0,
-      });
-    }
-    return doc.id;
-  }
-
-  const created = await payload.create({
-    collection: "media",
-    data: { alt: seed.alt },
-    filePath,
-    overrideAccess: true,
-    req,
-    depth: 0,
-  });
-  return created.id as number;
 }
 
 async function upsertWork(
@@ -172,7 +117,13 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   const workIds: number[] = [];
 
   for (const seed of FEATURED_WORKS) {
-    const mediaId = await upsertMedia({ payload, req }, seed);
+    const mediaId = await upsertSeedMedia({
+      payload,
+      req,
+      filePath: sourcePath(seed.filename),
+      filename: seed.filename,
+      alt: seed.alt,
+    });
     workIds.push(await upsertWork({ payload, req }, seed, mediaId));
   }
 

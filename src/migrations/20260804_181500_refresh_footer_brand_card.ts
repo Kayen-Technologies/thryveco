@@ -1,54 +1,22 @@
-import fs from "node:fs";
 import path from "node:path";
 
 import type { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
+import { del } from "@vercel/blob";
+
+import { upsertSeedMedia } from "./lib/upsertSeedMedia";
 
 const SOURCE = path.resolve(process.cwd(), "public", "assets", "footer", "brand-card.jpg");
 const FILENAME = "footer-brand-card.jpg";
 const ALT = "Thryve & Co brand card held in hands";
 
-type MediaDoc = { id: number; filesize?: number | null; filename?: string | null };
-
 export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
-  if (!fs.existsSync(SOURCE)) {
-    throw new Error(`Missing seeded media file: ${SOURCE}`);
-  }
-
-  const sourceSize = fs.statSync(SOURCE).size;
-  const existing = await payload.find({
-    collection: "media",
-    where: { filename: { equals: FILENAME } },
-    limit: 1,
-    depth: 0,
-    overrideAccess: true,
+  const mediaId = await upsertSeedMedia({
+    payload,
     req,
+    filePath: SOURCE,
+    filename: FILENAME,
+    alt: ALT,
   });
-
-  let mediaId: number;
-
-  if (existing.docs.length > 0) {
-    const doc = existing.docs[0] as MediaDoc;
-    mediaId = doc.id;
-    await payload.update({
-      collection: "media",
-      id: doc.id,
-      data: { alt: ALT },
-      filePath: SOURCE,
-      overrideAccess: true,
-      req,
-      depth: 0,
-    });
-  } else {
-    const created = await payload.create({
-      collection: "media",
-      data: { alt: ALT },
-      filePath: SOURCE,
-      overrideAccess: true,
-      req,
-      depth: 0,
-    });
-    mediaId = created.id as number;
-  }
 
   // Also refresh whatever file is currently linked (e.g. footer-brand-card-2.jpg)
   const settings = await payload.findGlobal({
@@ -60,6 +28,27 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
 
   const currentFooterImage = (settings as { footerImage?: number | null }).footerImage;
   if (typeof currentFooterImage === "number" && currentFooterImage !== mediaId) {
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    const linked = await payload.findByID({
+      collection: "media",
+      id: currentFooterImage,
+      depth: 0,
+      overrideAccess: true,
+      req,
+    });
+    const linkedFilename =
+      linked && typeof linked === "object" && "filename" in linked
+        ? (linked.filename as string | null | undefined)
+        : null;
+
+    if (token && linkedFilename) {
+      try {
+        await del(linkedFilename, { token });
+      } catch {
+        // Missing blob is fine.
+      }
+    }
+
     await payload.update({
       collection: "media",
       id: currentFooterImage,
@@ -78,8 +67,6 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
     req,
     depth: 0,
   });
-
-  void sourceSize;
 }
 
 export async function down(_args: MigrateDownArgs): Promise<void> {
