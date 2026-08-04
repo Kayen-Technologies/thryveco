@@ -8,7 +8,7 @@
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "lint": "eslint",
-    "vercel-build": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_MIGRATING=true payload migrate && next build",
+    "vercel-build": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap && cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_MIGRATING=true payload migrate && next build",
     "db:migrate": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_MIGRATING=true payload migrate",
     "db:clone-to-prod": "./scripts/clone-db-to-prod.sh",
     "media:upload": "tsx scripts/upload-media-to-blob.ts",

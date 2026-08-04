@@ -113,15 +113,13 @@ export default buildConfig({
     blocksAsJSON: true,
   }),
   plugins: [
-    ...(process.env.BLOB_READ_WRITE_TOKEN
-      ? [
-          vercelBlobStorage({
-            collections: { media: true },
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-            clientUploads: true,
-          }),
-        ]
-      : []),
+    // Always register: plugin self-disables when token is unset (local disk).
+    // Production importMap for client uploads is regenerated in vercel-build.
+    vercelBlobStorage({
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN || undefined,
+      clientUploads: true,
+    }),
   ],
   sharp,
 });
