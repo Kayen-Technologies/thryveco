@@ -129,13 +129,12 @@ export default function StudioServices({
     const panels = panelsRef.current.filter((panel): panel is HTMLDivElement => panel !== null);
     if (panels.length !== services.length) return;
 
-    const track = trackRef.current;
     const frame = frameRef.current;
     const section = sectionRef.current;
     const triggerId = `studio-services-${Date.now()}`;
 
     const initAnimation = () => {
-      if (!document.body.contains(track)) return;
+      if (!document.body.contains(frame)) return;
 
       gsapContextRef.current = gsap.context(() => {
         panels.forEach((panel, index) => {
@@ -177,22 +176,20 @@ export default function StudioServices({
           });
         });
 
+        // One viewport of scroll per service transition; pinSpacing owns track length.
+        // Avoid aggressive snap — it was skipping 01→04 on modest wheel deltas.
+        const scrollPerService = () => window.innerHeight;
+
         const timeline = gsap.timeline({
-          defaults: { ease: "power3.inOut" },
+          defaults: { ease: "none" },
           scrollTrigger: {
             id: triggerId,
-            trigger: track,
+            trigger: frame,
             start: "top top",
-            end: () => `+=${window.innerHeight * 0.85 * (services.length - 1)}`,
-            pin: frame,
+            end: () => `+=${scrollPerService() * (services.length - 1)}`,
+            pin: true,
             pinSpacing: true,
-            scrub: 0.8,
-            snap: {
-              snapTo: 1 / (services.length - 1),
-              duration: { min: 0.4, max: 0.8 },
-              delay: 0.1,
-              ease: "power2.inOut",
-            },
+            scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {

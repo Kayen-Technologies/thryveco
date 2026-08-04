@@ -19,8 +19,11 @@ export const STUDIO_DEFAULTS = {
   hero: {
     headline: "This is Where The Magic Happens",
     tagline:
-      "Four ways to work with us. One non-negotiable standard your brand leaves here looking and feeling undeniably itself.",
-    image: { src: "/assets/studio/studio-hero.jpg", alt: "Creative studio hands holding camera and tablet" },
+      "Four ways to work with us. One non-negotiable standard. Your brand leaves here looking and feeling undeniably itself.",
+    image: {
+      src: "/assets/studio/studio-hero.jpg",
+      alt: "Creative desk with laptop, headphones, and STRATEGY FIRST card",
+    },
   },
   servicesSection: {
     title: "The Four Services",

@@ -34,6 +34,13 @@ import * as migration_20260728_200700_add_how_it_works_image_field from './20260
 import * as migration_20260728_200800_seed_studio_how_step_images from './20260728_200800_seed_studio_how_step_images';
 import * as migration_20260730_132600_homepage_hero_video from './20260730_132600_homepage_hero_video';
 import * as migration_20260731_101600_seed_contact_page_figma from './20260731_101600_seed_contact_page_figma';
+import * as migration_20260804_143000_update_homepage_intro_copy from './20260804_143000_update_homepage_intro_copy';
+import * as migration_20260804_150000_homepage_marquee_items from './20260804_150000_homepage_marquee_items';
+import * as migration_20260804_151500_homepage_featured_work_max3 from './20260804_151500_homepage_featured_work_max3';
+import * as migration_20260804_180000_update_homepage_quote_band from './20260804_180000_update_homepage_quote_band';
+import * as migration_20260804_181500_refresh_footer_brand_card from './20260804_181500_refresh_footer_brand_card';
+import * as migration_20260804_183000_refresh_studio_hero_viewport from './20260804_183000_refresh_studio_hero_viewport';
+import * as migration_20260804_211500_update_journal_hero_copy from './20260804_211500_update_journal_hero_copy';
 
 export const migrations = [
   {
@@ -210,5 +217,40 @@ export const migrations = [
     up: migration_20260731_101600_seed_contact_page_figma.up,
     down: migration_20260731_101600_seed_contact_page_figma.down,
     name: '20260731_101600_seed_contact_page_figma'
+  },
+  {
+    up: migration_20260804_143000_update_homepage_intro_copy.up,
+    down: migration_20260804_143000_update_homepage_intro_copy.down,
+    name: '20260804_143000_update_homepage_intro_copy'
+  },
+  {
+    up: migration_20260804_150000_homepage_marquee_items.up,
+    down: migration_20260804_150000_homepage_marquee_items.down,
+    name: '20260804_150000_homepage_marquee_items'
+  },
+  {
+    up: migration_20260804_151500_homepage_featured_work_max3.up,
+    down: migration_20260804_151500_homepage_featured_work_max3.down,
+    name: '20260804_151500_homepage_featured_work_max3'
+  },
+  {
+    up: migration_20260804_180000_update_homepage_quote_band.up,
+    down: migration_20260804_180000_update_homepage_quote_band.down,
+    name: '20260804_180000_update_homepage_quote_band'
+  },
+  {
+    up: migration_20260804_181500_refresh_footer_brand_card.up,
+    down: migration_20260804_181500_refresh_footer_brand_card.down,
+    name: '20260804_181500_refresh_footer_brand_card'
+  },
+  {
+    up: migration_20260804_183000_refresh_studio_hero_viewport.up,
+    down: migration_20260804_183000_refresh_studio_hero_viewport.down,
+    name: '20260804_183000_refresh_studio_hero_viewport'
+  },
+  {
+    up: migration_20260804_211500_update_journal_hero_copy.up,
+    down: migration_20260804_211500_update_journal_hero_copy.down,
+    name: '20260804_211500_update_journal_hero_copy'
   },
 ];

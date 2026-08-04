@@ -7,7 +7,7 @@ export const JOURNAL_DEFAULTS = {
   hero: {
     headline: "Thoughts, perspective & a little creative obsession.",
     tagline:
-      "We write about the things we care about aesthetics, strategy, social media, and everything happening in the creative world around us. Pull up a seat.",
+      "We write about the things we care about: aesthetics, strategy, social media, and everything happening in the creative world around us. Pull up a seat.",
     image: {
       src: "/assets/journal/journal-hero-backdrop.jpg",
       alt: "Creative workspace with notebook and candle",

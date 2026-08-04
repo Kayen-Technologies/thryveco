@@ -10,7 +10,9 @@ Authority for implement → sweep → QA. Figma: `6X4FDZeL0ux7dY4zucMhe5`, node 
 
 Ship a Figma-faithful homepage hero on `/`: full-bleed background **video** under a transparent overlay Navbar, dark overlay, centered two-tone Playfair headline (“Your Brand’s New” white + “Creative Friend” gold italic), with tablet/mobile responsive scaling. Video + poster image + headline copy must be CMS-first via Payload Home Page global, with committed static fallbacks and a migration that seeds/links media.
 
-Success = desktop metrics match Figma; video autoplays muted with poster/image fallback; reduced-motion shows static poster; no other homepage sections changed.
+Success = desktop metrics match Figma for composition (nav, headline, overlay, media); video autoplays muted with poster/image fallback; reduced-motion shows static poster; no other homepage sections changed.
+
+**Height note:** Fixed desktop hero height `900px` / content `770px` acceptance is **superseded** by `homepage-hero-viewport-fill-micro-spec.md` (viewport fill via `100svh`/`100dvh`).
 
 ---
 

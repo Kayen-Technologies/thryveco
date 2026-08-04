@@ -916,16 +916,20 @@ export interface HomePage {
   };
   marquee?: {
     /**
-     * Portrait photo used in the scrolling marquee strip.
+     * Fallback portrait when a marquee item has no image. Prefer per-item images on Marquee Items.
      */
     image?: (number | null) | Media;
   };
   /**
-   * Words that scroll across the marquee strip between sections.
+   * Word + image clusters that scroll together (Figma Social → Cultured → Curated).
    */
   marqueeWords?:
     | {
         word: string;
+        /**
+         * Portrait paired with this word (slides with the text).
+         */
+        image?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -937,7 +941,7 @@ export interface HomePage {
   featuredWork?: {
     headline?: string | null;
     /**
-     * Select up to 4 case studies to feature on the homepage.
+     * Select up to 3 case studies to feature on the homepage (Figma order).
      */
     works?: (number | Work)[] | null;
   };
@@ -1293,6 +1297,7 @@ export interface HomePageSelect<T extends boolean = true> {
     | T
     | {
         word?: T;
+        image?: T;
         id?: T;
       };
   story?:

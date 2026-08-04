@@ -27,7 +27,7 @@ function buildStudioMediaSeed(): StudioMediaSeed[] {
   const seeds: StudioMediaSeed[] = [
     {
       filename: "studio-hero.jpg",
-      alt: "Creative studio hands holding camera and tablet",
+      alt: "Creative desk with laptop, headphones, and STRATEGY FIRST card",
       caption: "Figma studio hero",
     },
     {

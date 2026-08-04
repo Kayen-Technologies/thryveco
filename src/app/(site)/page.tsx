@@ -1,4 +1,4 @@
-import { getHomePage, getWorks } from "@/lib/payload";
+import { getHomePage } from "@/lib/payload";
 import FeaturedWorkSection from "@/components/home/FeaturedWorkSection";
 import type { FeaturedWorkItem } from "@/components/home/FeaturedWorkBand";
 import FinalCta from "@/components/home/FinalCta";
@@ -11,6 +11,8 @@ import { HOME_DEFAULTS, type HomeMediaSrc } from "@/components/home/defaults";
 import { getMediaUrl } from "@/lib/cms/media";
 import type { Media, Work } from "@/payload-types";
 
+const FEATURED_WORK_MAX = 3;
+
 function mediaSource(
   media: number | Media | null | undefined,
   fallback: HomeMediaSrc,
@@ -22,44 +24,79 @@ function mediaSource(
   return { src, alt: media.alt };
 }
 
-function mapFeaturedWork(work: Work): FeaturedWorkItem | null {
+function mapFeaturedWork(
+  work: Work,
+  fallback?: (typeof HOME_DEFAULTS.featured.items)[number],
+): FeaturedWorkItem | null {
   const media = work.coverImage ?? work.heroImage;
-  const src = getMediaUrl(media);
-  if (!src || !media || typeof media === "number") return null;
+  const image = mediaSource(
+    media,
+    fallback?.image ?? { src: "/assets/home/work-purple-square.jpg", alt: work.title },
+  );
 
   return {
     slug: work.slug,
     href: `/works/${work.slug}`,
     name: work.client || work.title,
     category: work.industry ?? work.tagline ?? "",
-    tags: work.tags?.map(({ tag }) => tag) ?? [],
-    image: { src, alt: media.alt },
+    tags: work.tags?.map(({ tag }) => tag) ?? fallback?.tags ?? [],
+    image,
   };
 }
 
+function resolveFeaturedWorks(
+  related: (number | Work)[] | null | undefined,
+): FeaturedWorkItem[] {
+  const defaults = HOME_DEFAULTS.featured.items;
+
+  const fromCms =
+    related
+      ?.map((entry, index) => {
+        if (!entry || typeof entry === "number") return null;
+        return mapFeaturedWork(entry, defaults[index]);
+      })
+      .filter((work): work is FeaturedWorkItem => work !== null)
+      .slice(0, FEATURED_WORK_MAX) ?? [];
+
+  if (fromCms.length > 0) return fromCms;
+
+  return defaults.map((item) => ({
+    ...item,
+    tags: [...item.tags],
+  }));
+}
+
 export default async function HomePage() {
-  const [page, { docs: allWorks }] = await Promise.all([
-    getHomePage(),
-    getWorks({ limit: 4 }),
-  ]);
+  const page = await getHomePage();
 
   const introBody = page?.intro?.body?.trim();
   const paragraphs = introBody
     ? introBody.split(/\n\s*\n/).filter(Boolean)
     : [...HOME_DEFAULTS.intro.body];
-  const marqueeWords = page?.marqueeWords?.map(({ word }) => word.trim()).filter(Boolean) ?? [];
+  const marqueeFallback = page?.marquee?.image
+    ? mediaSource(page.marquee.image, HOME_DEFAULTS.marquee.image)
+    : HOME_DEFAULTS.marquee.image;
 
-  const dynamicWorks = allWorks
-    .map(mapFeaturedWork)
-    .filter((work): work is FeaturedWorkItem => work !== null);
+  const marqueeItems =
+    page?.marqueeWords
+      ?.map((row, index) => {
+        const word = row.word?.trim();
+        if (!word) return null;
+        const fallbackItem =
+          HOME_DEFAULTS.marquee.items[index % HOME_DEFAULTS.marquee.items.length];
+        return {
+          word,
+          image: mediaSource(row.image, fallbackItem?.image ?? marqueeFallback),
+        };
+      })
+      .filter((item): item is { word: string; image: HomeMediaSrc } => item !== null) ??
+    [];
 
-  const featuredWorks =
-    dynamicWorks.length > 0
-      ? dynamicWorks
-      : HOME_DEFAULTS.featured.items.map((item) => ({
-          ...item,
-          tags: [...item.tags],
-        }));
+  const marquee =
+    marqueeItems.length > 0 ? marqueeItems : [...HOME_DEFAULTS.marquee.items];
+
+  const featuredWorks = resolveFeaturedWorks(page?.featuredWork?.works);
+
   const testimonials =
     page?.testimonials
       ?.map(({ quote, name, role }) => ({ quote, name, role }))
@@ -86,12 +123,7 @@ export default async function HomePage() {
         ctaHref={page?.intro?.ctaHref ?? HOME_DEFAULTS.intro.ctaHref}
         image={mediaSource(page?.intro?.image, HOME_DEFAULTS.intro.image)}
       />
-      <HomeMarquee
-        primaryWord={marqueeWords[0] ?? HOME_DEFAULTS.marquee.primaryWord}
-        secondaryWord={marqueeWords[1] ?? HOME_DEFAULTS.marquee.secondaryWord}
-        image={mediaSource(page?.marquee?.image, HOME_DEFAULTS.marquee.image)}
-        maskSrc={HOME_DEFAULTS.marquee.maskSrc}
-      />
+      <HomeMarquee items={marquee} />
       <FeaturedWorkSection
         headline={page?.featuredWork?.headline ?? HOME_DEFAULTS.featured.headline}
         body={page?.story?.body?.trim() || HOME_DEFAULTS.featured.body}

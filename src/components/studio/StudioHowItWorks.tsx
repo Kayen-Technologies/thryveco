@@ -94,12 +94,12 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
   return (
     <section className="studio-how">
       <div className="studio-how__inner">
-        <Reveal>
+        <Reveal className="studio-how__title-wrap" start="top 90%">
           <h2 className="studio-how__title">{title}</h2>
         </Reveal>
 
-        <div className="studio-how__layout">
-          <div className="studio-how__panel">
+        <Reveal className="studio-how__layout" stagger y={28} start="top 85%">
+          <div className="studio-how__panel" data-reveal>
             <div
               className={`studio-how__copy${copyVisible ? "" : " studio-how__copy--fading"}`}
               aria-live="polite"
@@ -136,6 +136,7 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
 
           <div
             className="studio-how__media"
+            data-reveal
             role="tabpanel"
             id={`studio-how-panel-${activeIndex}`}
             aria-labelledby={`studio-how-tab-${activeIndex}`}
@@ -156,7 +157,7 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
               />
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

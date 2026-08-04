@@ -12,7 +12,7 @@ export const HOME_DEFAULTS = {
   intro: {
     headline: "Growth should look as good as it performs.",
     body: [
-      "We're a creative agency for brands that refuse to blend in — aesthetic-forward, strategy-driven, and built for brands that want both.",
+      "We're a creative agency for brands that refuse to blend in. Aesthetic-forward, strategy-driven, and built for brands that want both.",
       "We help ambitious brands build an online presence that feels as intentional as the products and experiences they create. By blending strategy, creative direction, content creation and social media management, we shape brands that are memorable, culturally relevant and impossible to overlook.",
     ],
     ctaLabel: "Book a Discovery Call",
@@ -20,51 +20,88 @@ export const HOME_DEFAULTS = {
     image: { src: "/assets/home/intro-portrait.jpg", alt: "" },
   },
   marquee: {
-    primaryWord: "Cultured",
-    secondaryWord: "Intentional",
+    items: [
+      {
+        word: "Social",
+        image: {
+          src: "/assets/home/marquee-social.jpg",
+          alt: "Tablet and Positivity book on textured fabric",
+        },
+      },
+      {
+        word: "Cultured",
+        image: {
+          src: "/assets/home/marquee-cultured.jpg",
+          alt: "Gold vessel and chain on burgundy surface",
+        },
+      },
+      {
+        word: "Curated",
+        image: {
+          src: "/assets/home/marquee-curated.jpg",
+          alt: "Founder in burgundy suit by a window",
+        },
+      },
+    ],
+    // Legacy single-image fallback for items without an upload
     image: { src: "/assets/home/marquee-photo.jpg", alt: "" },
-    maskSrc: "/assets/home/marquee-mask.svg",
   },
   featured: {
     headline: "Every brand has a story. We make sure it’s one worth remembering.",
     body: "From strategy and content creation to full-scale campaigns, every project is thoughtfully crafted to help brands show up with confidence, clarity and unmistakable presence.",
     items: [
       {
-        slug: "casa-muse",
-        href: "/works/casa-muse",
-        name: "Casa muse",
+        slug: "purple-square-interiors",
+        href: "/works/purple-square-interiors",
+        name: "Purple Square Interiors",
         category: "Interior Design Studio",
-        tags: ["Brand Identity", "Content Strategy", "Digital Marketing", "Photography"],
-        image: { src: "/assets/home/work-01.jpg", alt: "Casa Muse interior case study hero" },
+        tags: [
+          "Brand Identity",
+          "Content Strategy",
+          "Digital Marketing",
+          "Videography",
+        ],
+        image: {
+          src: "/assets/home/work-purple-square.jpg",
+          alt: "Purple Square Interiors styled shelf vignette",
+        },
       },
       {
-        slug: "sole",
-        href: "/works",
-        name: "SÓLÉ",
-        category: "Skincare",
-        tags: ["Brand Identity", "Product Photography", "Social Media", "Campaign Creative"],
-        image: { src: "/assets/home/work-02.jpg", alt: "Sole skincare case study hero" },
+        slug: "naya-moments",
+        href: "/works/naya-moments",
+        name: "Naya Moments",
+        category: "Events Stylist",
+        tags: [
+          "Brand Identity",
+          "Photography",
+          "Social Media Management",
+          "Videography",
+        ],
+        image: {
+          src: "/assets/home/work-naya-moments.jpg",
+          alt: "Naya Moments skincare dialogue event set",
+        },
       },
       {
-        slug: "aure",
-        href: "/works",
-        name: "Aure",
-        category: "Fine Jewellery",
-        tags: ["Brand Positioning", "Content Strategy", "Digital Marketing", "Photography"],
-        image: { src: "/assets/home/work-03.jpg", alt: "Aure fine jewellery case study hero" },
-      },
-      {
-        slug: "lune",
-        href: "/works",
-        name: "Lune",
-        category: "Luxury Fragrance",
-        tags: ["Creative Direction", "Photography", "Social Media", "Content Strategy"],
-        image: { src: "/assets/home/work-04.jpg", alt: "Lune luxury fragrance case study hero" },
+        slug: "mya-art-workshop",
+        href: "/works/mya-art-workshop",
+        name: "Mya Art Workshop",
+        category: "Art Studio",
+        tags: [
+          "Brand Positioning",
+          "Content Strategy",
+          "Social Media Management",
+          "Videography",
+        ],
+        image: {
+          src: "/assets/home/work-mya-art.jpg",
+          alt: "Mya Art Workshop studio with easels",
+        },
       },
     ],
   },
   quote: {
-    quote: "Beautiful brands aren't an accident. They're built, on purpose, one detail at a time.",
+    quote: "Growth should look as good as it performs.",
     attribution: "Thryve & Co Creative Agency",
   },
   testimonials: {

@@ -1,109 +1,63 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef } from "react";
 
 import Section from "@/components/Section";
 import type { HomeMediaSrc } from "@/components/home/defaults";
 
-type HomeMarqueeProps = Readonly<{
-  primaryWord: string;
-  secondaryWord: string;
+export type MarqueeItem = Readonly<{
+  word: string;
   image: HomeMediaSrc;
-  maskSrc?: string;
 }>;
 
-type MarqueeSegmentProps = {
-  primaryWord: string;
-  secondaryWord: string;
-  variant: "primary" | "overlay" | "secondary" | "secondary-overlay";
-  ariaHidden?: boolean;
-  className?: string;
-  segmentRef?: RefObject<HTMLDivElement | null>;
-};
+type HomeMarqueeProps = Readonly<{
+  items: MarqueeItem[];
+}>;
 
-function MarqueeTextSegment({
-  primaryWord,
-  secondaryWord,
-  variant,
+function MarqueeCluster({
+  word,
+  image,
   ariaHidden = false,
-  className = "",
-  segmentRef,
-}: MarqueeSegmentProps) {
+}: MarqueeItem & { ariaHidden?: boolean }) {
   return (
-    <div
-      ref={segmentRef}
-      className={`home-marquee__segment ${className}`.trim()}
-      aria-hidden={ariaHidden || undefined}
-    >
-      <div className="home-marquee__primary-slot">
-        {variant !== "secondary" && variant !== "secondary-overlay" && (
-          <p
-            className={
-              variant === "overlay"
-                ? "home-marquee__word home-marquee__word--overlay"
-                : "home-marquee__word home-marquee__word--base"
-            }
-          >
-            {primaryWord}
-          </p>
-        )}
+    <div className="home-marquee__cluster" aria-hidden={ariaHidden || undefined}>
+      <div className="home-marquee__photo">
+        <Image
+          src={image.src}
+          alt={ariaHidden ? "" : image.alt}
+          fill
+          sizes="297px"
+          className="home-marquee__photo-img"
+        />
       </div>
-
-      {variant === "primary" ? (
-        <span className="home-marquee__secondary-slot" aria-hidden="true">
-          {secondaryWord}
-        </span>
-      ) : variant === "secondary" ? (
-        <p className="home-marquee__word home-marquee__word--secondary">{secondaryWord}</p>
-      ) : variant === "secondary-overlay" ? (
-        <p className="home-marquee__word home-marquee__word--secondary home-marquee__word--secondary--overlay">
-          {secondaryWord}
-        </p>
-      ) : (
-        <span className="home-marquee__secondary-slot" aria-hidden="true">
-          {secondaryWord}
-        </span>
-      )}
+      <p className="home-marquee__word home-marquee__word--base">{word}</p>
+      <div className="home-marquee__invert" aria-hidden="true">
+        <p className="home-marquee__word home-marquee__word--overlay">{word}</p>
+      </div>
     </div>
   );
 }
 
-export default function HomeMarquee({
-  primaryWord,
-  secondaryWord,
-  image,
-}: HomeMarqueeProps) {
+export default function HomeMarquee({ items }: HomeMarqueeProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const segmentRef = useRef<HTMLDivElement>(null);
-  const baseStageRef = useRef<HTMLDivElement>(null);
-  const overlayStageRef = useRef<HTMLDivElement>(null);
-  const secondaryStageRef = useRef<HTMLDivElement>(null);
-  const secondaryOverlayStageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const segment = segmentRef.current;
-    const baseStage = baseStageRef.current;
-    const overlayStage = overlayStageRef.current;
-    const secondaryStage = secondaryStageRef.current;
-    const secondaryOverlayStage = secondaryOverlayStageRef.current;
-    if (!segment || !baseStage || !overlayStage || !secondaryStage || !secondaryOverlayStage) return;
+    const track = trackRef.current;
+    const stage = stageRef.current;
+    if (!track || !stage || items.length === 0) return;
 
     const syncShift = () => {
-      const shift = `${segment.offsetWidth}px`;
-      baseStage.style.setProperty("--marquee-shift", shift);
-      overlayStage.style.setProperty("--marquee-shift", shift);
-      secondaryStage.style.setProperty("--marquee-shift", shift);
-      secondaryOverlayStage.style.setProperty("--marquee-shift", shift);
+      stage.style.setProperty("--marquee-shift", `${track.offsetWidth}px`);
     };
 
     syncShift();
-
     const observer = new ResizeObserver(syncShift);
-    observer.observe(segment);
-
+    observer.observe(track);
     return () => observer.disconnect();
-  }, [primaryWord, secondaryWord]);
+  }, [items]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -121,7 +75,7 @@ export default function HomeMarquee({
     return () => io.disconnect();
   }, []);
 
-  const segmentContent = { primaryWord, secondaryWord };
+  if (items.length === 0) return null;
 
   return (
     <Section
@@ -130,68 +84,19 @@ export default function HomeMarquee({
       className="home-marquee marquee-container relative overflow-hidden"
     >
       <div ref={viewportRef} className="home-marquee__viewport">
-        <div className="home-marquee__photo-static" aria-hidden="true">
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="297px"
-            className="object-cover"
-          />
-        </div>
-
         <div
-          ref={baseStageRef}
-          className="home-marquee__stage home-marquee__stage--base home-marquee__stage--animated"
+          ref={stageRef}
+          className="home-marquee__stage home-marquee__stage--animated"
         >
-          <MarqueeTextSegment {...segmentContent} variant="primary" segmentRef={segmentRef} />
-          <MarqueeTextSegment
-            {...segmentContent}
-            variant="primary"
-            ariaHidden
-            className="home-marquee-duplicate"
-          />
-        </div>
-
-        <div className="home-marquee__overlay-mask" aria-hidden="true">
-          <div
-            ref={overlayStageRef}
-            className="home-marquee__stage home-marquee__stage--animated"
-          >
-            <MarqueeTextSegment {...segmentContent} variant="overlay" />
-            <MarqueeTextSegment
-              {...segmentContent}
-              variant="overlay"
-              ariaHidden
-              className="home-marquee-duplicate"
-            />
+          <div ref={trackRef} className="home-marquee__track">
+            {items.map((item) => (
+              <MarqueeCluster key={`a-${item.word}`} {...item} />
+            ))}
           </div>
-          <div
-            ref={secondaryOverlayStageRef}
-            className="home-marquee__stage home-marquee__stage--animated"
-          >
-            <MarqueeTextSegment {...segmentContent} variant="secondary-overlay" />
-            <MarqueeTextSegment
-              {...segmentContent}
-              variant="secondary-overlay"
-              ariaHidden
-              className="home-marquee-duplicate"
-            />
-          </div>
-        </div>
-
-        <div className="home-marquee__secondary-layer" aria-hidden="true">
-          <div
-            ref={secondaryStageRef}
-            className="home-marquee__stage home-marquee__stage--secondary home-marquee__stage--animated"
-          >
-            <MarqueeTextSegment {...segmentContent} variant="secondary" />
-            <MarqueeTextSegment
-              {...segmentContent}
-              variant="secondary"
-              ariaHidden
-              className="home-marquee-duplicate"
-            />
+          <div className="home-marquee__track" aria-hidden="true">
+            {items.map((item) => (
+              <MarqueeCluster key={`b-${item.word}`} {...item} ariaHidden />
+            ))}
           </div>
         </div>
       </div>

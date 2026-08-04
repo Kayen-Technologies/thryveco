@@ -111,7 +111,8 @@ export const HomePage: GlobalConfig = {
           type: "upload",
           relationTo: "media",
           admin: {
-            description: "Portrait photo used in the scrolling marquee strip.",
+            description:
+              "Fallback portrait when a marquee item has no image. Prefer per-item images on Marquee Items.",
           },
         },
       ],
@@ -119,20 +120,26 @@ export const HomePage: GlobalConfig = {
     {
       name: "marqueeWords",
       type: "array",
-      label: "Marquee Words",
+      label: "Marquee Items",
       admin: {
-        description: "Words that scroll across the marquee strip between sections.",
+        description:
+          "Word + image clusters that scroll together (Figma Social → Cultured → Curated).",
       },
       defaultValue: [
+        { word: "Social" },
         { word: "Cultured" },
-        { word: "Intentional" },
-        { word: "Creative" },
-        { word: "Bold" },
-        { word: "Strategic" },
-        { word: "Purposeful" },
+        { word: "Curated" },
       ],
       fields: [
         { name: "word", type: "text", required: true },
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          admin: {
+            description: "Portrait paired with this word (slides with the text).",
+          },
+        },
       ],
     },
 
@@ -175,8 +182,9 @@ export const HomePage: GlobalConfig = {
           type: "relationship",
           relationTo: "works",
           hasMany: true,
+          maxRows: 3,
           admin: {
-            description: "Select up to 4 case studies to feature on the homepage.",
+            description: "Select up to 3 case studies to feature on the homepage (Figma order).",
           },
         },
       ],
@@ -196,6 +204,7 @@ export const HomePage: GlobalConfig = {
         {
           name: "attribution",
           type: "text",
+          defaultValue: "Thryve & Co Creative Agency",
         },
       ],
     },
