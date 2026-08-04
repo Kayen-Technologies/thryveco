@@ -29,7 +29,9 @@ Success = live intro headline + body paragraphs + CTA match Figma; CMS Admin sho
 
 1. `HOME_DEFAULTS.intro` body P1 updated.
 2. Payload field defaults / seed strings that still carry the old P1 updated where they act as authorities.
-3. Migration updates `home-page.intro.body` (and keeps headline/cta aligned) via Payload Local API.
+3. Migration updates `home_page.intro_*` columns via **raw SQL** (not Local API).
+   Local API is unsafe here: this migration runs before marquee `image_id` DDL, and
+   `findGlobal`/`updateGlobal` always query the current schema.
 4. This authority doc.
 
 ---
