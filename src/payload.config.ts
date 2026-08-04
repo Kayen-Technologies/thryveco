@@ -88,8 +88,37 @@ function getDatabasePoolConfig(): {
   };
 }
 
+function getServerURL(): string {
+  const explicit = process.env.NEXT_PUBLIC_SERVER_URL?.trim().replace(/\/$/, "");
+  if (explicit) return explicit;
+  // Vercel injects these without a scheme.
+  const vercel =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  return vercel ? `https://${vercel}` : "";
+}
+
+const serverURL = getServerURL();
+
+// CSRF only trusts origins in this list. A wrong NEXT_PUBLIC_SERVER_URL
+// (e.g. https://your-domain.vercel.app) makes req.user null on every write.
+const csrf = Array.from(
+  new Set(
+    [
+      serverURL,
+      process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+      process.env.VERCEL_BRANCH_URL
+        ? `https://${process.env.VERCEL_BRANCH_URL}`
+        : "",
+      process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "",
+    ].filter(Boolean),
+  ),
+);
+
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  serverURL,
+  csrf,
   admin: {
     user: Users.slug,
     theme: "light",

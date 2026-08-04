@@ -48,7 +48,10 @@ See `.env.local.example` for required variables.
 2. Set **Build Command** to `npm run vercel-build` so migrations run before the build.
 3. Create a **Blob** store under Storage and connect it (injects `BLOB_READ_WRITE_TOKEN`).
 4. Add the environment variables from `.env.local.example` with production values.
-   `NEXT_PUBLIC_SERVER_URL` and `NEXT_PUBLIC_SITE_URL` must be the live origin.
+   `NEXT_PUBLIC_SERVER_URL` and `NEXT_PUBLIC_SITE_URL` must be the live origin
+   (e.g. `https://thryveco-wheat.vercel.app`), **exact match**, no trailing slash.
+   If these still say `https://your-domain.vercel.app`, admin writes fail with
+   "You are not allowed to perform this action" because CSRF drops the auth cookie.
 
 ### Seeding production with local content
 
