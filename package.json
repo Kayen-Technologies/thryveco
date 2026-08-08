@@ -12,6 +12,7 @@
     "db:migrate": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_MIGRATING=true payload migrate",
     "db:clone-to-prod": "./scripts/clone-db-to-prod.sh",
     "media:upload": "tsx scripts/upload-media-to-blob.ts",
+    "media:prune": "tsx scripts/prune-orphan-media.ts",
     "prod:verify": "tsx scripts/verify-prod-parity.ts",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",

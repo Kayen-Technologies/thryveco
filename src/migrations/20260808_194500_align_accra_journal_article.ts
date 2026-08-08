@@ -1,8 +1,9 @@
-import fs from "node:fs";
 import path from "node:path";
 
 import type { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
 import { sql } from "@payloadcms/db-postgres";
+
+import { upsertSeedMedia } from "./lib/upsertSeedMedia";
 
 /**
  * Figma node 439:1244 — Opened Journal 3.
@@ -38,8 +39,6 @@ type ArticleBlock =
       ctaLabel: string;
       ctaHref: string;
     };
-
-type MediaDoc = { id: number; filesize?: number | null };
 
 type MediaSeed = {
   filename: string;
@@ -79,10 +78,6 @@ const INLINE_06: MediaSeed = {
 
 function assetPath(filename: string): string {
   return path.resolve(process.cwd(), "public", "assets", "journal", filename);
-}
-
-function publicMediaPath(filename: string): string {
-  return path.resolve(process.cwd(), "public", "media", filename);
 }
 
 function paragraphs(...texts: string[]): ArticleBlock {
@@ -137,66 +132,24 @@ function buildBlocks(inline1: number, inline2: number): ArticleBlock[] {
   ];
 }
 
-async function upsertMedia(
+/**
+ * Never pre-copy the asset into `public/media`: Payload dedupes against an
+ * existing file of the same name and silently renames the upload, which leaves
+ * the Blob key and the `filename` column pointing at different objects.
+ */
+function upsertMedia(
   payload: MigrateUpArgs["payload"],
   req: MigrateUpArgs["req"],
   seed: MediaSeed,
 ): Promise<number> {
-  const filePath = assetPath(seed.filename);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Missing seeded media file: ${filePath}`);
-  }
-
-  fs.mkdirSync(path.dirname(publicMediaPath(seed.filename)), { recursive: true });
-  fs.copyFileSync(filePath, publicMediaPath(seed.filename));
-
-  const sourceSize = fs.statSync(filePath).size;
-  const existing = await payload.find({
-    collection: "media",
-    where: { filename: { equals: seed.filename } },
-    limit: 1,
-    depth: 0,
-    overrideAccess: true,
+  return upsertSeedMedia({
+    payload,
     req,
+    filePath: assetPath(seed.filename),
+    filename: seed.filename,
+    alt: seed.alt,
+    caption: seed.caption,
   });
-
-  if (existing.docs.length > 0) {
-    const doc = existing.docs[0] as MediaDoc;
-    const fileChanged = doc.filesize !== sourceSize;
-    const missingOnDisk = !fs.existsSync(publicMediaPath(seed.filename));
-
-    // Delete + recreate when bytes change. Updating with `filePath` lets Payload
-    // rewrite the filename (e.g. journal-post-03.jpg → journal-post-4.jpg).
-    if (fileChanged || missingOnDisk) {
-      await payload.delete({
-        collection: "media",
-        id: doc.id,
-        overrideAccess: true,
-        req,
-      });
-    } else {
-      const updated = await payload.update({
-        collection: "media",
-        id: doc.id,
-        data: { alt: seed.alt, caption: seed.caption },
-        overrideAccess: true,
-        req,
-        depth: 0,
-      });
-      return (updated as MediaDoc).id;
-    }
-  }
-
-  const created = await payload.create({
-    collection: "media",
-    data: { alt: seed.alt, caption: seed.caption },
-    filePath,
-    overrideAccess: true,
-    req,
-    depth: 0,
-  });
-
-  return (created as MediaDoc).id;
 }
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {

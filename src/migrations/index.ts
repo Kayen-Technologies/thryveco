@@ -54,6 +54,7 @@ import * as migration_20260808_214500_align_works_cta_with_figma from './2026080
 import * as migration_20260808_220000_align_purple_square_case_study from './20260808_220000_align_purple_square_case_study';
 import * as migration_20260808_222000_align_naya_moments_case_study from './20260808_222000_align_naya_moments_case_study';
 import * as migration_20260808_223000_align_mya_art_workshop_case_study from './20260808_223000_align_mya_art_workshop_case_study';
+import * as migration_20260808_231500_restore_creativity_inline_image from './20260808_231500_restore_creativity_inline_image';
 
 export const migrations = [
   {
@@ -330,5 +331,10 @@ export const migrations = [
     up: migration_20260808_223000_align_mya_art_workshop_case_study.up,
     down: migration_20260808_223000_align_mya_art_workshop_case_study.down,
     name: '20260808_223000_align_mya_art_workshop_case_study'
+  },
+  {
+    up: migration_20260808_231500_restore_creativity_inline_image.up,
+    down: migration_20260808_231500_restore_creativity_inline_image.down,
+    name: '20260808_231500_restore_creativity_inline_image'
   },
 ];
