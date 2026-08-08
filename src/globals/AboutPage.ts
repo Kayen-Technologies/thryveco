@@ -88,11 +88,15 @@ export const AboutPage: GlobalConfig = {
           name: "paragraphOne",
           type: "textarea",
           label: "Story Paragraph 1",
+          defaultValue:
+            "Before Thryve, Michelle was a digital creator learning the language of content, aesthetics and storytelling one post at a time. She had an eye for what looked good and an instinct for what felt right. That combination led her into social media management, where she discovered something she hadn't expected: a love for strategy. For the thinking behind the making. For the way a well-built brand presence could change how a business was perceived overnight.",
         },
         {
           name: "paragraphTwo",
           type: "textarea",
           label: "Story Paragraph 2",
+          defaultValue:
+            "Five years, multiple clients, and countless content pieces later, it became clear that what she was building wasn't just a freelance career. It was something bigger. Something with a name, a vision, and a standard.",
         },
         {
           name: "storyImage",
@@ -140,16 +144,22 @@ export const AboutPage: GlobalConfig = {
           name: "intro",
           type: "textarea",
           label: "Intro Paragraph",
+          defaultValue:
+            "Thriving isn’t passive. It’s putting yourself out there, taking up space, and doing it on your own terms. And the & Co.? That’s the part that says we’re always doing more. More than just thriving. More ideas, more possibilities, more of what your brand deserves.",
         },
         {
           name: "agencyCopy",
           type: "textarea",
           label: "Agency Paragraph",
+          defaultValue:
+            "We call ourselves a Creative Agency because that’s exactly what we are. A team of people whose job is to make your brand impossible to ignore. A creative partner with a point of view, in your corner, invested in what you’re building.",
         },
         {
           name: "aspirationCopy",
           type: "textarea",
           label: "Aspiration Paragraph",
+          defaultValue:
+            "We aspire to be the agency that changes how lifestyle, wellness and product brands show up. The name people mention when they talk about brands that look different. The agency behind the brands you can’t stop watching.",
         },
         {
           name: "image",
@@ -166,14 +176,15 @@ export const AboutPage: GlobalConfig = {
         {
           name: "headline",
           type: "text",
-          defaultValue: "Ready to build a brand people remember?",
+          defaultValue: "Your Next Brand Move Starts Here.",
         },
         {
           name: "subtext",
-          type: "text",
-          defaultValue: "Beautiful brands start here",
+          type: "textarea",
+          defaultValue:
+            "Your brand deserves more than content that fills a feed. Let’s build a strategy, presence, and visual identity people actually remember.",
         },
-        { name: "ctaLabel", type: "text", defaultValue: "Book A Discovery Call" },
+        { name: "ctaLabel", type: "text", defaultValue: "Book My Discovery Call" },
         { name: "ctaHref", type: "text", defaultValue: "/contact" },
         {
           name: "image",

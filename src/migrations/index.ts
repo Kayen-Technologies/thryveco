@@ -41,6 +41,19 @@ import * as migration_20260804_180000_update_homepage_quote_band from './2026080
 import * as migration_20260804_181500_refresh_footer_brand_card from './20260804_181500_refresh_footer_brand_card';
 import * as migration_20260804_183000_refresh_studio_hero_viewport from './20260804_183000_refresh_studio_hero_viewport';
 import * as migration_20260804_211500_update_journal_hero_copy from './20260804_211500_update_journal_hero_copy';
+import * as migration_20260808_103000_update_final_cta_copy from './20260808_103000_update_final_cta_copy';
+import * as migration_20260808_105000_update_about_founder_story_copy from './20260808_105000_update_about_founder_story_copy';
+import * as migration_20260808_110000_update_about_what_thryve_copy from './20260808_110000_update_about_what_thryve_copy';
+import * as migration_20260808_123000_align_journal_copy_with_figma from './20260808_123000_align_journal_copy_with_figma';
+import * as migration_20260808_124500_refresh_journal_media_figma from './20260808_124500_refresh_journal_media_figma';
+import * as migration_20260808_191500_align_aesthetic_journal_article from './20260808_191500_align_aesthetic_journal_article';
+import * as migration_20260808_193000_align_posting_journal_article from './20260808_193000_align_posting_journal_article';
+import * as migration_20260808_194500_align_accra_journal_article from './20260808_194500_align_accra_journal_article';
+import * as migration_20260808_212000_align_creativity_journal_article from './20260808_212000_align_creativity_journal_article';
+import * as migration_20260808_214500_align_works_cta_with_figma from './20260808_214500_align_works_cta_with_figma';
+import * as migration_20260808_220000_align_purple_square_case_study from './20260808_220000_align_purple_square_case_study';
+import * as migration_20260808_222000_align_naya_moments_case_study from './20260808_222000_align_naya_moments_case_study';
+import * as migration_20260808_223000_align_mya_art_workshop_case_study from './20260808_223000_align_mya_art_workshop_case_study';
 
 export const migrations = [
   {
@@ -252,5 +265,70 @@ export const migrations = [
     up: migration_20260804_211500_update_journal_hero_copy.up,
     down: migration_20260804_211500_update_journal_hero_copy.down,
     name: '20260804_211500_update_journal_hero_copy'
+  },
+  {
+    up: migration_20260808_103000_update_final_cta_copy.up,
+    down: migration_20260808_103000_update_final_cta_copy.down,
+    name: '20260808_103000_update_final_cta_copy'
+  },
+  {
+    up: migration_20260808_105000_update_about_founder_story_copy.up,
+    down: migration_20260808_105000_update_about_founder_story_copy.down,
+    name: '20260808_105000_update_about_founder_story_copy'
+  },
+  {
+    up: migration_20260808_110000_update_about_what_thryve_copy.up,
+    down: migration_20260808_110000_update_about_what_thryve_copy.down,
+    name: '20260808_110000_update_about_what_thryve_copy'
+  },
+  {
+    up: migration_20260808_123000_align_journal_copy_with_figma.up,
+    down: migration_20260808_123000_align_journal_copy_with_figma.down,
+    name: '20260808_123000_align_journal_copy_with_figma'
+  },
+  {
+    up: migration_20260808_124500_refresh_journal_media_figma.up,
+    down: migration_20260808_124500_refresh_journal_media_figma.down,
+    name: '20260808_124500_refresh_journal_media_figma'
+  },
+  {
+    up: migration_20260808_191500_align_aesthetic_journal_article.up,
+    down: migration_20260808_191500_align_aesthetic_journal_article.down,
+    name: '20260808_191500_align_aesthetic_journal_article'
+  },
+  {
+    up: migration_20260808_193000_align_posting_journal_article.up,
+    down: migration_20260808_193000_align_posting_journal_article.down,
+    name: '20260808_193000_align_posting_journal_article'
+  },
+  {
+    up: migration_20260808_194500_align_accra_journal_article.up,
+    down: migration_20260808_194500_align_accra_journal_article.down,
+    name: '20260808_194500_align_accra_journal_article'
+  },
+  {
+    up: migration_20260808_212000_align_creativity_journal_article.up,
+    down: migration_20260808_212000_align_creativity_journal_article.down,
+    name: '20260808_212000_align_creativity_journal_article'
+  },
+  {
+    up: migration_20260808_214500_align_works_cta_with_figma.up,
+    down: migration_20260808_214500_align_works_cta_with_figma.down,
+    name: '20260808_214500_align_works_cta_with_figma'
+  },
+  {
+    up: migration_20260808_220000_align_purple_square_case_study.up,
+    down: migration_20260808_220000_align_purple_square_case_study.down,
+    name: '20260808_220000_align_purple_square_case_study'
+  },
+  {
+    up: migration_20260808_222000_align_naya_moments_case_study.up,
+    down: migration_20260808_222000_align_naya_moments_case_study.down,
+    name: '20260808_222000_align_naya_moments_case_study'
+  },
+  {
+    up: migration_20260808_223000_align_mya_art_workshop_case_study.up,
+    down: migration_20260808_223000_align_mya_art_workshop_case_study.down,
+    name: '20260808_223000_align_mya_art_workshop_case_study'
   },
 ];

@@ -1067,13 +1067,11 @@ export interface WorksPage {
     title?: string | null;
   };
   cta?: {
-    topLine?: string | null;
-    topLineAccent?: string | null;
-    bottomLine?: string | null;
-    bottomLineAccent?: string | null;
+    headline?: string | null;
+    subtext?: string | null;
     ctaLabel?: string | null;
     ctaHref?: string | null;
-    backgroundImage?: (number | null) | Media;
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1429,13 +1427,11 @@ export interface WorksPageSelect<T extends boolean = true> {
   cta?:
     | T
     | {
-        topLine?: T;
-        topLineAccent?: T;
-        bottomLine?: T;
-        bottomLineAccent?: T;
+        headline?: T;
+        subtext?: T;
         ctaLabel?: T;
         ctaHref?: T;
-        backgroundImage?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

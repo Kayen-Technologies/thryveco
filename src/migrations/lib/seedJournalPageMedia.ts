@@ -30,17 +30,17 @@ export const JOURNAL_MEDIA_SEED: JournalMediaSeed[] = [
   },
   {
     filename: "journal-post-02.jpg",
-    alt: "Hand holding a smartphone in front of city billboards",
+    alt: "Burgundy Thryve postcards and a tablet on a textured surface",
     caption: "Figma journal post 2",
   },
   {
     filename: "journal-post-03.jpg",
-    alt: "Group of creative women smiling together",
+    alt: "Creative studio with chalkboard wall, bicycle, and Edison bulbs",
     caption: "Figma journal post 3",
   },
   {
     filename: "journal-post-04.jpg",
-    alt: "Art books, mug, and sculptural candle on a table",
+    alt: "Hands sketching UI wireframes and flowcharts on paper",
     caption: "Figma journal post 4",
   },
 ];
@@ -66,7 +66,7 @@ export const JOURNAL_POSTS_SEED: JournalPostSeed[] = [
   },
   {
     slug: "posting-every-day-wont-save-your-brand",
-    title: "Posting every day alone won't save your brand but this will.",
+    title: "Posting every day won't save your brand but this will.",
     category: "Social Media",
     readTime: 3,
     excerpt:
@@ -85,8 +85,8 @@ export const JOURNAL_POSTS_SEED: JournalPostSeed[] = [
   {
     slug: "why-the-best-brands-never-leave-creativity-to-chance",
     title: "Why the best brands never leave creativity to chance.",
-    category: "Creative Direction",
-    readTime: 3,
+    category: "Strategy",
+    readTime: 4,
     excerpt:
       "Creative direction is more than making things look good. It's about creating a consistent visual language that shapes how people recognize, remember, and connect with your brand.",
     imageFilename: "journal-post-04.jpg",

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
+import FinalCta from "@/components/home/FinalCta";
 import Reveal from "@/components/motion/Reveal";
 import { WORKS_DEFAULTS, type WorksMediaSrc } from "@/components/works/defaults";
 import WorksCaseStudyCard from "@/components/works/WorksCaseStudyCard";
-import WorksCta from "@/components/works/WorksCta";
 import WorksHero from "@/components/works/WorksHero";
 import { getMediaUrl } from "@/lib/cms/media";
 import { getWorksPage, getWorks } from "@/lib/payload";
@@ -46,7 +46,6 @@ export default async function WorksPage() {
   const [page, { docs: works }] = await Promise.all([getWorksPage(), getWorks()]);
 
   const heroImage = mediaSource(page?.hero?.heroImage, WORKS_DEFAULTS.hero.heroImage);
-  const ctaBgImage = mediaSource(page?.cta?.backgroundImage, WORKS_DEFAULTS.cta.backgroundImage);
 
   const mappedWorks = works.length > 0 ? works.map(mapWork) : WORKS_DEFAULTS.works;
 
@@ -79,14 +78,12 @@ export default async function WorksPage() {
         </div>
       </section>
 
-      <WorksCta
-        topLine={page?.cta?.topLine ?? WORKS_DEFAULTS.cta.topLine}
-        topLineAccent={page?.cta?.topLineAccent ?? WORKS_DEFAULTS.cta.topLineAccent}
-        bottomLine={page?.cta?.bottomLine ?? WORKS_DEFAULTS.cta.bottomLine}
-        bottomLineAccent={page?.cta?.bottomLineAccent ?? WORKS_DEFAULTS.cta.bottomLineAccent}
+      <FinalCta
+        headline={page?.cta?.headline ?? WORKS_DEFAULTS.cta.headline}
+        subtext={page?.cta?.subtext ?? WORKS_DEFAULTS.cta.subtext}
         ctaLabel={page?.cta?.ctaLabel ?? WORKS_DEFAULTS.cta.ctaLabel}
         ctaHref={page?.cta?.ctaHref ?? WORKS_DEFAULTS.cta.ctaHref}
-        backgroundImage={ctaBgImage}
+        image={mediaSource(page?.cta?.image, WORKS_DEFAULTS.cta.image)}
       />
     </main>
   );

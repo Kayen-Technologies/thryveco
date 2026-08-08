@@ -87,24 +87,20 @@ export default function AboutWhatThryve({
         </Reveal>
 
         <div className="about-what__lower">
-          <Reveal y={28}>
-            <p className="about-what__aspiration">{aspirationCopy}</p>
+          <Reveal className="about-what__image-wrap" y={36} delay={0.08}>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              sizes="(max-width: 1024px) 90vw, 551px"
+              className="about-what__image"
+            />
           </Reveal>
 
-          <div className="about-what__right">
-            <Reveal y={28} delay={0.08}>
-              <p className="about-what__agency">{agencyCopy}</p>
-            </Reveal>
-            <Reveal className="about-what__image-wrap" y={36} delay={0.12}>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 1024px) 90vw, 500px"
-                className="about-what__image"
-              />
-            </Reveal>
-          </div>
+          <Reveal className="about-what__copy" stagger y={28} delay={0.12}>
+            <p data-reveal>{agencyCopy}</p>
+            <p data-reveal>{aspirationCopy}</p>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -154,14 +154,15 @@ export const StudioPage: GlobalConfig = {
         {
           name: "headline",
           type: "text",
-          defaultValue: "Ready to build a brand people remember?",
+          defaultValue: "Your Next Brand Move Starts Here.",
         },
         {
           name: "subtext",
-          type: "text",
-          defaultValue: "Beautiful brands start here",
+          type: "textarea",
+          defaultValue:
+            "Your brand deserves more than content that fills a feed. Let’s build a strategy, presence, and visual identity people actually remember.",
         },
-        { name: "ctaLabel", type: "text", defaultValue: "Book A Discovery Call" },
+        { name: "ctaLabel", type: "text", defaultValue: "Book My Discovery Call" },
         { name: "ctaHref", type: "text", defaultValue: "/contact" },
         {
           name: "image",

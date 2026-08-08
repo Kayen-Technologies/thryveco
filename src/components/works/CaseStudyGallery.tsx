@@ -20,7 +20,7 @@ export default function CaseStudyGallery({ images }: CaseStudyGalleryProps) {
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes="(min-width: 768px) 50vw, 100vw"
+                sizes="(min-width: 1200px) 534px, (min-width: 768px) 50vw, 100vw"
                 className="case-study-gallery__image"
               />
             </figure>

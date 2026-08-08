@@ -67,13 +67,9 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
     slug: "works-page",
     data: {
       cta: {
-        topLine: "READY TO BUILD A BRAND",
-        topLineAccent: "PEOPLE REMEMBER?",
-        bottomLine: "BEAUTIFUL BRANDS",
-        bottomLineAccent: "START HERE",
         ctaLabel: "Book A Discovery Call",
         ctaHref: "/contact",
-        backgroundImage: mediaId,
+        image: mediaId,
       },
     },
     depth: 0,

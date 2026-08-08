@@ -125,7 +125,9 @@ export async function getJournalPosts(options?: { limit?: number }) {
       collection: "journal-posts",
       ...publishedQuery,
       limit: options?.limit ?? 100,
-      sort: "-publishedAt",
+      // `id` breaks ties: the seeded posts share a publishedAt, so without it
+      // Postgres returns them in an arbitrary order.
+      sort: ["-publishedAt", "id"],
       depth: 2,
     });
   }, emptyPaginated<JournalPost>());

@@ -58,37 +58,20 @@ export const WorksPage: GlobalConfig = {
       label: "CTA Section",
       fields: [
         {
-          name: "topLine",
+          name: "headline",
           type: "text",
-          defaultValue: "READY TO BUILD A BRAND",
+          defaultValue: "Your Next Brand Move Starts Here.",
         },
         {
-          name: "topLineAccent",
-          type: "text",
-          defaultValue: "PEOPLE REMEMBER?",
+          name: "subtext",
+          type: "textarea",
+          defaultValue:
+            "Your brand deserves more than content that fills a feed. Let’s build a strategy, presence, and visual identity people actually remember.",
         },
+        { name: "ctaLabel", type: "text", defaultValue: "Book My Discovery Call" },
+        { name: "ctaHref", type: "text", defaultValue: "/contact" },
         {
-          name: "bottomLine",
-          type: "text",
-          defaultValue: "BEAUTIFUL BRANDS",
-        },
-        {
-          name: "bottomLineAccent",
-          type: "text",
-          defaultValue: "START HERE",
-        },
-        {
-          name: "ctaLabel",
-          type: "text",
-          defaultValue: "Book A Discovery Call",
-        },
-        {
-          name: "ctaHref",
-          type: "text",
-          defaultValue: "/contact",
-        },
-        {
-          name: "backgroundImage",
+          name: "image",
           type: "upload",
           relationTo: "media",
         },

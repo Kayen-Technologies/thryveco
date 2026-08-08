@@ -6,7 +6,7 @@ import CaseStudyHero from "@/components/works/CaseStudyHero";
 import CaseStudyListSection from "@/components/works/CaseStudyListSection";
 import CaseStudyQuote from "@/components/works/CaseStudyQuote";
 import CaseStudyTextSection from "@/components/works/CaseStudyTextSection";
-import WorksCta from "@/components/works/WorksCta";
+import FinalCta from "@/components/home/FinalCta";
 import { WORKS_DEFAULTS, type WorksMediaSrc } from "@/components/works/defaults";
 import { getMediaUrl } from "@/lib/cms/media";
 import { getWorksPage, getWork, getWorks } from "@/lib/payload";
@@ -85,17 +85,12 @@ export default async function WorkPage({ params }: Props) {
         <CaseStudyQuote quote={caseStudy.quote} attribution={caseStudy.attribution} />
       ) : null}
 
-      <WorksCta
-        topLine={worksPage?.cta?.topLine ?? WORKS_DEFAULTS.cta.topLine}
-        topLineAccent={worksPage?.cta?.topLineAccent ?? WORKS_DEFAULTS.cta.topLineAccent}
-        bottomLine={worksPage?.cta?.bottomLine ?? WORKS_DEFAULTS.cta.bottomLine}
-        bottomLineAccent={worksPage?.cta?.bottomLineAccent ?? WORKS_DEFAULTS.cta.bottomLineAccent}
+      <FinalCta
+        headline={worksPage?.cta?.headline ?? WORKS_DEFAULTS.cta.headline}
+        subtext={worksPage?.cta?.subtext ?? WORKS_DEFAULTS.cta.subtext}
         ctaLabel={worksPage?.cta?.ctaLabel ?? WORKS_DEFAULTS.cta.ctaLabel}
         ctaHref={worksPage?.cta?.ctaHref ?? WORKS_DEFAULTS.cta.ctaHref}
-        backgroundImage={mediaSource(
-          worksPage?.cta?.backgroundImage,
-          WORKS_DEFAULTS.cta.backgroundImage,
-        )}
+        image={mediaSource(worksPage?.cta?.image, WORKS_DEFAULTS.cta.image)}
       />
     </main>
   );

@@ -82,51 +82,180 @@ function paragraphsLexical(paragraphs: string[]): SerializedEditorState {
 }
 
 export const CASE_STUDY_DEFAULTS: Record<string, CaseStudyContent> = {
-  "casa-muse": {
+  /** Figma: 463:1748 Purple Square Interiors */
+  "purple-square-interiors": {
     seriesLabel: "The Thryve Edit",
     brandBody:
-      "Casa Muse is an interior design studio built around intentional spaces and timeless materials. With a growing portfolio of residential and commercial projects, Casa Muse has become known for its warm minimalism, editorial photography, and a visual identity that feels as considered as the rooms they design.",
+      "Purple Square Interiors is a luxury interior design studio where aesthetics are not just a preference, they are a standard. Known for spaces that are as intentional as they are beautiful, PSI brings a refined creative vision to every project, crafting interiors that feel considered, elevated, and deeply personal.",
     brandImages: [
       {
-        src: "/assets/works/case-study/brand-01.jpg",
-        alt: "Interior styling detail for Casa Muse",
+        src: "/assets/works/case-study/psi-brand-01.jpg",
+        alt: "Purple Square Interiors dining room with wood table and wall art",
       },
       {
-        src: "/assets/works/case-study/brand-02.jpg",
-        alt: "Casa Muse brand materials on a styled surface",
+        src: "/assets/works/case-study/psi-brand-02.jpg",
+        alt: "Purple Square Interiors bedroom with tufted headboard and bedside lamp",
       },
     ],
     challengeBody:
-      "As Casa Muse expanded into new markets, the challenge shifted from showcasing individual projects to maintaining a cohesive brand presence across every campaign and social touchpoint. The goal was to keep every launch feeling fresh while preserving the warmth and consistency that made the studio instantly recognizable.",
+      "While the work spoke for itself, the content didn’t always tell the full story. PSI’s online presence lacked the storytelling and personality-driven elements needed to truly connect with an audience, leaving the brand underleveraged on social media despite the quality behind it.",
     approachParagraphs: [
-      "Rather than reinventing the brand with every campaign, we focused on strengthening what already made Casa Muse distinctive. Every creative decision was guided by consistency, ensuring each visual felt unmistakably Casa Muse while allowing room for storytelling and project education.",
-      "We developed a content direction that balanced polished campaign imagery with authentic lifestyle moments, helping the studio feel aspirational without losing its accessibility.",
-      "The result was a content system that could scale across launches, social media, and digital campaigns while maintaining a unified visual language.",
+      "We shifted the focus from simply showcasing spaces to telling the story behind them. Through intentional storytelling, founder-led content, and a more personal look into the PSI world, we gave the brand a voice that matched the depth of its work and gave audiences a reason to stay.",
     ],
     deliverables: [
-      "Brand Content Strategy",
-      "Creative Direction",
-      "Social Media Content",
-      "Product Photography Direction",
+      "Brand Identity",
+      "Content Strategy",
+      "Digital Marketing",
+      "Videography",
     ],
     results: [
-      "Increased average engagement across campaign content by 42%",
-      "Generated over 4.8 million campaign impressions during the launch period",
-      "Strengthened visual consistency across all social platforms",
-      "Improved audience engagement through a more cohesive content strategy",
+      "A single project reveal reel hit 86K views, contributing to a 13% growth in community and a presence people talk about on and offline.",
+      "Revived PSI’s TikTok presence and established consistent activity across platforms.",
+      "Built an engaged community that extended beyond the screen.",
+      "Content consistently drove high saves, shares and comments across posts.",
     ],
     quote:
-      "Working with Thryve & Co. gave us a stronger creative system without compromising the simplicity that defines Casa Muse. Every campaign felt intentional, cohesive, and unmistakably us.",
-    attribution: "Jane D., Founder of Casa Muse",
+      "Michelle transformed our online presence with strategy and creativity. Our brand became clearer, engagement grew, and every post felt intentional.",
+    attribution: "Alisa - Creative Lead, Purple Square Interiors",
     heroImage: {
-      src: "/assets/works/case-study/hero.jpg",
-      alt: "Casa Muse interior design hero image",
+      src: "/assets/works/case-study/psi-hero.jpg",
+      alt: "Styled shelf with ceramic vase, dried botanicals, and candle for Purple Square Interiors",
     },
     galleryImages: [
-      { src: "/assets/works/case-study/gallery-01.jpg", alt: "Casa Muse project gallery image 1" },
-      { src: "/assets/works/case-study/gallery-02.jpg", alt: "Casa Muse project gallery image 2" },
-      { src: "/assets/works/case-study/gallery-03.jpg", alt: "Casa Muse project gallery image 3" },
-      { src: "/assets/works/case-study/gallery-04.jpg", alt: "Casa Muse project gallery image 4" },
+      {
+        src: "/assets/works/case-study/psi-gallery-01.jpg",
+        alt: "Brown lounge chair with white pillows and ceramic urn",
+      },
+      {
+        src: "/assets/works/case-study/psi-gallery-02.jpg",
+        alt: "Empty renovated room before furniture installation",
+      },
+      {
+        src: "/assets/works/case-study/psi-gallery-03.jpg",
+        alt: "Founder reviewing materials in a furniture showroom",
+      },
+      {
+        src: "/assets/works/case-study/psi-gallery-04.jpg",
+        alt: "Finished living room with ivory sofas and geometric coffee tables",
+      },
+    ],
+  },
+  /** Figma: 463:1648 Naya Moments */
+  "naya-moments": {
+    seriesLabel: "The Thryve Edit",
+    brandBody:
+      "Naya Moments is an event styling and planning brand rooted in a minimalist, chic aesthetic. With a quiet mastery of tablescapes at the core of what she does, Naya Moments turns even the simplest setup into a moment worth remembering.",
+    brandImages: [
+      {
+        src: "/assets/works/case-study/naya-brand-01.jpg",
+        alt: "Outdoor welcome baby tablescape with blush napkins, gold cutlery and scalloped table lamps",
+      },
+      {
+        src: "/assets/works/case-study/naya-brand-02.jpg",
+        alt: "Garden reception table set beneath a suspended coral and pink floral installation",
+      },
+    ],
+    challengeBody:
+      "When Naya Moments came on board, the brand had little to no social media presence. The work was there. The eye, the skill, the aesthetic, but the world didn’t know it yet. The challenge was clear: build a presence from the ground up, introduce Naya Moments to the right audience, and translate that visibility into real interest and bookings.",
+    approachParagraphs: [
+      "The approach was rooted in letting the work speak, but giving it the right stage to do so. We brought Naya Moments to life online through before and after visuals that captured the full transformation of every setup, paired with content that highlighted the distinct vibe and intentionality behind each event.",
+      "To go beyond the pretty pictures, we wove in short form video and behind the scenes content: week in the life clips that gave followers a real look at her process, her personality, and the eye behind every detail. The result was a presence that felt as considered as the brand itself, and an audience that converted into clients.",
+    ],
+    deliverables: [
+      "Brand Identity",
+      "Photography",
+      "Social Media Management",
+      "Videography",
+    ],
+    results: [
+      "Grew Instagram by 88% and TikTok by 86% in six months.",
+      "Built a consistent, engaging presence from zero social media activity.",
+      "Expanded brand reach and introduced Naya Moments to new audiences.",
+      "Increased visibility translated into new clients and bookings.",
+    ],
+    quote:
+      "Working with Thryve has honestly been such a great experience. They’re patient, supportive, and so intentional with helping bring our vision to life.",
+    attribution: "Naya - Founder, Naya Moments",
+    heroImage: {
+      src: "/assets/works/case-study/naya-hero.jpg",
+      alt: "The Skincare Dialogue event styled by Naya Moments with an arched backdrop and white armchairs",
+    },
+    galleryImages: [
+      {
+        src: "/assets/works/case-study/naya-gallery-01.jpg",
+        alt: "Green and pink tablescape layered with florals, grapes and crystal glassware",
+      },
+      {
+        src: "/assets/works/case-study/naya-gallery-02.jpg",
+        alt: "Essakobea event entrance with charcoal plinths, white florals and a champagne tower",
+      },
+      {
+        src: "/assets/works/case-study/naya-gallery-03.jpg",
+        alt: "Candlelit walkway lined with red heart balloons for a Valentine’s setup",
+      },
+      {
+        src: "/assets/works/case-study/naya-gallery-04.jpg",
+        alt: "Bridal shower wellness setup with yoga mats, arched mirrors and pastel florals",
+      },
+    ],
+  },
+  /** Figma: 463:1847 Mya Art Workshop */
+  "mya-art-workshop": {
+    seriesLabel: "The Thryve Edit",
+    brandBody:
+      "Mya Art Workshop is an art studio curating hands-on creative experiences for kids and adults across Accra and Dubai. From sip and paint sessions to guided art workshops, Mya creates spaces where creativity feels accessible, intentional, and genuinely fun for every age and every level.",
+    brandImages: [
+      {
+        src: "/assets/works/case-study/mya-brand-01.jpg",
+        alt: "Hands dipping a paintbrush into orange paint on a white palette",
+      },
+      {
+        src: "/assets/works/case-study/mya-brand-02.jpg",
+        alt: "Artist sketching a vase in graphite on a white canvas",
+      },
+    ],
+    challengeBody:
+      "Despite a strong offering, Mya Art Workshop needed to reposition itself in the Ghanaian market to attract a more diverse, local crowd. The content wasn’t yet speaking to the right audience, and visibility in Ghana was being overshadowed by reach in the Dubai market making it harder to build the local community the brand deserved.",
+    approachParagraphs: [
+      "We moved away from simple workshop recaps and into content that felt relevant, experience-driven, and shareable. Trending audios, engaging short form formats, attendee features, and finished artwork showcases shifted the focus from the event to the experience.",
+      "We also ran geo-targeted ads to ensure Ghanaian content was reaching Ghanaian audiences, and transitioned the username from Sip and Paint to Mya Art Workshop, building a stronger, more recognisable brand identity from the ground up.",
+    ],
+    deliverables: [
+      "Brand Positioning",
+      "Content Strategy",
+      "Social Media Management",
+      "Videography",
+    ],
+    results: [
+      "Three months of rebranding and strategic content drove a 312% jump in profile activity.",
+      "Geo-targeted ads successfully redirected visibility to the Ghanaian market, reaching the right audience.",
+      "Content reached 849 accounts with a 1,276% increase in engagement from non-followers bringing in a largely new audience.",
+      "Added 219 new fans to the community, with growth driven predominantly by new audiences discovering the brand.",
+    ],
+    quote:
+      "Michelle is incredibly hands-on and creative. She understood my vision quickly and consistently delivered visuals that brought it to life.",
+    attribution: "Yasmeen - Founder, Mya Art Workshop",
+    heroImage: {
+      src: "/assets/works/case-study/mya-hero.jpg",
+      alt: "Sunlit art studio with wooden easels, colorful abstract paintings, and an ART wood cutout",
+    },
+    galleryImages: [
+      {
+        src: "/assets/works/case-study/mya-gallery-01.jpg",
+        alt: "Hands wiping a teal paintbrush on denim fabric beside a warm-toned painting",
+      },
+      {
+        src: "/assets/works/case-study/mya-gallery-02.jpg",
+        alt: "Coastal beach scene with a yellow hey! text overlay",
+      },
+      {
+        src: "/assets/works/case-study/mya-gallery-03.jpg",
+        alt: "Workshop attendee in orange headscarf holding a framed mosaic heart artwork",
+      },
+      {
+        src: "/assets/works/case-study/mya-gallery-04.jpg",
+        alt: "Yellow cup of paintbrushes beside a pink book and painted wooden palette",
+      },
     ],
   },
   sole: {

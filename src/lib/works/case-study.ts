@@ -76,7 +76,7 @@ export function resolveCaseStudy(work: Work): ResolvedCaseStudy {
   const heroImage =
     mediaSource(work.heroImage, fallback?.heroImage ?? listingFallback?.coverImage) ??
     listingFallback?.coverImage ?? {
-      src: "/assets/works/work-casa-muse.jpg",
+      src: "/assets/home/work-purple-square.jpg",
       alt: work.title,
     };
 
