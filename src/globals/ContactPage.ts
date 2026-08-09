@@ -4,11 +4,10 @@ import { isAdmin } from "@/access/isAdmin";
 import { publicRead } from "@/access/publicRead";
 
 const SERVICE_DEFAULTS = [
-  "The Thryve Blueprint",
-  "The Thryve Aesthetic",
-  "The Thryve Edit",
-  "The Thryve Moment",
-  "Not sure / Multiple",
+  "The Thryve Blueprint (Strategy & Consulting)",
+  "The Thryve Aesthetic (Content Creation)",
+  "The Thryve Edit (Social Media Management)",
+  "The Thryve Moment (Creative Direction)",
 ];
 
 const TIMELINE_DEFAULTS = [

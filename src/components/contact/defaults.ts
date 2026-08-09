@@ -8,11 +8,10 @@ export type ContactSelectOption = {
 };
 
 export const CONTACT_SERVICE_OPTIONS: ContactSelectOption[] = [
-  { label: "The Thryve Blueprint" },
-  { label: "The Thryve Aesthetic" },
-  { label: "The Thryve Edit" },
-  { label: "The Thryve Moment" },
-  { label: "Not sure / Multiple" },
+  { label: "The Thryve Blueprint (Strategy & Consulting)" },
+  { label: "The Thryve Aesthetic (Content Creation)" },
+  { label: "The Thryve Edit (Social Media Management)" },
+  { label: "The Thryve Moment (Creative Direction)" },
 ];
 
 export const CONTACT_TIMELINE_OPTIONS: ContactSelectOption[] = [

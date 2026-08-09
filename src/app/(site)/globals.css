@@ -1537,7 +1537,10 @@ h6 {
 
 @media (min-width: 1024px) {
   .about-hero__image {
-    object-position: 50% 42%;
+    /* Source is 3277×4096 portrait, so a landscape viewport crops most of its
+       height. Anchor to the bottom to keep the iPad and the Thryve & Co.
+       artwork on its screen in frame, and clear of the headline. */
+    object-position: 50% 100%;
   }
 
   .about-hero__content {
@@ -4121,13 +4124,16 @@ html:has(.works-page) {
     height: var(--studio-services-frame-height);
   }
 
+  /* Figma 488:1554 — 1382×1189 frame. Vertical offsets are percentages of that
+     frame so the composition holds as the pinned frame tracks the viewport.
+     Left column x=56, right column right-aligned to the same gutter. */
   .studio-services--scroll .studio-services__header {
-    top: clamp(1.5rem, 8vh, 7.5rem);
+    top: 10.1%;
     left: var(--spacing-container-x);
   }
 
   .studio-services--scroll .studio-services__title {
-    margin-bottom: clamp(1rem, 3vh, 4rem);
+    margin-bottom: 1.5rem;
     font-size: clamp(2rem, 5vh, 3.5rem);
   }
 
@@ -4136,17 +4142,26 @@ html:has(.works-page) {
   }
 
   .studio-services--scroll .studio-services__stack {
-    /* Figma 288/1189 ≈ 24%; height 781/1189 ≈ 66% — clamp for short laptops */
-    top: clamp(7.5rem, 24vh, 18rem);
+    /* 511/1382 centred, 288/1189 down, 418×781. Width also yields to the gap
+       between the two text columns so the stack never runs under them. */
+    top: 24.2%;
     left: 50%;
     transform: translateX(-50%);
-    width: min(418px, 32vw, calc(52vh * 418 / 781));
-    height: min(48.8125rem, 52vh);
+    width: min(
+      418px,
+      calc(65.7vh * 418 / 781),
+      calc((100vw - 2 * var(--spacing-container-x) - 610px) * 0.66)
+    );
+    height: auto;
+    aspect-ratio: 418 / 781;
   }
 
+  /* Anchored on its underline (Figma y=907) rather than its top, so the
+     two-line service titles grow upward instead of into the description. */
   .studio-services--scroll .studio-services__display-title-wrap {
-    top: clamp(18rem, 58vh, 44.3rem);
-    left: max(var(--spacing-container-x), calc(50% - min(418px, 32vw, calc(52vh * 418 / 781)) / 2 - 12rem));
+    top: auto;
+    bottom: 23.7%;
+    left: var(--spacing-container-x);
     width: min(19.875rem, 22vw);
   }
 
@@ -4154,27 +4169,22 @@ html:has(.works-page) {
     font-size: clamp(1.5rem, 3.2vh, 2rem);
   }
 
-  .studio-services--scroll .studio-services__display-title-accent {
-    color: #ffffff;
-    mix-blend-mode: difference;
-  }
-
   .studio-services--scroll .studio-services__description {
-    top: auto;
-    bottom: clamp(1.5rem, 4vh, 3rem);
+    top: 79%;
+    bottom: auto;
     left: var(--spacing-container-x);
     width: min(21rem, 28vw);
   }
 
   .studio-services--scroll .studio-services__includes {
-    top: clamp(16rem, 52vh, 41.4rem);
+    top: 55.8%;
     right: var(--spacing-container-x);
     width: min(18.25rem, 24vw);
-    gap: clamp(1rem, 2.5vh, 2rem);
+    gap: 2rem;
   }
 
   .studio-services--scroll .studio-services__includes-list {
-    gap: clamp(0.75rem, 2vh, 2rem);
+    gap: 2rem;
   }
 
   .studio-services--scroll .studio-services__includes-heading {
@@ -4182,8 +4192,8 @@ html:has(.works-page) {
   }
 
   .studio-services--scroll .studio-services__cta-wrap {
-    top: auto;
-    bottom: clamp(1.5rem, 4vh, 3rem);
+    top: 85.7%;
+    bottom: auto;
     right: var(--spacing-container-x);
   }
 
@@ -4202,7 +4212,7 @@ html:has(.works-page) {
   }
 
   .studio-services__title {
-    margin-bottom: 4rem;
+    margin-bottom: 1.5rem;  /* 24px gap to the service label */
   }
 
   .studio-services__stack {
@@ -4214,14 +4224,10 @@ html:has(.works-page) {
   }
 
   .studio-services__display-title-wrap {
-    top: 44.3rem;
-    left: 18.125rem;
-    width: 19.875rem;
-  }
-
-  .studio-services__display-title-accent {
-    color: #ffffff;
-    mix-blend-mode: difference;
+    top: auto;
+    bottom: 17.625rem;    /* underline lands on Figma y=907 of the 1189px frame */
+    left: var(--spacing-container-x);
+    width: 19.875rem;     /* 318px */
   }
 
   .studio-services__description {

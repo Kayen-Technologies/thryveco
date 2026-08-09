@@ -55,6 +55,7 @@ import * as migration_20260808_220000_align_purple_square_case_study from './202
 import * as migration_20260808_222000_align_naya_moments_case_study from './20260808_222000_align_naya_moments_case_study';
 import * as migration_20260808_223000_align_mya_art_workshop_case_study from './20260808_223000_align_mya_art_workshop_case_study';
 import * as migration_20260808_231500_restore_creativity_inline_image from './20260808_231500_restore_creativity_inline_image';
+import * as migration_20260808_233500_update_contact_service_options from './20260808_233500_update_contact_service_options';
 
 export const migrations = [
   {
@@ -336,5 +337,10 @@ export const migrations = [
     up: migration_20260808_231500_restore_creativity_inline_image.up,
     down: migration_20260808_231500_restore_creativity_inline_image.down,
     name: '20260808_231500_restore_creativity_inline_image'
+  },
+  {
+    up: migration_20260808_233500_update_contact_service_options.up,
+    down: migration_20260808_233500_update_contact_service_options.down,
+    name: '20260808_233500_update_contact_service_options'
   },
 ];
