@@ -185,6 +185,18 @@ export const Works: CollectionConfig = {
           relationTo: "media",
           required: true,
         },
+        {
+          name: "video",
+          type: "upload",
+          relationTo: "media",
+          filterOptions: {
+            mimeType: { contains: "video" },
+          },
+          admin: {
+            description:
+              "Optional muted loop that plays in place of the image while the tile is on screen. The image above stays as its poster.",
+          },
+        },
       ],
     },
     {

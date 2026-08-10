@@ -3354,6 +3354,55 @@ html:has(.works-page) {
   transform: translateY(-2px);
 }
 
+/* Mobile card (Figma node 427:1519) drops the industry, tags and link for a
+   600px frame carrying one centred white name chip — same treatment as the
+   home page featured bands. */
+@media (max-width: 767px) {
+  .works-case-study-card {
+    height: 600px;
+    min-height: 0;
+  }
+
+  .works-case-study-card__overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 39.5%,
+      rgba(0, 0, 0, 0.66) 100%
+    );
+    opacity: 1;
+  }
+
+  .works-case-study-card__footer {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-inline: var(--spacing-container-x-mobile);
+    padding-bottom: 56px;
+  }
+
+  .works-case-study-card__identity {
+    align-items: center;
+    max-width: none;
+  }
+
+  .works-case-study-card__client {
+    background: var(--color-bg-surface);
+    padding: 12px 24px;
+    color: var(--color-text);
+    /* Untracked here, unlike the desktop label: the design sizes the chip to
+       the plain string. */
+    letter-spacing: normal;
+  }
+
+  /* Hidden via display so the card's GSAP reveal can't fade them back in. */
+  .works-case-study-card__industry,
+  .works-case-study-card__tags,
+  .works-case-study-card__link {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .works-case-study-card__footer {
     display: grid;
@@ -3672,6 +3721,23 @@ html:has(.works-page) {
   object-position: center;
 }
 
+/* next/image supplies the absolute fill for the still; a video gets none of
+   it. Held transparent until the first frame so the still shows through. */
+.case-study-gallery__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.case-study-gallery__video[data-ready="true"] {
+  opacity: 1;
+}
+
 .case-study-quote {
   position: relative;
   padding: 6.25rem clamp(1.5rem, 12vw, 12.5rem);
@@ -3766,10 +3832,14 @@ html:has(.works-page) {
     padding-top: 4rem;
   }
 
+  /* The shared clamp(1.5rem, 12vw, …) never reaches its floor above a 200px
+     viewport, so phones inherited a 12vw gutter while the hero and final CTA
+     sat at the site gutter. Pull the body sections back into line. */
   .case-study-section,
   .case-study-list,
   .case-study-gallery,
   .case-study-quote {
+    padding-inline: var(--spacing-container-x-mobile);
     padding-bottom: 3rem;
   }
 
@@ -4073,13 +4143,15 @@ html:has(.works-page) {
   list-style: none;
 }
 
+/* Figma draws every item on one line, so it never specified leading. Longer
+   copy does wrap here, and line-height 1 pushed those lines into each other. */
 .studio-services__includes-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   font-family: var(--font-body);
   font-size: var(--text-body);
-  line-height: 1;
+  line-height: 1.4;
   color: #929292;
 }
 
@@ -4087,6 +4159,9 @@ html:has(.works-page) {
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
+  /* Half-leading offset, so the diamond sits on the first line, not between
+     the two lines of a wrapped item. */
+  margin-top: 0.2rem;
 }
 
 .studio-services__cta-wrap {
@@ -4647,13 +4722,16 @@ html:has(.works-page) {
   }
 
   .studio-services--scroll .studio-services__stack {
-    /* 511/1382 centred, 288/1189 down, 418×781. Width also yields to the gap
-       between the two text columns so the stack never runs under them. */
+    /* 511/1382 centred, 288/1189 down, 418×781. The width tracks Figma's
+       418/1440 share of the viewport rather than a flat 418px, which left the
+       deck stranded at laptop size on wide monitors. Height (65.7vh, Figma's
+       781/1189) still caps it, and it yields to the gap between the two text
+       columns so the stack never runs under them. */
     top: 24.2%;
     left: 50%;
     transform: translateX(-50%);
     width: min(
-      418px,
+      29.03vw,
       calc(65.7vh * 418 / 781),
       calc((100vw - 2 * var(--spacing-container-x) - 610px) * 0.66)
     );
@@ -4688,18 +4766,26 @@ html:has(.works-page) {
     gap: 2rem;
   }
 
+  /* Trimmed from 2rem so the taller line boxes still land on Figma's 48px
+     baseline pitch between single-line items. */
   .studio-services--scroll .studio-services__includes-list {
-    gap: 2rem;
+    gap: 1.6rem;
   }
 
   .studio-services--scroll .studio-services__includes-heading {
     font-size: clamp(1.25rem, 2.8vh, 1.5rem);
   }
 
+  /* Figma puts the button and the includes column on the same left edge
+     (x=1031), so the wrap borrows the column's width and the button sits at
+     its start rather than trailing the right gutter. */
   .studio-services--scroll .studio-services__cta-wrap {
     top: 85.7%;
     bottom: auto;
     right: var(--spacing-container-x);
+    display: flex;
+    justify-content: flex-start;
+    width: min(18.25rem, 24vw);
   }
 
   .studio-services--scroll .studio-services__progress {

@@ -56,6 +56,9 @@ import * as migration_20260808_222000_align_naya_moments_case_study from './2026
 import * as migration_20260808_223000_align_mya_art_workshop_case_study from './20260808_223000_align_mya_art_workshop_case_study';
 import * as migration_20260808_231500_restore_creativity_inline_image from './20260808_231500_restore_creativity_inline_image';
 import * as migration_20260808_233500_update_contact_service_options from './20260808_233500_update_contact_service_options';
+import * as migration_20260810_130000_purple_square_gallery_videos from './20260810_130000_purple_square_gallery_videos';
+import * as migration_20260810_133000_naya_moments_gallery_videos from './20260810_133000_naya_moments_gallery_videos';
+import * as migration_20260810_140000_mya_art_workshop_gallery_videos from './20260810_140000_mya_art_workshop_gallery_videos';
 
 export const migrations = [
   {
@@ -342,5 +345,20 @@ export const migrations = [
     up: migration_20260808_233500_update_contact_service_options.up,
     down: migration_20260808_233500_update_contact_service_options.down,
     name: '20260808_233500_update_contact_service_options'
+  },
+  {
+    up: migration_20260810_130000_purple_square_gallery_videos.up,
+    down: migration_20260810_130000_purple_square_gallery_videos.down,
+    name: '20260810_130000_purple_square_gallery_videos'
+  },
+  {
+    up: migration_20260810_133000_naya_moments_gallery_videos.up,
+    down: migration_20260810_133000_naya_moments_gallery_videos.down,
+    name: '20260810_133000_naya_moments_gallery_videos'
+  },
+  {
+    up: migration_20260810_140000_mya_art_workshop_gallery_videos.up,
+    down: migration_20260810_140000_mya_art_workshop_gallery_videos.down,
+    name: '20260810_140000_mya_art_workshop_gallery_videos'
   },
 ];

@@ -26,6 +26,7 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
   const [copyIndex, setCopyIndex] = useState(0);
   const [copyVisible, setCopyVisible] = useState(true);
   const fadeTimerRef = useRef<number | null>(null);
+  const stepsRef = useRef<HTMLDivElement | null>(null);
   const copyStep = sortedSteps[copyIndex] ?? sortedSteps[0];
 
   useEffect(() => {
@@ -41,8 +42,29 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
   const prefersReducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // The mobile strip is narrower than the six pills, so centre the chosen one
+  // to keep its neighbours reachable. No-ops wherever the row already fits.
+  const centreStepInView = (index: number) => {
+    const strip = stepsRef.current;
+    if (!strip || strip.scrollWidth <= strip.clientWidth + 1) return;
+
+    const pill = strip.querySelector<HTMLButtonElement>(`#studio-how-tab-${index}`);
+    if (!pill) return;
+
+    const stripBox = strip.getBoundingClientRect();
+    const pillBox = pill.getBoundingClientRect();
+    const target =
+      strip.scrollLeft + (pillBox.left - stripBox.left) - (strip.clientWidth - pillBox.width) / 2;
+
+    strip.scrollTo({
+      left: Math.max(0, Math.min(target, strip.scrollWidth - strip.clientWidth)),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+  };
+
   const selectStep = (index: number) => {
     if (index < 0 || index >= sortedSteps.length) return;
+    centreStepInView(index);
     if (index === activeIndex && index === copyIndex && copyVisible) return;
 
     setActiveIndex(index);
@@ -88,7 +110,8 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
     const nextTab = event.currentTarget.querySelector<HTMLButtonElement>(
       `#studio-how-tab-${nextIndex}`,
     );
-    nextTab?.focus();
+    // selectStep already centred it; native focus scrolling would fight that.
+    nextTab?.focus({ preventScroll: true });
   };
 
   return (
@@ -137,6 +160,7 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
               numbers under the photo; desktop grid-places them back inside the
               burgundy panel. */}
           <div
+            ref={stepsRef}
             className="studio-how__steps"
             role="tablist"
             aria-label="How it works steps"

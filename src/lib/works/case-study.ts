@@ -49,7 +49,12 @@ function mapGalleryImages(
 ): CaseStudyMediaSrc[] {
   const fromPayload =
     work.galleryImages
-      ?.map((entry) => mediaSource(entry.image))
+      ?.map((entry) => {
+        const image = mediaSource(entry.image);
+        if (!image) return null;
+        const videoSrc = getMediaUrl(entry.video);
+        return videoSrc ? { ...image, videoSrc } : image;
+      })
       .filter((image): image is CaseStudyMediaSrc => image !== null) ?? [];
 
   if (fromPayload.length > 0) return fromPayload;

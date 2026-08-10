@@ -3,6 +3,8 @@ import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical
 export type CaseStudyMediaSrc = {
   src: string;
   alt: string;
+  /** Muted loop played over the still, which stays as the poster. */
+  videoSrc?: string;
 };
 
 export type CaseStudyContent = {
@@ -129,10 +131,12 @@ export const CASE_STUDY_DEFAULTS: Record<string, CaseStudyContent> = {
       {
         src: "/assets/works/case-study/psi-gallery-02.jpg",
         alt: "Empty renovated room before furniture installation",
+        videoSrc: "/assets/works/case-study/psi-gallery-02.mp4",
       },
       {
         src: "/assets/works/case-study/psi-gallery-03.jpg",
         alt: "Founder reviewing materials in a furniture showroom",
+        videoSrc: "/assets/works/case-study/psi-gallery-03.mp4",
       },
       {
         src: "/assets/works/case-study/psi-gallery-04.jpg",
@@ -188,10 +192,12 @@ export const CASE_STUDY_DEFAULTS: Record<string, CaseStudyContent> = {
       {
         src: "/assets/works/case-study/naya-gallery-02.jpg",
         alt: "Essakobea event entrance with charcoal plinths, white florals and a champagne tower",
+        videoSrc: "/assets/works/case-study/naya-gallery-02.mp4",
       },
       {
         src: "/assets/works/case-study/naya-gallery-03.jpg",
         alt: "Candlelit walkway lined with red heart balloons for a Valentine’s setup",
+        videoSrc: "/assets/works/case-study/naya-gallery-03.mp4",
       },
       {
         src: "/assets/works/case-study/naya-gallery-04.jpg",
@@ -247,10 +253,12 @@ export const CASE_STUDY_DEFAULTS: Record<string, CaseStudyContent> = {
       {
         src: "/assets/works/case-study/mya-gallery-02.jpg",
         alt: "Coastal beach scene with a yellow hey! text overlay",
+        videoSrc: "/assets/works/case-study/mya-gallery-02.mp4",
       },
       {
         src: "/assets/works/case-study/mya-gallery-03.jpg",
         alt: "Workshop attendee in orange headscarf holding a framed mosaic heart artwork",
+        videoSrc: "/assets/works/case-study/mya-gallery-03.mp4",
       },
       {
         src: "/assets/works/case-study/mya-gallery-04.jpg",

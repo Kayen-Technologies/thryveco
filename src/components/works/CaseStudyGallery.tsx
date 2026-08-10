@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import CaseStudyGalleryVideo from "@/components/works/CaseStudyGalleryVideo";
 import type { CaseStudyMediaSrc } from "@/components/works/caseStudyDefaults";
 
 type CaseStudyGalleryProps = Readonly<{
@@ -23,6 +24,7 @@ export default function CaseStudyGallery({ images }: CaseStudyGalleryProps) {
                 sizes="(min-width: 1200px) 534px, (min-width: 768px) 50vw, 100vw"
                 className="case-study-gallery__image"
               />
+              {image.videoSrc ? <CaseStudyGalleryVideo src={image.videoSrc} /> : null}
             </figure>
           ))}
         </div>

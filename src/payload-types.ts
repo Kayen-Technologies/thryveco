@@ -305,6 +305,10 @@ export interface Work {
   galleryImages?:
     | {
         image: number | Media;
+        /**
+         * Optional muted loop that plays in place of the image while the tile is on screen. The image above stays as its poster.
+         */
+        video?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -666,6 +670,7 @@ export interface WorksSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        video?: T;
         id?: T;
       };
   brandImages?:
