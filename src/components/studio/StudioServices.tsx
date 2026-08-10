@@ -197,8 +197,15 @@ export default function StudioServices({
                 Math.max(0, Math.round(self.progress * (services.length - 1))),
               );
               setActiveIndex(idx);
+              // Hit-testing follows the panel the viewer is actually looking at.
+              // Tweening pointerEvents inside the scrub instead left every
+              // resting position mid-transition with no interactive panel, so
+              // the button ignored taps unless a segment had fully settled.
               panels.forEach((panel, i) => {
-                gsap.set(panel, { zIndex: i === idx ? 10 : 1 });
+                gsap.set(panel, {
+                  zIndex: i === idx ? 10 : 1,
+                  pointerEvents: i === idx ? "auto" : "none",
+                });
               });
             },
           },
@@ -229,7 +236,7 @@ export default function StudioServices({
 
           timeline.to(
             currentPanel,
-            { opacity: 0, pointerEvents: "none", duration: segmentDuration * 0.6 },
+            { opacity: 0, duration: segmentDuration * 0.6 },
             segmentStart,
           );
 
@@ -261,7 +268,7 @@ export default function StudioServices({
 
           timeline.to(
             nextPanel,
-            { opacity: 1, pointerEvents: "auto", duration: segmentDuration * 0.6 },
+            { opacity: 1, duration: segmentDuration * 0.6 },
             segmentStart + segmentDuration * 0.35,
           );
 
