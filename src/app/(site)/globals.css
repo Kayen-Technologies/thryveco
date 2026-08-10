@@ -54,12 +54,16 @@
     calc(var(--spacing-nav-h) + 1.5rem),
     clamp(9rem, 28vw, 11rem)
   );
-  --text-section: clamp(2rem, 4vw, 3.5rem);
+  --text-section: clamp(3rem, 4vw, 3.5rem);
   --text-intro-heading: 3.5rem; /* 56px — Figma intro headline */
   --text-quote: clamp(2.5rem, 6vw, 5.5rem);
   --text-marquee: clamp(3.5rem, 12vw, 12.5rem);
   --text-marquee-desktop: 12.5rem; /* 200px — Figma marquee word */
-  --marquee-height: clamp(420px, 56vw, 809px); /* mobile/base floor; desktop tightened below 1024px breakpoint */
+  --marquee-height: clamp(
+    420px,
+    56vw,
+    809px
+  ); /* mobile/base floor; desktop tightened below 1024px breakpoint */
   --marquee-cluster-width: 686px;
   --marquee-cluster-height: 353px;
   --text-display: var(--text-hero); /* deprecated alias */
@@ -80,7 +84,7 @@
 
   /* ── Spacing / Layout ────────────────────────────────────── */
   --spacing-container-x: 56px;
-  --spacing-container-x-mobile: 24px;
+  --spacing-container-x-mobile: 16px;
   --spacing-section-y: 130px;
   --spacing-nav-h: 130px;
   --spacing-section-gap: 80px;
@@ -200,7 +204,7 @@ h6 {
 
 @media (max-width: 767px) {
   .container-x {
-    padding-inline: 24px;
+    padding-inline: 16px;
   }
 }
 
@@ -379,15 +383,13 @@ h6 {
 
 .home-hero__content {
   position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .home-hero__headline {
-  position: absolute;
-  top: clamp(3.5rem, 18vw, 225px);
-  left: 50%;
   width: min(100% - 48px, 804px);
   margin: 0;
-  transform: translateX(-50%);
   font-family: var(--font-heading);
   font-size: var(--text-hero);
   font-weight: 400;
@@ -410,7 +412,6 @@ h6 {
   }
 
   .home-hero__headline {
-    top: clamp(8rem, 22vh, 225px);
     font-size: var(--text-hero-desktop);
   }
 }
@@ -458,7 +459,7 @@ h6 {
 
 .home-intro__headline {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, var(--text-intro-heading));
+  font-size: clamp(3rem, 5vw, var(--text-intro-heading));
   font-weight: 400;
   letter-spacing: var(--tracking-heading);
   line-height: 1.2;
@@ -487,6 +488,12 @@ h6 {
   overflow: hidden;
 }
 
+@media (max-width: 767px) {
+  .home-intro__media {
+    aspect-ratio: 358 / 360;
+  }
+}
+
 @media (min-width: 1024px) {
   .home-intro__media {
     width: 541px;
@@ -502,6 +509,9 @@ h6 {
 
 /* ── Home editorial strip (Figma node 488:1488) ────────────── */
 .home-marquee {
+  /* Shared by the word band and the photo strip: equal duration over an equal
+     shift is what keeps the two locked together. */
+  --marquee-duration: 36s;
   position: relative;
   height: 879px;
   background: var(--color-bg);
@@ -511,18 +521,24 @@ h6 {
   position: absolute;
   top: 89px;
   left: 0;
+  z-index: 1;
   width: 100%;
   height: 200px;
 }
 
+/* Only needed where the word band overlaps the photo (mobile). */
+.home-marquee__words-viewport--invert {
+  display: none;
+}
+
 .home-marquee__words-stage {
-  --marquee-text-shift: 50%;
+  --marquee-shift: 50%;
   position: absolute;
   top: 0;
   left: -36px;
   display: flex;
   width: max-content;
-  animation: home-marquee-text-scroll 36s linear infinite;
+  animation: home-marquee-scroll var(--marquee-duration) linear infinite;
   will-change: transform;
 }
 
@@ -535,13 +551,14 @@ h6 {
   padding-right: 56px;
 }
 
-@keyframes home-marquee-text-scroll {
+/* Shared by the word band and the photo strip so they scroll as one system. */
+@keyframes home-marquee-scroll {
   from {
     transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translate3d(calc(-1 * var(--marquee-text-shift)), 0, 0);
+    transform: translate3d(calc(-1 * var(--marquee-shift)), 0, 0);
   }
 }
 
@@ -566,12 +583,24 @@ h6 {
   position: absolute;
   top: 439px;
   left: 50%;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   width: min(1151px, calc(100% - 48px));
   height: 440px;
   transform: translateX(-50%);
+}
+
+/* The strip wrappers dissolve so the photos stay direct grid items; only the
+   mobile frame turns them into a scrolling track. */
+.home-marquee__gallery-stage,
+.home-marquee__gallery-track {
+  display: contents;
+}
+
+.home-marquee__gallery-track[data-loop="true"] {
+  display: none;
 }
 
 .home-marquee__photo {
@@ -616,31 +645,92 @@ h6 {
 
 @media (max-width: 639px) {
   .home-marquee {
-    height: 490px;
+    --marquee-photo-width: 297px;
+    height: 809px;
   }
 
   .home-marquee__words-viewport {
-    top: 58px;
+    top: 309px;
+    height: 200px;
+  }
+
+  .home-marquee__words-viewport--invert {
+    display: block;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* The photo strip travels at the word band's speed, so in the band's own
+     coordinate space the photos never move. That lets a static mask stand in
+     for "wherever a photo is", with no per-frame work: one opaque band per
+     photo. JS supplies the stops from the same measurements that place the
+     photos, and the gradient repeats over exactly one loop. Without JS the
+     stops resolve to fully transparent, leaving the plain dark word band. */
+  .home-marquee__words-viewport--invert .home-marquee__words-stage {
+    -webkit-mask-image: repeating-linear-gradient(
+      to right,
+      var(--marquee-mask-stops, transparent 0 100%)
+    );
+    mask-image: repeating-linear-gradient(
+      to right,
+      var(--marquee-mask-stops, transparent 0 100%)
+    );
+  }
+
+  .home-marquee__words-viewport--invert .home-marquee__word {
+    color: #ffffff;
+    opacity: 1;
   }
 
   .home-marquee__words-stage {
-    left: -16px;
+    left: 0;
   }
 
   .home-marquee__words-track {
-    gap: 20px;
-    padding-right: 20px;
+    gap: 56px;
+    padding-right: 56px;
   }
 
   .home-marquee__word {
-    font-size: 72px;
+    font-size: 200px;
   }
 
+  /* Full-width band so photos cross the screen like the words do. */
   .home-marquee__gallery {
-    top: 210px;
-    gap: 8px;
-    width: calc(100% - 32px);
-    height: 280px;
+    top: 189px;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 440px;
+    overflow: hidden;
+    transform: none;
+  }
+
+  .home-marquee__gallery-stage {
+    display: flex;
+    width: max-content;
+    height: 100%;
+    animation: home-marquee-scroll var(--marquee-duration) linear infinite;
+    will-change: transform;
+  }
+
+  /* One loop wide, so the two copies tile seamlessly. Photos are placed by
+     offset rather than flowed, so each can sit under its own word. */
+  .home-marquee__gallery-track,
+  .home-marquee__gallery-track[data-loop="true"] {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    width: var(--marquee-shift, 100%);
+    height: 100%;
+  }
+
+  .home-marquee__photo {
+    position: absolute;
+    top: 0;
+    left: var(--marquee-photo-offset, 0px);
+    width: var(--marquee-photo-width);
+    height: 100%;
   }
 }
 
@@ -801,9 +891,73 @@ h6 {
   }
 }
 
-.featured-work-band__cta:focus-visible {
+/* Fills the card so every part of it is a tap target, and stays the containing
+   block for the image and footer that it now wraps. */
+.featured-work-band__link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.featured-work-band__link:focus-visible {
+  /* Inset, or the card's own overflow clip would swallow the ring. */
   outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
+  outline-offset: -4px;
+}
+
+@media (max-width: 767px) {
+  .featured-work-band {
+    height: 600px;
+  }
+
+  /* Flat 40% wash over the whole frame, deepening to 66% at the base, rather
+     than the desktop treatment that leaves the top clear. */
+  .featured-work-band__overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 39.5%,
+      rgba(0, 0, 0, 0.66) 100%
+    );
+    opacity: 1;
+  }
+
+  .featured-work-band__footer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-inline: var(--spacing-container-x-mobile);
+    padding-bottom: 56px;
+  }
+
+  .featured-work-band__identity {
+    align-items: center;
+    max-width: none;
+  }
+
+  .featured-work-band__name {
+    background: var(--color-bg-surface);
+    color: var(--color-text);
+    padding: 12px 24px;
+    border-radius: 0;
+    /* Untracked here, unlike the desktop label: the design sizes the chip to
+       the plain string. */
+    letter-spacing: normal;
+  }
+
+  .featured-work-band__category,
+  .featured-work-band__tags {
+    display: none;
+  }
+
+  /* No link text in the mobile design; the card itself carries the tap. Hidden
+     via display so GSAP's inline opacity can't reveal it. */
+  .featured-work-band__cta {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1153,7 +1307,7 @@ h6 {
 .final-cta__headline {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: 0.02em;
@@ -1428,6 +1582,57 @@ h6 {
   color: #ffffff;
 }
 
+/* Mobile footer (Figma node 416:844): one 358px column on a 16px gutter, with a
+   flat 56px rhythm between the hero, divider, link groups, card and legal. */
+@media (max-width: 767px) {
+  .site-footer {
+    padding: 80px var(--spacing-container-x-mobile);
+  }
+
+  .site-footer__hero {
+    gap: 40px;
+  }
+
+  .site-footer__tagline {
+    font-size: 3rem;
+  }
+
+  .site-footer__divider {
+    margin-block: 56px;
+  }
+
+  .site-footer__lower,
+  .site-footer__columns {
+    gap: 56px;
+  }
+
+  /* The DOM leads with the card because desktop splits it off to the left; on
+     mobile Figma puts it under the link groups. */
+  .site-footer__columns {
+    order: 1;
+  }
+
+  .site-footer__brand-card {
+    order: 2;
+    max-width: none;
+    aspect-ratio: 358 / 196;
+  }
+
+  .site-footer__brand-card-image {
+    /* Re-centred for the short mobile crop, matching Figma's fill offset. */
+    object-position: 50% 70%;
+  }
+
+  .site-footer__legal {
+    margin-top: 56px;
+    gap: 24px;
+  }
+
+  .site-footer__copyright {
+    text-align: left;
+  }
+}
+
 /* ── About page (Figma node 160:6) ─────────────────────────── */
 .about-page {
   background: var(--color-bg);
@@ -1538,9 +1743,10 @@ h6 {
 @media (min-width: 1024px) {
   .about-hero__image {
     /* Source is 3277×4096 portrait, so a landscape viewport crops most of its
-       height. Anchor to the bottom to keep the iPad and the Thryve & Co.
-       artwork on its screen in frame, and clear of the headline. */
-    object-position: 50% 100%;
+       height. Bias low to keep the iPad and the Thryve & Co. artwork on its
+       screen in frame. Below ~75% a 16:9 viewport starts clipping the
+       "SOCIAL · CULTURED · CURATED" line off the bottom. */
+    object-position: 50% 80%;
   }
 
   .about-hero__content {
@@ -1733,36 +1939,39 @@ h6 {
   }
 }
 
+/* Mobile founder story (Figma node 416:1113): a single full-width portrait
+   instead of the desktop collage, then headline, copy, and a closing portrait,
+   on a 56px block rhythm. */
 @media (max-width: 767px) {
+  .about-meet__eyebrow {
+    font-size: 2rem;
+  }
+
+  .about-meet__name {
+    font-size: 3.5rem;
+  }
+
   .about-meet__collage {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    display: block;
+    margin-top: 56px;
     min-height: auto;
     padding-bottom: 0;
   }
 
-  .about-meet__photo {
-    position: relative;
-    top: auto !important;
-    left: auto !important;
-    width: min(78vw, 325px);
-    height: auto;
-    aspect-ratio: 325 / 433;
-  }
-
+  .about-meet__photo,
   .about-meet__photo--1 {
-    align-self: flex-start;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 358 / 433;
   }
 
-  .about-meet__photo--2 {
-    align-self: center;
-    margin-top: 0.5rem;
-  }
-
+  /* The staggered second and third frames are a desktop-only composition. */
+  .about-meet__photo--2,
   .about-meet__photo--3 {
-    align-self: flex-end;
-    margin-top: 0.5rem;
+    display: none;
   }
 }
 
@@ -1817,6 +2026,35 @@ h6 {
 
 .about-origin__copy p {
   margin: 0;
+}
+
+/* Mobile origin story (Figma node 416:1113). Must sit after the base rules
+   above, which would otherwise win on source order. */
+@media (max-width: 767px) {
+  .about-origin__headline {
+    margin-top: 56px;
+    font-size: 3rem;
+  }
+
+  .about-origin__grid {
+    margin-top: 48px;
+    gap: 56px;
+  }
+
+  /* Figma leads with the copy and closes the section on the portrait; the DOM
+     order suits the desktop portrait-beside-copy grid. */
+  .about-origin__copy {
+    order: 1;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .about-origin__portrait {
+    order: 2;
+    max-width: none;
+    aspect-ratio: 358 / 500;
+  }
 }
 
 .about-quote {
@@ -2040,12 +2278,29 @@ h6 {
   .about-what__lower {
     display: grid;
     grid-template-columns: minmax(0, 551px) minmax(0, 658px);
+    /* Empty first row absorbs the slack, so the paragraph pair sits at the
+       bottom of the column beside the photo. */
+    grid-template-rows: 1fr auto auto;
     column-gap: clamp(2rem, 7vw, 103px);
-    /* Figma bottom-aligns the portrait and the copy column */
-    align-items: end;
-    row-gap: 0;
+    row-gap: 1.5rem;
     margin-top: 80px;
     width: 100%;
+  }
+
+  .about-what__image-wrap {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: end;
+  }
+
+  .about-what__copy--agency {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .about-what__copy--aspiration {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   .about-what__copy {
@@ -2072,9 +2327,36 @@ h6 {
   }
 }
 
+/* Mobile "What Thryve Means" (Figma node 416:1158). */
 @media (max-width: 767px) {
+  .about-what {
+    padding: 100px var(--spacing-container-x-mobile);
+  }
+
+  .about-what__title {
+    /* 26px row gap leaves room for the absolutely-positioned swoosh, putting
+       "Means" on Figma's 82px second-line baseline. */
+    gap: 26px 1rem;
+    font-size: 3.5rem;
+  }
+
+  .about-what__intro {
+    font-size: 1.5rem;
+  }
+
   .about-what__lower {
     margin-top: 2.5rem;
+    gap: 0;
+  }
+
+  .about-what__image-wrap {
+    margin-top: 48px;
+    max-width: none;
+    aspect-ratio: 358 / 400;
+  }
+
+  .about-what__copy--aspiration {
+    margin-top: 56px;
   }
 }
 
@@ -2794,7 +3076,9 @@ h6 {
 }
 
 @media (min-width: 768px) {
-  .journal-article-body--rich-text .prose-thryve > p:first-of-type::first-letter {
+  .journal-article-body--rich-text
+    .prose-thryve
+    > p:first-of-type::first-letter {
     font-size: 4em;
   }
 
@@ -3335,7 +3619,8 @@ html:has(.works-page) {
   flex-shrink: 0;
   width: 0.875rem;
   height: 0.875rem;
-  background: url("/assets/works/case-study/bullet.svg") center / contain no-repeat;
+  background: url("/assets/works/case-study/bullet.svg") center / contain
+    no-repeat;
 }
 
 .case-study-gallery {
@@ -3679,34 +3964,34 @@ html:has(.works-page) {
    With index+1 mapping: layer--1 gets stack-01 (front), layer--4 gets stack-04 (back) */
 .studio-services__stack-layer--1 {
   z-index: 4;
-  top: 24.58%;       /* 192/781 - front/bottom */
+  top: 24.58%; /* 192/781 - front/bottom */
   left: 0;
-  width: 100%;       /* 418/418 */
-  height: 67.22%;    /* 525/781 */
+  width: 100%; /* 418/418 */
+  height: 67.22%; /* 525/781 */
 }
 
 .studio-services__stack-layer--2 {
   z-index: 3;
-  top: 16.39%;       /* 128/781 */
-  left: 5.98%;       /* 25/418 */
-  width: 88.04%;     /* 368/418 */
-  height: 83.61%;    /* 653/781 */
+  top: 16.39%; /* 128/781 */
+  left: 5.98%; /* 25/418 */
+  width: 88.04%; /* 368/418 */
+  height: 83.61%; /* 653/781 */
 }
 
 .studio-services__stack-layer--3 {
   z-index: 2;
-  top: 8.19%;        /* 64/781 */
-  left: 10.77%;      /* 45/418 */
-  width: 78.47%;     /* 328/418 */
-  height: 58.0%;     /* 453/781 */
+  top: 8.19%; /* 64/781 */
+  left: 10.77%; /* 45/418 */
+  width: 78.47%; /* 328/418 */
+  height: 58%; /* 453/781 */
 }
 
 .studio-services__stack-layer--4 {
   z-index: 1;
-  top: 0;            /* back/top */
-  left: 16.03%;      /* 67/418 */
-  width: 67.94%;     /* 284/418 */
-  height: 58.0%;     /* 453/781 */
+  top: 0; /* back/top */
+  left: 16.03%; /* 67/418 */
+  width: 67.94%; /* 284/418 */
+  height: 58%; /* 453/781 */
 }
 
 .studio-services__display-title-wrap {
@@ -3831,7 +4116,9 @@ html:has(.works-page) {
   height: 0.375rem;
   border-radius: 999px;
   background: rgba(26, 26, 26, 0.25);
-  transition: transform 0.25s ease, background-color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
 }
 
 .studio-services__progress-dot--active {
@@ -3916,12 +4203,146 @@ html:has(.works-page) {
   margin-top: 1.5rem;
 }
 
+/* Pinned frame below desktop (Figma node 553:1428). Figma draws the composition
+   1215px tall, but pinning needs it inside one viewport, so the outer padding
+   and the header gap give up their Figma values and the card deck takes
+   whatever height is left. svh keeps the pin stable when a mobile address bar
+   shows or hides. */
+@media (max-width: 1023px) {
+  .studio-services--scroll {
+    --studio-services-frame-height: 100svh;
+  }
+
+  .studio-services--scroll .studio-services__frame {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: var(--studio-services-frame-height);
+    padding: 48px var(--spacing-container-x-mobile) 40px;
+  }
+
+  .studio-services--scroll .studio-services__header {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    /* The 768px rule narrows the header to the desktop gutter; in the flex frame
+       it should simply span the frame's padding box. */
+    width: auto;
+  }
+
+  .studio-services--scroll .studio-services__title {
+    margin-bottom: 24px;
+    font-size: 3rem;
+    line-height: 1.1;
+  }
+
+  .studio-services--scroll .studio-services__label {
+    /* Two lines held open (Figma's own label wraps): the header is shared, so a
+       label that reflows between services would resize the deck mid-crossfade. */
+    min-height: 3.6rem;
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .studio-services--scroll .studio-services__stage {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+    margin-top: 32px;
+  }
+
+  .studio-services--scroll .studio-services__panel {
+    display: flex;
+    flex-direction: column;
+    /* Once the deck reaches its cap on tall screens the leftover height would
+       otherwise pool under the button. */
+    justify-content: center;
+    gap: 24px;
+  }
+
+  /* Height comes from the leftover space; the ratio then sets the width, so
+     centring rather than stretching is what keeps the deck proportional. */
+  .studio-services--scroll .studio-services__stack {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex: 1;
+    align-self: center;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 609px;
+    aspect-ratio: 418 / 781;
+    transform: none;
+  }
+
+  .studio-services--scroll .studio-services__display-title-wrap {
+    position: static;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    align-self: center;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .studio-services--scroll .studio-services__display-title {
+    font-size: 1.5rem;
+  }
+
+  /* Zero width keeps the swoosh out of the wrapper's fit-content measurement,
+     so the title alone sets the width and min-width then matches it — Figma
+     hugs the swoosh to the text rather than to a fixed 318px. */
+  .studio-services--scroll .studio-services__underline {
+    width: 0;
+    min-width: 100%;
+  }
+
+  /* Figma's mobile frame carries none of these. */
+  .studio-services--scroll .studio-services__description,
+  .studio-services--scroll .studio-services__includes,
+  .studio-services--scroll .studio-services__progress {
+    display: none;
+  }
+
+  .studio-services--scroll .studio-services__cta-wrap {
+    position: static;
+    top: auto;
+    right: auto;
+  }
+
+  .studio-services--scroll .studio-services__cta {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Tablet borrows the mobile frame, but a full-bleed button at this width reads
+   as a banner rather than a button. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .studio-services--scroll .studio-services__cta-wrap {
+    align-self: center;
+    width: min(100%, 22.375rem);
+  }
+}
+
 .studio-how {
+  /* Shared so the step pills, which live outside the panel, can align to the
+     panel's inset when the desktop grid places them back inside it. */
+  --studio-how-panel-pad-y: clamp(2.5rem, 8vw, 7.5rem);
+  --studio-how-panel-pad-x: clamp(1.5rem, 5vw, 4.5rem);
   background: var(--color-bg-cream);
 }
 
 .studio-how__inner {
-  padding: clamp(3rem, 6vw, 4.5rem) var(--spacing-container-x-mobile) clamp(5rem, 10vw, 9.375rem);
+  padding: clamp(3rem, 6vw, 4.5rem) var(--spacing-container-x-mobile)
+    clamp(5rem, 10vw, 9.375rem);
 }
 
 .studio-how__title-wrap {
@@ -3949,7 +4370,7 @@ html:has(.works-page) {
   justify-content: space-between;
   gap: 3rem;
   min-height: clamp(20rem, 70vw, 32rem);
-  padding: clamp(2.5rem, 8vw, 7.5rem) clamp(1.5rem, 5vw, 4.5rem);
+  padding: var(--studio-how-panel-pad-y) var(--studio-how-panel-pad-x);
   background: var(--color-primary);
   overflow: hidden;
 }
@@ -4009,7 +4430,9 @@ html:has(.works-page) {
   color: var(--color-text);
   opacity: 0.7;
   cursor: pointer;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .studio-how__step-pill:hover {
@@ -4028,6 +4451,68 @@ html:has(.works-page) {
 
 .studio-how__image {
   object-fit: cover;
+}
+
+/* Mobile "How it Works" (Figma node 417:1443): centred heading and panel copy,
+   a taller photo, and the step numbers moved out from under the copy to a
+   scrolling strip beneath the photo. */
+@media (max-width: 767px) {
+  .studio-how__inner {
+    padding: 32px var(--spacing-container-x-mobile) 80px;
+  }
+
+  .studio-how__title {
+    margin-bottom: 40px;
+    font-size: 3.5rem;
+    text-align: center;
+  }
+
+  .studio-how__layout {
+    gap: 0;
+  }
+
+  .studio-how__panel {
+    gap: 0;
+    min-height: 0;
+    padding: 80px 24px;
+    text-align: center;
+  }
+
+  .studio-how__copy {
+    align-items: center;
+    gap: 24px;
+  }
+
+  .studio-how__step-title {
+    font-size: 2.5rem;
+  }
+
+  .studio-how__media {
+    margin-top: 24px;
+    min-height: 0;
+    height: 370px;
+  }
+
+  /* Six 64px pills on an 88px pitch run past the gutter, so the strip scrolls
+     and the clipped pill is the affordance — as drawn. */
+  .studio-how__steps {
+    margin-top: 40px;
+    flex-wrap: nowrap;
+    gap: 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .studio-how__steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .studio-how__step-pill {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    font-size: 2rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -4056,6 +4541,11 @@ html:has(.works-page) {
     padding-inline: var(--spacing-container-x);
   }
 
+  .studio-how {
+    --studio-how-panel-pad-y: clamp(3rem, 8vw, 7.5rem);
+    --studio-how-panel-pad-x: clamp(2rem, 5vw, 4.5rem);
+  }
+
   .studio-how__layout {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4063,13 +4553,28 @@ html:has(.works-page) {
     align-items: stretch;
   }
 
-  .studio-how__panel {
-    padding: clamp(3rem, 8vw, 7.5rem) clamp(2rem, 5vw, 4.5rem);
-  }
-
   .studio-how__panel,
   .studio-how__media {
+    grid-row: 1;
     min-height: clamp(22rem, 48vh, 36rem);
+  }
+
+  .studio-how__panel {
+    grid-column: 1;
+  }
+
+  .studio-how__media {
+    grid-column: 2;
+  }
+
+  /* Shares the panel's cell so the pills read as its last child, with the
+     panel's own padding as the inset. */
+  .studio-how__steps {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    z-index: 1;
+    padding: 0 var(--studio-how-panel-pad-x) var(--studio-how-panel-pad-y);
   }
 }
 
@@ -4212,22 +4717,22 @@ html:has(.works-page) {
   }
 
   .studio-services__title {
-    margin-bottom: 1.5rem;  /* 24px gap to the service label */
+    margin-bottom: 1.5rem; /* 24px gap to the service label */
   }
 
   .studio-services__stack {
-    top: 18rem;           /* 288px from section top */
+    top: 18rem; /* 288px from section top */
     left: 50%;
     transform: translateX(-50%);
     width: 418px;
-    height: 48.8125rem;   /* 781px */
+    height: 48.8125rem; /* 781px */
   }
 
   .studio-services__display-title-wrap {
     top: auto;
-    bottom: 17.625rem;    /* underline lands on Figma y=907 of the 1189px frame */
+    bottom: 17.625rem; /* underline lands on Figma y=907 of the 1189px frame */
     left: var(--spacing-container-x);
-    width: 19.875rem;     /* 318px */
+    width: 19.875rem; /* 318px */
   }
 
   .studio-services__description {
@@ -4297,7 +4802,8 @@ html:has(.works-page) {
     flex-direction: column;
     height: 100dvh;
     max-height: 100dvh;
-    padding: clamp(2rem, 5vh, 4.5rem) var(--spacing-container-x) clamp(2rem, 5vh, 4.5rem);
+    padding: clamp(2rem, 5vh, 4.5rem) var(--spacing-container-x)
+      clamp(2rem, 5vh, 4.5rem);
   }
 
   .studio-how__title {
@@ -4311,11 +4817,15 @@ html:has(.works-page) {
     gap: clamp(1rem, 2vw, 2rem);
   }
 
+  .studio-how {
+    --studio-how-panel-pad-y: clamp(2rem, 8vh, 7.5rem);
+    --studio-how-panel-pad-x: clamp(2rem, 4vw, 4.5rem);
+  }
+
   .studio-how__panel {
     min-height: 0;
     height: 100%;
     gap: clamp(1.25rem, 3vh, 3rem);
-    padding: clamp(2rem, 8vh, 7.5rem) clamp(2rem, 4vw, 4.5rem);
   }
 
   .studio-how__media {
@@ -4342,6 +4852,16 @@ html:has(.works-page) {
   }
 }
 
+/* ── Quote Band mobile (Figma node 413:537) ───────────────────── */
+@media (max-width: 767px) {
+  .quote-band {
+    min-height: 696px;
+  }
+
+  .quote-band__watermark {
+    font-size: clamp(24rem, 72vw, 30rem);
+  }
+}
 
 /* ── Reduced Motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
@@ -4352,6 +4872,11 @@ html:has(.works-page) {
 
   .home-marquee__word {
     transition: none;
+  }
+
+  .home-marquee__gallery-stage {
+    animation: none;
+    will-change: auto;
   }
 
   .home-testimonial-card {

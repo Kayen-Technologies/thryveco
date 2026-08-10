@@ -34,8 +34,8 @@ export default function HomeIntro({
                 ))}
               </div>
             </div>
-            <div data-reveal>
-              <Button href={ctaHref} variant="primary">
+            <div data-reveal className="w-full md:w-auto">
+              <Button href={ctaHref} variant="primary" className="w-full md:w-auto">
                 {ctaLabel}
               </Button>
             </div>

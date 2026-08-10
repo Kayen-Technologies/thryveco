@@ -86,7 +86,13 @@ export default function AboutWhatThryve({
           <p className="about-what__intro">{intro}</p>
         </Reveal>
 
+        {/* Source order follows the mobile design, which runs the photo between
+            the two paragraphs; desktop places them side by side via grid. */}
         <div className="about-what__lower">
+          <Reveal className="about-what__copy about-what__copy--agency" y={28} delay={0.12}>
+            <p>{agencyCopy}</p>
+          </Reveal>
+
           <Reveal className="about-what__image-wrap" y={36} delay={0.08}>
             <Image
               src={image.src}
@@ -97,9 +103,8 @@ export default function AboutWhatThryve({
             />
           </Reveal>
 
-          <Reveal className="about-what__copy" stagger y={28} delay={0.12}>
-            <p data-reveal>{agencyCopy}</p>
-            <p data-reveal>{aspirationCopy}</p>
+          <Reveal className="about-what__copy about-what__copy--aspiration" y={28} delay={0.12}>
+            <p>{aspirationCopy}</p>
           </Reveal>
         </div>
       </div>

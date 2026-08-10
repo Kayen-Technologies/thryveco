@@ -149,13 +149,11 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
         </Link>
 
         <div className="ml-auto flex items-center gap-3">
-          <Button
-            href={site.bookingLink}
-            variant="primary"
-            className="hidden lg:inline-flex"
-          >
-            {bookingLabel}
-          </Button>
+          <div className="hidden lg:block">
+            <Button href={site.bookingLink} variant="primary">
+              {bookingLabel}
+            </Button>
+          </div>
 
           <button
             type="button"

@@ -109,40 +109,44 @@ export default function FeaturedWorkBand({
       ref={bandRef}
       className={`featured-work-band${variant === "compact" ? " featured-work-band--compact" : ""}`}
     >
-      <div ref={imageRef} className="featured-work-band__image-wrap">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          fill
-          sizes="100vw"
-          className="featured-work-band__image"
-        />
-      </div>
-      <div className="featured-work-band__overlay" aria-hidden="true" />
-      <div className="featured-work-band__footer">
-        <div className="featured-work-band__identity" data-band-reveal>
-          <p className="featured-work-band__name">{name}</p>
-          {category ? (
-            <p className="featured-work-band__category">{category}</p>
-          ) : null}
+      {/* The whole card is the link, so tapping the image opens the case study.
+          The visible label below is decorative text, not a nested anchor. */}
+      <Link
+        href={href ?? `/works/${slug}`}
+        className="featured-work-band__link"
+        aria-label={`${name} case study`}
+      >
+        <div ref={imageRef} className="featured-work-band__image-wrap">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes="100vw"
+            className="featured-work-band__image"
+          />
         </div>
-        {tags.length > 0 ? (
-          <ul className="featured-work-band__tags">
-            {tags.map((tag) => (
-              <li key={tag} data-tag-reveal>
-                {tag}
-              </li>
-            ))}
-          </ul>
-        ) : null}
-        <Link
-          href={href ?? `/works/${slug}`}
-          className="featured-work-band__cta"
-          data-band-reveal
-        >
-          View Case Study
-        </Link>
-      </div>
+        <div className="featured-work-band__overlay" aria-hidden="true" />
+        <div className="featured-work-band__footer">
+          <div className="featured-work-band__identity" data-band-reveal>
+            <p className="featured-work-band__name">{name}</p>
+            {category ? (
+              <p className="featured-work-band__category">{category}</p>
+            ) : null}
+          </div>
+          {tags.length > 0 ? (
+            <ul className="featured-work-band__tags">
+              {tags.map((tag) => (
+                <li key={tag} data-tag-reveal>
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <span className="featured-work-band__cta" data-band-reveal>
+            View Case Study
+          </span>
+        </div>
+      </Link>
     </article>
   );
 }

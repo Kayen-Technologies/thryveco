@@ -99,11 +99,10 @@ export default function StudioServices({
   }, []);
 
   useEffect(() => {
-    const desktopMq = window.matchMedia("(min-width: 1024px)");
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const update = () => {
-      const shouldEnable = desktopMq.matches && !motionMq.matches;
+      const shouldEnable = !motionMq.matches;
       if (!shouldEnable) {
         killGsap();
       }
@@ -111,11 +110,9 @@ export default function StudioServices({
     };
 
     update();
-    desktopMq.addEventListener("change", update);
     motionMq.addEventListener("change", update);
 
     return () => {
-      desktopMq.removeEventListener("change", update);
       motionMq.removeEventListener("change", update);
       killGsap();
     };
@@ -176,9 +173,11 @@ export default function StudioServices({
           });
         });
 
-        // One viewport of scroll per service transition; pinSpacing owns track length.
+        // One frame of scroll per service transition; pinSpacing owns track length.
         // Avoid aggressive snap — it was skipping 01→04 on modest wheel deltas.
-        const scrollPerService = () => window.innerHeight;
+        // Measuring the frame (not innerHeight) keeps the distance in step with a
+        // svh-based height when a mobile address bar shows or hides.
+        const scrollPerService = () => frame.offsetHeight || window.innerHeight;
 
         const timeline = gsap.timeline({
           defaults: { ease: "none" },

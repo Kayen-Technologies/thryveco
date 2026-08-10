@@ -107,31 +107,6 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
               <h3 className="studio-how__step-title">{copyStep.title}</h3>
               <p className="studio-how__step-description">{copyStep.description}</p>
             </div>
-
-            <div
-              className="studio-how__steps"
-              role="tablist"
-              aria-label="How it works steps"
-              onKeyDown={onTabListKeyDown}
-            >
-              {sortedSteps.map((step, index) => (
-                <button
-                  key={step.step}
-                  type="button"
-                  role="tab"
-                  aria-selected={index === activeIndex}
-                  aria-controls={`studio-how-panel-${index}`}
-                  id={`studio-how-tab-${index}`}
-                  tabIndex={index === activeIndex ? 0 : -1}
-                  className={`studio-how__step-pill${
-                    index === activeIndex ? " studio-how__step-pill--active" : ""
-                  }`}
-                  onClick={() => selectStep(index)}
-                >
-                  {step.step}
-                </button>
-              ))}
-            </div>
           </div>
 
           <div
@@ -155,6 +130,35 @@ export default function StudioHowItWorks({ title, steps }: StudioHowItWorksProps
                 }}
                 priority={index === 0}
               />
+            ))}
+          </div>
+
+          {/* Sibling of the media because the mobile design puts the step
+              numbers under the photo; desktop grid-places them back inside the
+              burgundy panel. */}
+          <div
+            className="studio-how__steps"
+            role="tablist"
+            aria-label="How it works steps"
+            onKeyDown={onTabListKeyDown}
+            data-reveal
+          >
+            {sortedSteps.map((step, index) => (
+              <button
+                key={step.step}
+                type="button"
+                role="tab"
+                aria-selected={index === activeIndex}
+                aria-controls={`studio-how-panel-${index}`}
+                id={`studio-how-tab-${index}`}
+                tabIndex={index === activeIndex ? 0 : -1}
+                className={`studio-how__step-pill${
+                  index === activeIndex ? " studio-how__step-pill--active" : ""
+                }`}
+                onClick={() => selectStep(index)}
+              >
+                {step.step}
+              </button>
             ))}
           </div>
         </Reveal>
