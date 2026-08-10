@@ -523,6 +523,14 @@ h6 {
   color: var(--color-text);
 }
 
+/* 5vw only overtakes the 48px floor around 960px, so phones sat at the clamp
+   minimum. Drop the floor to 40px there without touching tablet. */
+@media (max-width: 767px) {
+  .home-intro__headline {
+    font-size: 2.5rem;
+  }
+}
+
 .home-intro__body {
   display: flex;
   flex-direction: column;
@@ -1568,7 +1576,7 @@ h6 {
   }
 
   .site-footer__tagline {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .site-footer__divider {
@@ -2013,7 +2021,7 @@ h6 {
 @media (max-width: 767px) {
   .about-origin__headline {
     margin-top: 56px;
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .about-origin__grid {
@@ -4430,6 +4438,13 @@ html:has(.works-page) {
   .studio-services--scroll .studio-services__cta {
     width: 100%;
     min-width: 0;
+  }
+}
+
+/* The frame above is shared with tablet, where 48px still fits; phones only. */
+@media (max-width: 767px) {
+  .studio-services--scroll .studio-services__title {
+    font-size: 2.5rem;
   }
 }
 

@@ -111,6 +111,12 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
   // contact, which otherwise splits marks by breakpoint.
   const resolvedLogoSrc = isScrolled ? overlayLogoSrc : logoSrc;
   const showsContactDesktopLogo = isContactPage && !isScrolled;
+  // The drawer covers the screen, so the logo is no longer a way back home;
+  // desktop keeps the logo visible and so keeps the shorter list.
+  const mobileNavLinks = [
+    { label: "Home", href: "/" },
+    ...site.navLinks.filter((link) => link.href !== "/"),
+  ];
 
   useEffect(() => {
     setIsOpen(false);
@@ -217,7 +223,7 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
             <span className="absolute block h-0.5 w-5 -rotate-45 bg-current" />
           </button>
           <nav className="flex flex-col gap-6" aria-label="Mobile">
-            {site.navLinks.map((link) => (
+            {mobileNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
