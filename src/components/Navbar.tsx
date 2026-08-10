@@ -43,14 +43,29 @@ function LogoMark({
   );
 }
 
+/** Past this many pixels the bar goes solid, so a stray pixel of trackpad
+ *  scroll doesn't flicker it against the hero. */
+const SOLID_BAR_SCROLL_THRESHOLD = 24;
+
 export default function Navbar({ site, variant = "light", currentPath }: NavbarProps) {
   const clientPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Force re-render after mount to ensure correct client-side state
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > SOLID_BAR_SCROLL_THRESHOLD);
+
+    // Browsers restore scroll position on reload and back, so read it now
+    // rather than waiting for the visitor to move.
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Use client pathname once mounted; before mount, use server-provided or default to "/"
@@ -75,8 +90,10 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
   const effectiveVariant = isContactPage ? "dark" : overlayVariant;
   const bookingLabel =
     isOverlayNav && !isContactPage ? "Book a Call" : site.bookingLabel;
+  // The solid bar is burgundy over whatever is scrolling past, so the
+  // per-route colours stop applying and everything goes light.
   const textColor =
-    effectiveVariant === "light"
+    isScrolled || effectiveVariant === "light"
       ? "text-[var(--color-text-on-dark)]"
       : "text-[var(--color-text)]";
   const overlayLogoSrc = "/assets/home/nav-monogram.svg";
@@ -90,6 +107,10 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
     : effectiveVariant === "light"
       ? site.logoDarkUrl ?? overlayLogoSrc
       : site.logoUrl ?? creamBgLogoSrc;
+  // On burgundy the white monogram is the only legible mark, including on
+  // contact, which otherwise splits marks by breakpoint.
+  const resolvedLogoSrc = isScrolled ? overlayLogoSrc : logoSrc;
+  const showsContactDesktopLogo = isContactPage && !isScrolled;
 
   useEffect(() => {
     setIsOpen(false);
@@ -107,8 +128,11 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
   }, [isOpen]);
 
   return (
-    <header className={`${isOverlayNav ? "absolute inset-x-0 top-0" : "relative"} z-50 w-full`}>
-      <div className="container-x relative flex h-[var(--spacing-nav-h)] items-center justify-between gap-6">
+    <header
+      className={`site-nav${isOverlayNav ? " site-nav--overlay" : ""}`}
+      data-scrolled={isScrolled ? "true" : undefined}
+    >
+      <div className="site-nav__bar container-x flex items-center justify-between gap-6">
         <nav className="hidden items-center gap-[50px] lg:flex" aria-label="Main">
           {site.navLinks.map((link) => (
             <Link
@@ -128,14 +152,14 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
           className="shrink-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2"
           aria-label={`${site.siteName} home`}
         >
-          {logoSrc ? (
+          {resolvedLogoSrc ? (
             <>
               <LogoMark
-                src={logoSrc}
+                src={resolvedLogoSrc}
                 alt={site.siteName}
-                className={isContactPage ? "lg:hidden" : ""}
+                className={showsContactDesktopLogo ? "lg:hidden" : ""}
               />
-              {isContactPage && (
+              {showsContactDesktopLogo && (
                 <LogoMark src={overlayLogoSrc} alt="" className="hidden lg:block" />
               )}
             </>
@@ -182,7 +206,7 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-[var(--color-primary)] px-6 pb-10 pt-[var(--spacing-nav-h)] lg:hidden">
+        <div className="fixed inset-0 z-50 bg-[var(--color-primary)] px-6 pb-10 pt-[var(--nav-h-current)] lg:hidden">
           <button
             type="button"
             className="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center text-[var(--color-text-on-dark)]"

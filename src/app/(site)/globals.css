@@ -87,6 +87,9 @@
   --spacing-container-x-mobile: 16px;
   --spacing-section-y: 130px;
   --spacing-nav-h: 130px;
+  /* The fixed nav shrinks to this once the page leaves the top, so it covers
+     less of the full-viewport sections it now sits permanently above. */
+  --spacing-nav-h-compact: 80px;
   --spacing-section-gap: 80px;
   --spacing-gap-xs: 8px;
   --spacing-gap-sm: 16px;
@@ -205,6 +208,55 @@ h6 {
 @media (max-width: 767px) {
   .container-x {
     padding-inline: 16px;
+  }
+}
+
+/* ── Site nav ───────────────────────────────────────────────── */
+/* The bar is fixed at every breakpoint so the menu stays reachable anywhere on
+   the page, including the very bottom. The <header> itself stays in flow and
+   holds the space the bar used to occupy on the routes where the nav was not
+   an overlay, so those heroes keep tucking under it with the same negative
+   margin they already use. */
+.site-nav {
+  --nav-h-current: var(--spacing-nav-h);
+  position: relative;
+  z-index: 50;
+  width: 100%;
+  height: var(--spacing-nav-h);
+}
+
+/* Home, about, studio and contact draw their hero beneath the nav, so it must
+   not take any room of its own there. */
+.site-nav--overlay {
+  height: 0;
+}
+
+.site-nav__bar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: var(--nav-h-current);
+  transition:
+    height 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Away from the top the bar sits over arbitrary photography, so it needs a
+   background of its own — and it shrinks, to cover less of the full-viewport
+   sections it now sits permanently above. */
+.site-nav[data-scrolled="true"] {
+  --nav-h-current: var(--spacing-nav-h-compact);
+}
+
+.site-nav[data-scrolled="true"] .site-nav__bar {
+  background: var(--color-primary);
+  box-shadow: 0 1px 24px rgb(0 0 0 / 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__bar {
+    transition: none;
   }
 }
 
@@ -436,6 +488,12 @@ h6 {
     gap: 0;
   }
 
+  /* Figma's column width, which only applies once the copy sits beside the
+     photo. While the grid is stacked the copy gets the full container. */
+  .home-intro__copy {
+    max-width: 573px;
+  }
+
   .home-intro__headline {
     font-size: var(--text-intro-heading);
   }
@@ -444,7 +502,6 @@ h6 {
 .home-intro__copy {
   display: flex;
   width: 100%;
-  max-width: 573px;
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
@@ -511,7 +568,7 @@ h6 {
 .home-marquee {
   /* Shared by the word band and the photo strip: equal duration over an equal
      shift is what keeps the two locked together. */
-  --marquee-duration: 36s;
+  --marquee-duration: 20s;
   position: relative;
   height: 879px;
   background: var(--color-bg);
@@ -960,13 +1017,15 @@ h6 {
   }
 }
 
+/* One row from tablet up, as on desktop: name, tags and link side by side. The
+   trailing 1fr soaks up the slack so the link keeps to the right edge. */
 @media (min-width: 768px) {
   .featured-work-band__footer {
     display: grid;
-    grid-template-columns: minmax(0, 163px) auto;
-    grid-template-rows: auto auto;
+    grid-template-columns: minmax(0, 163px) auto 1fr;
+    grid-template-rows: auto;
     align-items: end;
-    gap: 32px 48px;
+    gap: 0 48px;
     padding-inline: var(--spacing-container-x);
     padding-bottom: 48px;
   }
@@ -983,8 +1042,9 @@ h6 {
   }
 
   .featured-work-band__cta {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 }
 
@@ -1861,6 +1921,12 @@ h6 {
   .about-origin__headline {
     font-size: clamp(3rem, 6vw, 5rem);
   }
+
+  /* Match the origin-story headline scale so the two section titles read as
+     the same weight on tablet. */
+  .about-what__title {
+    font-size: clamp(3rem, 6vw, 5rem);
+  }
 }
 
 /* Fluid origin-story grid for 768–1479px. The fixed-pixel layout below
@@ -2057,6 +2123,32 @@ h6 {
   }
 }
 
+/* Tablet stacks like mobile: two columns leave the copy at ~37 characters a
+   line and strand the bottom-aligned portrait under a band of empty cream.
+   The portrait keeps its Figma proportions, so it is capped rather than run
+   full-bleed — a landscape crop this wide would cut the founder's head off. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .about-origin__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .about-origin__copy {
+    order: 1;
+    max-width: none;
+    padding-bottom: 0;
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .about-origin__portrait {
+    order: 2;
+    justify-self: start;
+    max-width: min(100%, 26rem);
+    margin-left: 0;
+  }
+}
+
 .about-quote {
   position: relative;
   display: flex;
@@ -2175,7 +2267,7 @@ h6 {
   gap: 0 1rem;
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 6vw, 5rem);
   font-weight: 400;
   line-height: 1;
   color: var(--color-text);
@@ -2424,7 +2516,16 @@ h6 {
   color: var(--color-text-muted);
 }
 
-@media (min-width: 768px) {
+/* Tablet keeps the stacked layout so the photo runs the full width; the copy
+   still takes the wider gutter the rest of the page uses at this size. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .journal-hero__content {
+    padding-inline: var(--spacing-container-x);
+  }
+}
+
+/* The side-by-side split only has room from desktop up. */
+@media (min-width: 1024px) {
   .journal-hero__inner {
     grid-template-columns: minmax(0, 521fr) minmax(0, 919fr);
     align-items: stretch;
@@ -2757,7 +2858,6 @@ h6 {
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  max-width: 43.9375rem;
 }
 
 .journal-article-body__section {
@@ -3159,7 +3259,17 @@ h6 {
   color: var(--color-text-muted);
 }
 
-@media (min-width: 768px) {
+/* Tablet keeps the stacked layout so the photo runs the full width, as it does
+   on the studio hero; the copy still takes the wider gutter the rest of the
+   page uses at this size. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .works-hero__content {
+    padding-inline: var(--spacing-container-x);
+  }
+}
+
+/* The side-by-side split only has room from desktop up. */
+@media (min-width: 1024px) {
   .works-hero__inner {
     grid-template-columns: minmax(0, 521fr) minmax(0, 919fr);
     align-items: stretch;
@@ -3403,13 +3513,15 @@ html:has(.works-page) {
   }
 }
 
+/* One row from tablet up, as on desktop: name, tags and link side by side. The
+   trailing 1fr soaks up the slack so the link keeps to the right edge. */
 @media (min-width: 768px) {
   .works-case-study-card__footer {
     display: grid;
-    grid-template-columns: minmax(0, 163px) auto;
-    grid-template-rows: auto auto;
+    grid-template-columns: minmax(0, 163px) auto 1fr;
+    grid-template-rows: auto;
     align-items: end;
-    gap: 32px 48px;
+    gap: 0 48px;
     padding-inline: var(--spacing-container-x);
     padding-bottom: 48px;
   }
@@ -3426,8 +3538,9 @@ html:has(.works-page) {
   }
 
   .works-case-study-card__link {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 }
 
@@ -4006,13 +4119,17 @@ html:has(.works-page) {
   -webkit-backface-visibility: hidden;
 }
 
+/* Centred with auto margins rather than translateX(-50%): GSAP owns this
+   element's transform for the crossfade, and it inherits any percentage
+   translation it finds here into every panel, which then survives the
+   breakpoints that centre the deck by other means. */
 .studio-services__stack {
   position: absolute;
   top: clamp(10rem, 24vw, 18rem);
-  left: 50%;
+  inset-inline: 0;
+  margin-inline: auto;
   width: min(100%, 418px);
   height: clamp(28rem, 54vw, 48.8125rem);
-  transform: translateX(-50%);
   will-change: transform;
   transform-origin: center center;
   backface-visibility: hidden;
@@ -4231,8 +4348,7 @@ html:has(.works-page) {
 .studio-services--static .studio-services__stack {
   position: relative;
   top: auto;
-  left: auto;
-  transform: none;
+  inset-inline: auto;
   width: 100%;
   max-width: 320px;
   height: auto;
@@ -4342,7 +4458,7 @@ html:has(.works-page) {
   .studio-services--scroll .studio-services__stack {
     position: relative;
     top: auto;
-    left: auto;
+    inset-inline: auto;
     flex: 1;
     align-self: center;
     width: auto;
@@ -4351,7 +4467,6 @@ html:has(.works-page) {
     min-height: 0;
     max-height: 609px;
     aspect-ratio: 418 / 781;
-    transform: none;
   }
 
   .studio-services--scroll .studio-services__display-title-wrap {
@@ -4728,8 +4843,8 @@ html:has(.works-page) {
        781/1189) still caps it, and it yields to the gap between the two text
        columns so the stack never runs under them. */
     top: 24.2%;
-    left: 50%;
-    transform: translateX(-50%);
+    inset-inline: 0;
+    margin-inline: auto;
     width: min(
       29.03vw,
       calc(65.7vh * 418 / 781),
@@ -4808,8 +4923,8 @@ html:has(.works-page) {
 
   .studio-services__stack {
     top: 18rem; /* 288px from section top */
-    left: 50%;
-    transform: translateX(-50%);
+    inset-inline: 0;
+    margin-inline: auto;
     width: 418px;
     height: 48.8125rem; /* 781px */
   }
@@ -4935,6 +5050,20 @@ html:has(.works-page) {
     width: clamp(2.75rem, 5vh, 4rem);
     height: clamp(2.75rem, 5vh, 4rem);
     font-size: clamp(1.25rem, 2.5vh, 2rem);
+  }
+}
+
+/* Figma's services frame is 1189px tall and the blocks in it are anchored by
+   percentage, so on a laptop the includes column and the button beneath it
+   close on each other and eventually collide. Tighten the list rather than let
+   them overlap; taller viewports keep Figma's exact 48px pitch. */
+@media (min-width: 1024px) and (max-height: 1000px) {
+  .studio-services--scroll .studio-services__includes {
+    gap: 1.25rem;
+  }
+
+  .studio-services--scroll .studio-services__includes-list {
+    gap: 1.1rem;
   }
 }
 
