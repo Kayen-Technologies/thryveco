@@ -94,11 +94,13 @@ export default function FinalCta({
 
         <div className="final-cta__media" data-reveal>
           <div ref={mediaMotionRef} className="final-cta__media-motion">
+            {/* Mobile crops into a 1.45x zoom, so only ~69% of the chosen
+                candidate is on screen — ask for a proportionally larger one. */}
             <Image
               src={image.src}
               alt={image.alt}
               fill
-              sizes="(min-width: 1024px) 986px, 100vw"
+              sizes="(min-width: 1024px) 986px, (min-width: 768px) 100vw, 150vw"
               className="final-cta__image"
             />
           </div>

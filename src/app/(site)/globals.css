@@ -1308,6 +1308,18 @@ h6 {
   object-position: 50% 69%;
 }
 
+/* The mobile box is 3:2 — the same shape as the source — so cover leaves no
+   overflow for object-position to move and the whole face stays in frame.
+   Zoom the photo instead: 1.45x then lift it so the top edge lands on the same
+   row of the source (28%) the desktop band starts at. The parallax scales
+   .final-cta__media-motion, not the image, so this transform is safe. */
+@media (max-width: 767px) {
+  .final-cta__image {
+    transform: translateY(-18.2%) scale(1.45);
+    transform-origin: center;
+  }
+}
+
 .final-cta__overlay {
   position: absolute;
   inset: 0;
