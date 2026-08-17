@@ -2359,14 +2359,19 @@ h6 {
   }
 
   .about-what__title {
-    /* 26px row gap leaves room for the absolutely-positioned swoosh, putting
-       "Means" on Figma's 82px second-line baseline. */
+    /* Row gap only applies if the title ever wraps below ~310px, where the
+       clamp floor takes over; it keeps the swoosh clear of the next line. */
     gap: 26px 1rem;
-    font-size: 40px;
+    /* Keep the three words on one line. At 40px the line measures ~361px
+       (329px of glyphs + two 16px gaps), which overflows a 390px phone by 3px,
+       so scale with the viewport: 8.23px of width per 1px of font, plus the
+       32px of fixed gaps, inside a 100vw - 32px container. Caps at the 40px
+       Figma size once there is room for it. */
+    font-size: clamp(1.5rem, 11.4vw - 7.3px, 2.5rem);
   }
 
   .about-what__intro {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 
   .about-what__lower {
@@ -4766,23 +4771,27 @@ html:has(.works-page) {
    scrolling strip beneath the photo. */
 @media (max-width: 767px) {
   .studio-how__inner {
-    padding: 32px var(--spacing-container-x-mobile) 80px;
+    padding-block: clamp(1.25rem, 3vh, 2rem) clamp(1.5rem, 4vh, 2.5rem);
   }
 
   .studio-how__title {
-    margin-bottom: 40px;
+    margin-bottom: clamp(1.25rem, 3vh, 2.5rem);
+    padding-inline: var(--spacing-container-x-mobile);
     font-size: 3.5rem;
     text-align: center;
   }
 
+  /* Pack panel, photo and pills together and let the leftover screen height
+     fall below them, rather than opening a gap between photo and pills. */
   .studio-how__layout {
+    align-content: start;
     gap: 0;
   }
 
   .studio-how__panel {
     gap: 0;
     min-height: 0;
-    padding: 80px 24px;
+    padding: clamp(2rem, 5vh, 5rem) 24px;
     text-align: center;
   }
 
@@ -4795,16 +4804,20 @@ html:has(.works-page) {
     font-size: 2.5rem;
   }
 
+  /* Needs a definite height: the step photos are absolutely positioned fills,
+     so an auto height collapses the box to zero. Scales with the viewport so
+     the stack keeps landing inside one screen. */
   .studio-how__media {
     margin-top: 24px;
     min-height: 0;
-    height: 370px;
+    height: clamp(11rem, 32vh, 20rem);
   }
 
   /* Six 64px pills on an 88px pitch run past the gutter, so the strip scrolls
      and the clipped pill is the affordance — as drawn. */
   .studio-how__steps {
-    margin-top: 40px;
+    margin-top: clamp(1.25rem, 3vh, 2.5rem);
+    padding-inline: var(--spacing-container-x-mobile);
     flex-wrap: nowrap;
     gap: 24px;
     overflow-x: auto;
@@ -4883,6 +4896,61 @@ html:has(.works-page) {
     align-self: end;
     z-index: 1;
     padding: 0 var(--studio-how-panel-pad-x) var(--studio-how-panel-pad-y);
+  }
+}
+
+/* Below desktop the section reads as one full screen, edge to edge: the wrapper
+   drops its side gutter so the panel and photo run full-bleed, and it is capped
+   at the viewport like the >=1024px treatment. Must follow the min-width:768
+   rules to beat their padding-inline. Copy that no longer sits inside a padded
+   box carries its own inline gutter. */
+@media (max-width: 1023px) {
+  .studio-how__inner {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding-inline: 0;
+  }
+
+  .studio-how__layout {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .studio-how__panel,
+  .studio-how__media {
+    min-height: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .studio-how {
+    --studio-how-panel-pad-y: clamp(2rem, 6vh, 5rem);
+  }
+
+  .studio-how__inner {
+    padding-block: clamp(1.5rem, 4vh, 3rem);
+  }
+
+  .studio-how__title {
+    margin-bottom: clamp(1rem, 2.5vh, 2rem);
+    padding-inline: var(--spacing-container-x);
+  }
+
+  /* Cap the split: on a 1180px-tall iPad an uncapped row stretched the panel to
+     ~1015px, leaving a column of empty burgundy under the copy. Leftover screen
+     height sits below the split instead. */
+  .studio-how__layout {
+    max-height: clamp(22rem, 70vh, 46rem);
+  }
+
+  /* Both cells stretch to the capped layout row instead of the fixed min-height
+     that would push the section past one screen. */
+  .studio-how__panel,
+  .studio-how__media {
+    height: 100%;
   }
 }
 
