@@ -68,7 +68,7 @@ export const STUDIO_DEFAULTS = {
       ctaLabel: "Book a Discovery Call",
       ctaHref: "/contact",
       stackImages: [
-        { src: "/assets/studio/studio-svc02-stack-01.jpg", alt: "Editorial magazine styled on a table beside a wooden board" },
+        { src: "/assets/studio/studio-svc02-stack-01.jpg", alt: "Red compact camera, iced coffee, and sunglasses arranged on dark stone" },
         { src: "/assets/studio/studio-svc02-stack-02.jpg", alt: "Content creation mid-back layer" },
         { src: "/assets/studio/studio-svc02-stack-03.jpg", alt: "Content creation mid-front layer" },
         { src: "/assets/studio/studio-svc02-stack-04.jpg", alt: "Content creation front layer" },
