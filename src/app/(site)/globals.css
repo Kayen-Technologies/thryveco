@@ -1588,10 +1588,19 @@ h6 {
     gap: 56px;
   }
 
-  /* The DOM leads with the card because desktop splits it off to the left; on
-     mobile Figma puts it under the link groups. */
+  /* Menu + Get In Touch sit side by side; Socials spans the full row below. */
   .site-footer__columns {
     order: 1;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5rem;
+    row-gap: 56px;
+  }
+
+  .site-footer__column--socials {
+    grid-column: 1 / -1;
+    /* Keep the pill column content-sized — do not stretch to the row width. */
+    width: auto;
+    max-width: 152px;
   }
 
   .site-footer__brand-card {
@@ -1847,7 +1856,7 @@ h6 {
   /* Match the origin-story headline scale so the two section titles read as
      the same weight on tablet. */
   .about-what__title {
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: 40px;
   }
 }
 
@@ -1895,7 +1904,7 @@ h6 {
   .about-origin__headline {
     margin-top: 100px;
     max-width: 1284px;
-    font-size: 5rem;
+    font-size: 40px;
   }
 }
 
@@ -2279,7 +2288,7 @@ h6 {
   }
 
   .about-what__title {
-    font-size: 3.5rem;
+    font-size: 40px;
   }
 
   .about-what__underline {
@@ -2288,7 +2297,7 @@ h6 {
 
   .about-what__intro {
     margin-top: 80px;
-    font-size: 2rem;
+    font-size: 32px;
   }
 
   .about-what__lower {
@@ -2353,7 +2362,7 @@ h6 {
     /* 26px row gap leaves room for the absolutely-positioned swoosh, putting
        "Means" on Figma's 82px second-line baseline. */
     gap: 26px 1rem;
-    font-size: 3.5rem;
+    font-size: 40px;
   }
 
   .about-what__intro {
@@ -3858,6 +3867,28 @@ html:has(.works-page) {
   .case-study-gallery__figure:nth-child(4n + 2),
   .case-study-gallery__figure:nth-child(4n + 3) {
     grid-row: span 2;
+  }
+}
+
+/* Uniform 400px section and gallery tiles below desktop — the full-bleed
+   504/900 portraits were ~1.8× viewport height on phones. Fixed height replaces
+   the ratios, so aspect-ratio must be cleared or it would keep driving the box. */
+@media (max-width: 1023px) {
+  .case-study-section__figure,
+  .case-study-gallery__figure,
+  .case-study-gallery__figure:nth-child(4n + 2),
+  .case-study-gallery__figure:nth-child(4n + 3) {
+    aspect-ratio: auto;
+    height: 400px;
+  }
+}
+
+/* Tablet: drop the two-row portrait span, which would otherwise stretch the
+   tile past its fixed height. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .case-study-gallery__figure:nth-child(4n + 2),
+  .case-study-gallery__figure:nth-child(4n + 3) {
+    grid-row: auto;
   }
 }
 
