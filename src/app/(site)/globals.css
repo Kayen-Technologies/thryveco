@@ -3174,6 +3174,11 @@ h6 {
   color: var(--color-text);
 }
 
+.works-hero__emphasis {
+  font-style: italic;
+  color: var(--color-primary); /* #6B0F1A */
+}
+
 .works-hero__subheadline {
   margin: 0;
   max-width: 25rem;
@@ -4322,12 +4327,12 @@ html:has(.works-page) {
   margin-top: 1.5rem;
 }
 
-/* Pinned frame below desktop (Figma node 553:1428). Figma draws the composition
+/* Pinned frame on tablet only (Figma node 553:1428). Figma draws the composition
    1215px tall, but pinning needs it inside one viewport, so the outer padding
    and the header gap give up their Figma values and the card deck takes
    whatever height is left. svh keeps the pin stable when a mobile address bar
-   shows or hides. */
-@media (max-width: 1023px) {
+   shows or hides. Phones (<768) render the stacked cards path instead. */
+@media (min-width: 768px) and (max-width: 1023px) {
   .studio-services--scroll {
     --studio-services-frame-height: 100svh;
   }
@@ -4429,10 +4434,14 @@ html:has(.works-page) {
     display: none;
   }
 
+  /* Tablet borrows this frame, but a full-bleed button at this width reads as a
+     banner rather than a button, so it stays centred and capped. */
   .studio-services--scroll .studio-services__cta-wrap {
     position: static;
     top: auto;
     right: auto;
+    align-self: center;
+    width: min(100%, 22.375rem);
   }
 
   .studio-services--scroll .studio-services__cta {
@@ -4441,19 +4450,249 @@ html:has(.works-page) {
   }
 }
 
-/* The frame above is shared with tablet, where 48px still fits; phones only. */
+/* Phone card composition (Figma mobile service frames): centred display title +
+   swoosh, one square image, CTA, then two disclosures. Shared by both phone
+   paths — the pinned crossfade (--scroll-cards) and the reduced-motion stacked
+   flow (--cards). No other variant renders at this width, so the shared rules
+   below need no root-class scoping. */
 @media (max-width: 767px) {
-  .studio-services--scroll .studio-services__title {
-    font-size: 2.5rem;
+  .studio-services__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-}
 
-/* Tablet borrows the mobile frame, but a full-bleed button at this width reads
-   as a banner rather than a button. */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .studio-services--scroll .studio-services__cta-wrap {
-    align-self: center;
-    width: min(100%, 22.375rem);
+  .studio-services__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .studio-services__label {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  .studio-services__display-title-wrap {
+    position: static;
+    top: auto;
+    left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .studio-services__display-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  /* Zero width keeps the swoosh out of the wrapper's fit-content measurement, so
+     the title sets the width and the underline then matches it. */
+  .studio-services__underline {
+    width: 0;
+    min-width: 100%;
+  }
+
+  .studio-services__card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin-top: 1.5rem;
+    overflow: hidden;
+  }
+
+  .studio-services__card-image {
+    object-fit: cover;
+    object-position: 50% 45%;
+  }
+
+  .studio-services__card-cta {
+    width: 100%;
+    min-width: 0;
+    margin-top: 1.5rem;
+  }
+
+  .studio-services__disclosure {
+    width: 100%;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.12);
+  }
+
+  .studio-services__disclosure:first-of-type {
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.12);
+  }
+
+  .studio-services__disclosure-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-text);
+    text-align: left;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .studio-services__disclosure-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .studio-services__disclosure-summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .studio-services__disclosure-icon {
+    flex-shrink: 0;
+    color: var(--color-primary);
+    transition: transform 0.25s ease;
+  }
+
+  .studio-services__disclosure[open] .studio-services__disclosure-icon {
+    transform: rotate(180deg);
+  }
+
+  .studio-services__disclosure-content {
+    text-align: left;
+  }
+
+  .studio-services__disclosure-inner {
+    padding-bottom: 1.25rem;
+  }
+
+  .studio-services__card-description {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .studio-services__includes-list {
+    gap: 1.25rem;
+  }
+
+  /* Reduced-motion phone path: services stacked in normal document flow. */
+  .studio-services--cards {
+    display: flex;
+    flex-direction: column;
+    padding: 48px var(--spacing-container-x-mobile) 40px;
+  }
+
+  .studio-services--cards .studio-services__card + .studio-services__card,
+  .studio-services--cards .studio-services__card ~ .studio-services__card {
+    margin-top: clamp(3.5rem, 12vw, 5rem);
+  }
+
+  /* Pinned phone path: the card composition inside the crossfading frame, so
+     scrolling advances Service 01 → 04 as it does tablet-up. */
+  .studio-services--scroll-cards {
+    --studio-services-frame-height: 100svh;
+  }
+
+  .studio-services--scroll-cards .studio-services__frame {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: var(--studio-services-frame-height);
+    padding: 48px var(--spacing-container-x-mobile) 40px;
+  }
+
+  .studio-services--scroll-cards .studio-services__header {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    flex-shrink: 0;
+    width: auto;
+    text-align: center;
+  }
+
+  /* Two lines held open: the header is shared, so a label that reflowed between
+     services would resize the stage mid-crossfade. */
+  .studio-services--scroll-cards .studio-services__label {
+    min-height: 2.6rem;
+  }
+
+  .studio-services--scroll-cards .studio-services__stage {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+    margin-top: 1.5rem;
+  }
+
+  /* Safety valve: with both disclosures open on a long service the composition
+     can still exceed the frame after the image has shrunk to its floor. Block
+     rather than flex, so the card below is free to grow past the panel and
+     actually produce a scrollable overflow.
+
+     Scroll chaining must stay at its default (auto): the pin is driven by
+     document scroll, so `overscroll-behavior: contain` here swallows the wheel
+     over the panel and the service stops advancing. */
+  .studio-services--scroll-cards .studio-services__panel {
+    display: block;
+  }
+
+  /* Scrollable only while a disclosure is open. Closed, the panel must not be a
+     scroll container at all — sub-pixel overflow would otherwise be enough to
+     capture wheel gestures that belong to the pin. */
+  .studio-services--scroll-cards
+    .studio-services__panel:has(.studio-services__disclosure[open]) {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Fills the panel while the disclosures are closed, so the image can flex into
+     the leftover space — but grows past it, scrolling the panel, once both are
+     open and the image has hit its floor. */
+  .studio-services--scroll-cards .studio-services__card {
+    box-sizing: border-box;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  .studio-services--scroll-cards .studio-services__display-title-wrap {
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+
+  /* The image is the only elastic element, so it absorbs disclosure expansion.
+     The frame height — and therefore the pin distance — never changes, which is
+     why opening a disclosure needs no ScrollTrigger refresh. */
+  .studio-services--scroll-cards .studio-services__card-media {
+    flex: 1;
+    min-height: 5rem;
+    aspect-ratio: auto;
+    margin-top: 1.25rem;
+  }
+
+  .studio-services--scroll-cards .studio-services__card-cta,
+  .studio-services--scroll-cards .studio-services__disclosure {
+    flex-shrink: 0;
+  }
+
+  /* Figma's mobile frames carry no progress dots. */
+  .studio-services--scroll-cards .studio-services__progress {
+    display: none;
   }
 }
 

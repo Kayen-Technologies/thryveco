@@ -8,7 +8,25 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import Button from "@/components/Button";
 import Reveal from "@/components/motion/Reveal";
 import type { StudioServiceDefault } from "@/components/studio/defaults";
+import StudioServiceCard from "@/components/studio/StudioServiceCard";
 import StudioServiceStack from "@/components/studio/StudioServiceStack";
+
+/* "scroll-cards" is the phone pinned path: same crossfade as "scroll", but each
+   panel holds the card composition (single image + disclosures) instead of the
+   desktop stack layout. */
+type StudioServicesMode = "cards" | "scroll-cards" | "scroll" | "static";
+
+/* Panel children the crossfade timeline staggers. Queried as one list so DOM
+   order drives the stagger and each variant contributes only what it renders. */
+const PANEL_ANIM_SELECTOR = [
+  ".studio-services__display-title-wrap",
+  ".studio-services__description",
+  ".studio-services__includes",
+  ".studio-services__cta-wrap",
+  ".studio-services__card-media",
+  ".studio-services__card-cta",
+  ".studio-services__disclosure",
+].join(",");
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -82,7 +100,9 @@ export default function StudioServices({
   const gsapContextRef = useRef<gsap.Context | null>(null);
   const scrollTriggerIdRef = useRef<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollEnabled, setScrollEnabled] = useState(false);
+  // Initialised to "cards" so phones server-render their final markup and skip
+  // the mount-time swap that used to shift layout on every phone load.
+  const [mode, setMode] = useState<StudioServicesMode>("cards");
 
   const killGsap = useCallback(() => {
     if (scrollTriggerIdRef.current) {
@@ -99,27 +119,42 @@ export default function StudioServices({
   }, []);
 
   useEffect(() => {
+    // Motion allowed: pinned crossfade at every width, with the card
+    // composition on phones and the stack layout tablet-up. Reduced motion
+    // falls back to unpinned flow: cards on phones, the static grid tablet-up.
+    const widthMq = window.matchMedia("(min-width: 768px)");
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const update = () => {
-      const shouldEnable = !motionMq.matches;
-      if (!shouldEnable) {
-        killGsap();
-      }
-      setScrollEnabled(shouldEnable);
+      const isTabletUp = widthMq.matches;
+      const next: StudioServicesMode = motionMq.matches
+        ? isTabletUp
+          ? "static"
+          : "cards"
+        : isTabletUp
+          ? "scroll"
+          : "scroll-cards";
+      // Leaving a pinned mode must drop the pin so no orphaned pin-spacer
+      // survives; swapping between the two pinned variants also needs a rebuild
+      // because the animated children differ.
+      killGsap();
+      setMode(next);
     };
 
     update();
+    widthMq.addEventListener("change", update);
     motionMq.addEventListener("change", update);
 
     return () => {
+      widthMq.removeEventListener("change", update);
       motionMq.removeEventListener("change", update);
       killGsap();
     };
   }, [killGsap]);
 
   useLayoutEffect(() => {
-    if (!scrollEnabled || !sectionRef.current || !trackRef.current || !frameRef.current || services.length < 2) {
+    const isPinned = mode === "scroll" || mode === "scroll-cards";
+    if (!isPinned || !sectionRef.current || !trackRef.current || !frameRef.current || services.length < 2) {
       return;
     }
 
@@ -136,10 +171,7 @@ export default function StudioServices({
       gsapContextRef.current = gsap.context(() => {
         panels.forEach((panel, index) => {
           const imageStack = panel.querySelector(".studio-services__stack");
-          const textContent = panel.querySelector(".studio-services__display-title-wrap");
-          const description = panel.querySelector(".studio-services__description");
-          const includes = panel.querySelector(".studio-services__includes");
-          const cta = panel.querySelector(".studio-services__cta-wrap");
+          const animEls = Array.from(panel.querySelectorAll(PANEL_ANIM_SELECTOR));
 
           gsap.set(panel, {
             opacity: index === 0 ? 1 : 0,
@@ -163,13 +195,11 @@ export default function StudioServices({
             });
           }
 
-          [textContent, description, includes, cta].forEach((el, elIndex) => {
-            if (el) {
-              gsap.set(el, {
-                opacity: index === 0 ? 1 : 0,
-                y: index === 0 ? 0 : 30 + elIndex * 8,
-              });
-            }
+          animEls.forEach((el, elIndex) => {
+            gsap.set(el, {
+              opacity: index === 0 ? 1 : 0,
+              y: index === 0 ? 0 : 30 + elIndex * 8,
+            });
           });
         });
 
@@ -218,18 +248,10 @@ export default function StudioServices({
           const nextPanel = panels[index + 1];
           const currentStack = currentPanel.querySelector(".studio-services__stack");
           const nextStack = nextPanel.querySelector(".studio-services__stack");
-          const currentTextElements = [
-            currentPanel.querySelector(".studio-services__display-title-wrap"),
-            currentPanel.querySelector(".studio-services__description"),
-            currentPanel.querySelector(".studio-services__includes"),
-            currentPanel.querySelector(".studio-services__cta-wrap"),
-          ].filter(Boolean);
-          const nextTextElements = [
-            nextPanel.querySelector(".studio-services__display-title-wrap"),
-            nextPanel.querySelector(".studio-services__description"),
-            nextPanel.querySelector(".studio-services__includes"),
-            nextPanel.querySelector(".studio-services__cta-wrap"),
-          ].filter(Boolean);
+          const currentTextElements = Array.from(
+            currentPanel.querySelectorAll(PANEL_ANIM_SELECTOR),
+          );
+          const nextTextElements = Array.from(nextPanel.querySelectorAll(PANEL_ANIM_SELECTOR));
 
           const segmentStart = index;
           const segmentDuration = 1;
@@ -308,9 +330,26 @@ export default function StudioServices({
       cancelAnimationFrame(frameId);
       killGsap();
     };
-  }, [scrollEnabled, services, killGsap]);
+  }, [mode, services, killGsap]);
 
-  if (!scrollEnabled) {
+  if (mode === "cards") {
+    return (
+      <section className="studio-services studio-services--cards" ref={sectionRef}>
+        {services.map((service, index) => (
+          <StudioServiceCard
+            key={service.serviceLabel}
+            service={service}
+            sectionTitle={sectionTitle}
+            underlineSrc={underlineSrc}
+            bulletSrc={bulletSrc}
+            index={index}
+          />
+        ))}
+      </section>
+    );
+  }
+
+  if (mode === "static") {
     return (
       <section className="studio-services studio-services--static" ref={sectionRef}>
         <Reveal className="studio-services__static-intro">
@@ -329,9 +368,13 @@ export default function StudioServices({
     );
   }
 
+  const isCardVariant = mode === "scroll-cards";
+
   return (
     <section
-      className="studio-services studio-services--scroll"
+      className={`studio-services ${
+        isCardVariant ? "studio-services--scroll studio-services--scroll-cards" : "studio-services--scroll"
+      }`}
       ref={sectionRef}
       style={{ "--studio-service-count": services.length } as CSSProperties}
     >
@@ -355,9 +398,24 @@ export default function StudioServices({
                 }}
                 className="studio-services__panel"
                 aria-hidden={index !== activeIndex}
+                // The card variant puts tabbable <summary> elements in every
+                // panel; inert keeps the hidden ones out of the tab order
+                // instead of leaving focusable nodes inside aria-hidden.
+                inert={index !== activeIndex}
                 id={`studio-service-panel-${index}`}
               >
-                <ServicePanel service={service} underlineSrc={underlineSrc} bulletSrc={bulletSrc} />
+                {isCardVariant ? (
+                  <StudioServiceCard
+                    service={service}
+                    sectionTitle={sectionTitle}
+                    underlineSrc={underlineSrc}
+                    bulletSrc={bulletSrc}
+                    index={index}
+                    showHeading={false}
+                  />
+                ) : (
+                  <ServicePanel service={service} underlineSrc={underlineSrc} bulletSrc={bulletSrc} />
+                )}
               </div>
             ))}
           </div>

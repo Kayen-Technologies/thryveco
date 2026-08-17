@@ -21,6 +21,10 @@ export default function WorksHero({
   const contentRef = useRef<HTMLDivElement>(null);
   const mediaMotionRef = useRef<HTMLDivElement>(null);
 
+  const emphasis = "Thryved";
+  const emphasisIndex = headline.indexOf(emphasis);
+  const hasEmphasis = emphasisIndex >= 0;
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const content = contentRef.current;
@@ -59,7 +63,17 @@ export default function WorksHero({
       <div className="works-hero__inner">
         <div ref={contentRef} className="works-hero__content">
           <h1 id="works-hero-heading" className="works-hero__headline">
-            <span data-works-hero-line>{headline}</span>
+            <span data-works-hero-line>
+              {hasEmphasis ? (
+                <>
+                  {headline.slice(0, emphasisIndex)}
+                  <span className="works-hero__emphasis">{emphasis}</span>
+                  {headline.slice(emphasisIndex + emphasis.length)}
+                </>
+              ) : (
+                headline
+              )}
+            </span>
           </h1>
           <p className="works-hero__subheadline">
             <span data-works-hero-line>{subheadline}</span>

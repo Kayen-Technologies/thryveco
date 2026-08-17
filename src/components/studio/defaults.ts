@@ -46,7 +46,7 @@ export const STUDIO_DEFAULTS = {
       ctaLabel: "Book a Discovery Call",
       ctaHref: "/contact",
       stackImages: [
-        { src: "/assets/studio/studio-svc01-stack-01.jpg", alt: "Strategy and consulting back layer" },
+        { src: "/assets/studio/studio-svc01-stack-01.jpg", alt: "Woman holding a maroon card reading Your Brand's New Best Friend" },
         { src: "/assets/studio/studio-svc01-stack-02.jpg", alt: "Strategy and consulting mid-back layer" },
         { src: "/assets/studio/studio-svc01-stack-03.jpg", alt: "Strategy and consulting mid-front layer" },
         { src: "/assets/studio/studio-svc01-stack-04.jpg", alt: "Strategy and consulting front layer" },
@@ -68,7 +68,7 @@ export const STUDIO_DEFAULTS = {
       ctaLabel: "Book a Discovery Call",
       ctaHref: "/contact",
       stackImages: [
-        { src: "/assets/studio/studio-svc02-stack-01.jpg", alt: "Content creation back layer" },
+        { src: "/assets/studio/studio-svc02-stack-01.jpg", alt: "Editorial magazine styled on a table beside a wooden board" },
         { src: "/assets/studio/studio-svc02-stack-02.jpg", alt: "Content creation mid-back layer" },
         { src: "/assets/studio/studio-svc02-stack-03.jpg", alt: "Content creation mid-front layer" },
         { src: "/assets/studio/studio-svc02-stack-04.jpg", alt: "Content creation front layer" },
@@ -91,7 +91,7 @@ export const STUDIO_DEFAULTS = {
       ctaLabel: "Book a Discovery Call",
       ctaHref: "/contact",
       stackImages: [
-        { src: "/assets/studio/studio-svc03-stack-01.jpg", alt: "Social media management back layer" },
+        { src: "/assets/studio/studio-svc03-stack-01.jpg", alt: "Vintage radio resting on a Picture Post magazine" },
         { src: "/assets/studio/studio-svc03-stack-02.jpg", alt: "Social media management mid-back layer" },
         { src: "/assets/studio/studio-svc03-stack-03.jpg", alt: "Social media management mid-front layer" },
         { src: "/assets/studio/studio-svc03-stack-04.jpg", alt: "Social media management front layer" },
@@ -113,7 +113,7 @@ export const STUDIO_DEFAULTS = {
       ctaLabel: "Book a Discovery Call",
       ctaHref: "/contact",
       stackImages: [
-        { src: "/assets/studio/studio-svc04-stack-01.jpg", alt: "Creative direction back layer" },
+        { src: "/assets/studio/studio-svc04-stack-01.jpg", alt: "Hand photographing Thryve branded prints on a phone" },
         { src: "/assets/studio/studio-svc04-stack-02.jpg", alt: "Creative direction mid-back layer" },
         { src: "/assets/studio/studio-svc04-stack-03.jpg", alt: "Creative direction mid-front layer" },
         { src: "/assets/studio/studio-svc04-stack-04.jpg", alt: "Creative direction front layer" },
