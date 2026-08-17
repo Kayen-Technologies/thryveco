@@ -845,7 +845,7 @@ export interface SiteSetting {
   email?: string | null;
   phone?: string | null;
   /**
-   * URL for the 'Book a Call' CTA button in the nav.
+   * URL for the 'Book a Discovery Call' CTA button in the nav.
    */
   bookingLink?: string | null;
   /**

@@ -184,7 +184,7 @@ export const AboutPage: GlobalConfig = {
           defaultValue:
             "Your brand deserves more than content that fills a feed. Let’s build a strategy, presence, and visual identity people actually remember.",
         },
-        { name: "ctaLabel", type: "text", defaultValue: "Book My Discovery Call" },
+        { name: "ctaLabel", type: "text", defaultValue: "Book a Discovery Call" },
         { name: "ctaHref", type: "text", defaultValue: "/contact" },
         {
           name: "image",

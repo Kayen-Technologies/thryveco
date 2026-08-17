@@ -32,7 +32,7 @@ export const site: SiteConfig = {
   email: "hello@thryve&co.agency",
   phone: "+233 53 762 2693",
   bookingLink: "/contact",
-  bookingLabel: "Book a Call",
+  bookingLabel: "Book a Discovery Call",
   navLinks: [
     { label: "Studio", href: "/studio" },
     { label: "Works", href: "/works" },

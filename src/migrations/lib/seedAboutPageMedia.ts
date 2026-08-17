@@ -253,7 +253,7 @@ export async function linkAboutPageContent({
       cta: {
         headline: current.cta?.headline ?? "Ready to build a brand people remember?",
         subtext: current.cta?.subtext ?? "Beautiful brands start here",
-        ctaLabel: current.cta?.ctaLabel ?? "Book A Discovery Call",
+        ctaLabel: current.cta?.ctaLabel ?? "Book a Discovery Call",
         ctaHref: current.cta?.ctaHref ?? "/contact",
         image: mediaByFilename.get("about-cta.jpg") ?? current.cta?.image ?? null,
       },
@@ -305,7 +305,7 @@ export async function clearAboutPageContent({
       cta: {
         headline: current.cta?.headline ?? "Ready to build a brand people remember?",
         subtext: current.cta?.subtext ?? "Beautiful brands start here",
-        ctaLabel: current.cta?.ctaLabel ?? "Book A Discovery Call",
+        ctaLabel: current.cta?.ctaLabel ?? "Book a Discovery Call",
         ctaHref: current.cta?.ctaHref ?? "/contact",
         image: null,
       },

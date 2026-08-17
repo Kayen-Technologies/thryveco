@@ -45,7 +45,7 @@ export const SiteSettings: GlobalConfig = {
       type: "text",
       defaultValue: "/contact",
       admin: {
-        description: "URL for the 'Book a Call' CTA button in the nav.",
+        description: "URL for the 'Book a Discovery Call' CTA button in the nav.",
       },
     },
     {

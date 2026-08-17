@@ -41,7 +41,7 @@ export const HomePage: GlobalConfig = {
         {
           name: "ctaLabel",
           type: "text",
-          defaultValue: "Book a Call",
+          defaultValue: "Book a Discovery Call",
         },
         {
           name: "ctaHref",
@@ -245,7 +245,7 @@ export const HomePage: GlobalConfig = {
         {
           name: "ctaLabel",
           type: "text",
-          defaultValue: "Book My Discovery Call",
+          defaultValue: "Book a Discovery Call",
         },
         {
           name: "ctaHref",

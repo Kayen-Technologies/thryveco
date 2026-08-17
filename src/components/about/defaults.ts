@@ -53,7 +53,7 @@ export const ABOUT_DEFAULTS = {
     headline: "Your Next Brand Move Starts Here.",
     subtext:
       "Your brand deserves more than content that fills a feed. Let’s build a strategy, presence, and visual identity people actually remember.",
-    ctaLabel: "Book My Discovery Call",
+    ctaLabel: "Book a Discovery Call",
     ctaHref: "/contact",
     image: { src: "/assets/about/about-cta.jpg", alt: "Creative studio lifestyle scene" },
   },

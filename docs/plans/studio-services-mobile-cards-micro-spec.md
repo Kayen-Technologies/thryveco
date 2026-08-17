@@ -4,35 +4,26 @@ Authority for implement → sweep → QA. Figma: `6X4FDZeL0ux7dY4zucMhe5` (mobil
 
 ## GOAL
 
-Below `768px`, `StudioServices` renders four services in normal document flow. Each card: repeated section title, service label, centered display title + swoosh underline, one ~1:1 image, centered CTA, then divider-separated `Overview` and `What's included` disclosures — both closed by default, independently toggleable. No pin, no crossfade, no progress dots, no `aria-live` label.
+Below `768px`, `StudioServices` renders the section title once, then four services in normal document flow. Each card: service label, centered display title + swoosh underline, one ~1:1 image, centered CTA, then divider-separated `Overview` and `What's included` disclosures — both closed by default. No pin, no crossfade, no progress dots, no `aria-live` label.
 
 ## RENDER MODE MATRIX
 
-Revised after the designer confirmed the pinned crossfade must also apply on phones ("when you scroll, it changes… service 1, 2 etc like it did before").
+The pinned crossfade was briefly extended to phones, then reverted at the designer's request ("on mobile view, lets change this to a list instead of the animate"). Phones are now a plain stacked list at any motion preference, so the phone path no longer depends on GSAP at all.
 
 | Viewport | Motion pref | Path | Root class |
 |---|---|---|---|
-| `< 768px` | no-preference | Pinned crossfade, card composition | `studio-services--scroll studio-services--scroll-cards` |
-| `< 768px` | reduce | Stacked accordion cards, no pin | `studio-services--cards` |
+| `< 768px` | any | Stacked accordion cards, no pin | `studio-services--cards` |
 | `≥ 768px` | no-preference | Pinned crossfade, stack layout (unchanged) | `studio-services--scroll` |
 | `≥ 768px` | reduce | 2-col static grid (unchanged) | `studio-services--static` |
-
-### How the pin and the accordions coexist
-
-The pinned frame is a fixed `100svh`, so accordion expansion must be absorbed **inside** it:
-
-1. The image is the only elastic element (`flex: 1; min-height: 5rem`), so it shrinks to make room. The frame height never changes, which is why opening a disclosure needs no `ScrollTrigger.refresh()`.
-2. Once the image hits its floor the card grows past the panel (`min-height: 100%` on a `display: block` panel), and the panel becomes scrollable so the remaining content stays reachable.
-3. The panel is a scroll container **only** while a disclosure is open (`:has(.studio-services__disclosure[open])`), and scroll chaining stays at its default. Both matter: a permanently-scrollable panel captures wheel gestures that belong to the pin, and `overscroll-behavior: contain` swallows them outright, freezing service advancement.
 
 ## CONSTRAINTS
 
 - Phone path (`< 768px`) only. Tablet 768–1023 keeps the existing pinned stack frame.
-- Inactive pinned panels carry `inert`, because the card variant puts tabbable `<summary>` elements in every panel and focusable nodes must not sit inside `aria-hidden`.
+- Inactive pinned panels carry `inert`: each panel holds a focusable CTA link, and focusable nodes must not sit inside `aria-hidden`.
 - Image: reuse `service.stackImages[0]` (front layer, already the maroon-card photo). `object-fit: cover`, `object-position: 50% 45%`, `sizes="100vw"`.
-- Section title repeats on every card visually, but only card 01 uses a real `<h2>`; cards 02–04 render it as `<p aria-hidden="true">` to keep one heading in the outline.
-- Accordions: native `<details>/<summary>`, both closed initially, **exclusive** — a shared `name` per service makes the two rows a radio group, so opening one closes the other and the composition stays inside the pinned frame. Browsers without `name` support degrade to independent toggling. Inline chevron SVG (no chevron asset exists), rotated 180° on open. No height animation (Figma specifies only the two static states).
-- Mode gate becomes three-way (`cards | scroll | static`), initialised to `cards` so phones SSR their final markup. Crossing `768px` must revert the GSAP context and remove the pin-spacer.
+- Section title appears **once**, in a `.studio-services__cards-intro` header above the list, as the section's single `<h2>`. It is not repeated per card (the earlier per-card repetition, with cards 02–04 as `<p aria-hidden>`, was rejected by the designer).
+- Accordions: native `<details>/<summary>`, both closed initially, **exclusive** — a shared `name` per service makes the two rows a radio group, so opening one closes the other. Browsers without `name` support degrade to independent toggling. Inline chevron SVG (no chevron asset exists), rotated 180° on open. No height animation (Figma specifies only the two static states).
+- Mode gate is three-way (`cards | scroll | static`), initialised to `cards` so phones SSR their final markup. Crossing `768px` downward must revert the GSAP context and remove the pin-spacer.
 - No Payload schema or copy changes. No new image exports. No desktop/tablet layout changes. No `Button` changes (`variant="primary"` stays).
 
 ## FILE TOUCH LIST

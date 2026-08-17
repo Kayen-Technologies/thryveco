@@ -6,41 +6,23 @@ import StudioServiceDisclosure from "@/components/studio/StudioServiceDisclosure
 
 type StudioServiceCardProps = Readonly<{
   service: StudioServiceDefault;
-  sectionTitle: string;
   underlineSrc: string;
   bulletSrc: string;
   index: number;
-  /* Pinned mode renders the title and label once in the shared header, where
-     they already sit at the position every Figma frame draws them. */
-  showHeading?: boolean;
 }>;
 
 export default function StudioServiceCard({
   service,
-  sectionTitle,
   underlineSrc,
   bulletSrc,
   index,
-  showHeading = true,
 }: StudioServiceCardProps) {
   const heroImage = service.stackImages[0];
-  const isFirst = index === 0;
   const disclosureGroup = `studio-service-disclosure-${index}`;
 
   return (
     <article className="studio-services__card">
-      {showHeading ? (
-        <>
-          {isFirst ? (
-            <h2 className="studio-services__title">{sectionTitle}</h2>
-          ) : (
-            <p className="studio-services__title" aria-hidden="true">
-              {sectionTitle}
-            </p>
-          )}
-          <p className="studio-services__label">{service.serviceLabel}</p>
-        </>
-      ) : null}
+      <p className="studio-services__label">{service.serviceLabel}</p>
 
       <div className="studio-services__display-title-wrap">
         <p className="studio-services__display-title">

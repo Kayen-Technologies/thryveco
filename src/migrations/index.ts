@@ -59,6 +59,7 @@ import * as migration_20260808_233500_update_contact_service_options from './202
 import * as migration_20260810_130000_purple_square_gallery_videos from './20260810_130000_purple_square_gallery_videos';
 import * as migration_20260810_133000_naya_moments_gallery_videos from './20260810_133000_naya_moments_gallery_videos';
 import * as migration_20260810_140000_mya_art_workshop_gallery_videos from './20260810_140000_mya_art_workshop_gallery_videos';
+import * as migration_20260817_183000_unify_cta_label_book_a_discovery_call from './20260817_183000_unify_cta_label_book_a_discovery_call';
 
 export const migrations = [
   {
@@ -360,5 +361,10 @@ export const migrations = [
     up: migration_20260810_140000_mya_art_workshop_gallery_videos.up,
     down: migration_20260810_140000_mya_art_workshop_gallery_videos.down,
     name: '20260810_140000_mya_art_workshop_gallery_videos'
+  },
+  {
+    up: migration_20260817_183000_unify_cta_label_book_a_discovery_call.up,
+    down: migration_20260817_183000_unify_cta_label_book_a_discovery_call.down,
+    name: '20260817_183000_unify_cta_label_book_a_discovery_call'
   },
 ];

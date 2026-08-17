@@ -88,8 +88,7 @@ export default function Navbar({ site, variant = "light", currentPath }: NavbarP
   const overlayVariant = isOverlayNav ? "light" : variant;
   // Contact sits on cream under the nav — charcoal links, not light-on-dark.
   const effectiveVariant = isContactPage ? "dark" : overlayVariant;
-  const bookingLabel =
-    isOverlayNav && !isContactPage ? "Book a Call" : site.bookingLabel;
+  const bookingLabel = site.bookingLabel;
   // The solid bar is burgundy over whatever is scrolling past, so the
   // per-route colours stop applying and everything goes light.
   const textColor =

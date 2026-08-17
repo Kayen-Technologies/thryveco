@@ -11,21 +11,18 @@ import type { StudioServiceDefault } from "@/components/studio/defaults";
 import StudioServiceCard from "@/components/studio/StudioServiceCard";
 import StudioServiceStack from "@/components/studio/StudioServiceStack";
 
-/* "scroll-cards" is the phone pinned path: same crossfade as "scroll", but each
-   panel holds the card composition (single image + disclosures) instead of the
-   desktop stack layout. */
-type StudioServicesMode = "cards" | "scroll-cards" | "scroll" | "static";
+/* Phones always get "cards": services stacked in normal document flow. The
+   pinned crossfade is tablet-up only, with "static" as its reduced-motion
+   fallback. */
+type StudioServicesMode = "cards" | "scroll" | "static";
 
 /* Panel children the crossfade timeline staggers. Queried as one list so DOM
-   order drives the stagger and each variant contributes only what it renders. */
+   order drives the stagger. */
 const PANEL_ANIM_SELECTOR = [
   ".studio-services__display-title-wrap",
   ".studio-services__description",
   ".studio-services__includes",
   ".studio-services__cta-wrap",
-  ".studio-services__card-media",
-  ".studio-services__card-cta",
-  ".studio-services__disclosure",
 ].join(",");
 
 if (typeof window !== "undefined") {
@@ -119,25 +116,25 @@ export default function StudioServices({
   }, []);
 
   useEffect(() => {
-    // Motion allowed: pinned crossfade at every width, with the card
-    // composition on phones and the stack layout tablet-up. Reduced motion
-    // falls back to unpinned flow: cards on phones, the static grid tablet-up.
+    // Phones get the stacked list. Tablet-up keeps the pinned crossfade, or the
+    // static grid when motion is reduced.
     const widthMq = window.matchMedia("(min-width: 768px)");
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+    const resolveMode = (): StudioServicesMode => {
+      if (!widthMq.matches) {
+        return "cards";
+      }
+      return motionMq.matches ? "static" : "scroll";
+    };
+
     const update = () => {
-      const isTabletUp = widthMq.matches;
-      const next: StudioServicesMode = motionMq.matches
-        ? isTabletUp
-          ? "static"
-          : "cards"
-        : isTabletUp
-          ? "scroll"
-          : "scroll-cards";
-      // Leaving a pinned mode must drop the pin so no orphaned pin-spacer
-      // survives; swapping between the two pinned variants also needs a rebuild
-      // because the animated children differ.
-      killGsap();
+      const next = resolveMode();
+      // Leaving scroll mode (e.g. resizing below 768) must drop the pin so no
+      // orphaned pin-spacer survives.
+      if (next !== "scroll") {
+        killGsap();
+      }
       setMode(next);
     };
 
@@ -153,8 +150,7 @@ export default function StudioServices({
   }, [killGsap]);
 
   useLayoutEffect(() => {
-    const isPinned = mode === "scroll" || mode === "scroll-cards";
-    if (!isPinned || !sectionRef.current || !trackRef.current || !frameRef.current || services.length < 2) {
+    if (mode !== "scroll" || !sectionRef.current || !trackRef.current || !frameRef.current || services.length < 2) {
       return;
     }
 
@@ -335,11 +331,14 @@ export default function StudioServices({
   if (mode === "cards") {
     return (
       <section className="studio-services studio-services--cards" ref={sectionRef}>
+        <Reveal className="studio-services__cards-intro">
+          <h2 className="studio-services__title">{sectionTitle}</h2>
+        </Reveal>
+
         {services.map((service, index) => (
           <StudioServiceCard
             key={service.serviceLabel}
             service={service}
-            sectionTitle={sectionTitle}
             underlineSrc={underlineSrc}
             bulletSrc={bulletSrc}
             index={index}
@@ -368,13 +367,9 @@ export default function StudioServices({
     );
   }
 
-  const isCardVariant = mode === "scroll-cards";
-
   return (
     <section
-      className={`studio-services ${
-        isCardVariant ? "studio-services--scroll studio-services--scroll-cards" : "studio-services--scroll"
-      }`}
+      className="studio-services studio-services--scroll"
       ref={sectionRef}
       style={{ "--studio-service-count": services.length } as CSSProperties}
     >
@@ -398,24 +393,13 @@ export default function StudioServices({
                 }}
                 className="studio-services__panel"
                 aria-hidden={index !== activeIndex}
-                // The card variant puts tabbable <summary> elements in every
-                // panel; inert keeps the hidden ones out of the tab order
-                // instead of leaving focusable nodes inside aria-hidden.
+                // Each panel holds a focusable CTA link, so inert keeps the
+                // hidden ones out of the tab order instead of leaving focusable
+                // nodes inside aria-hidden.
                 inert={index !== activeIndex}
                 id={`studio-service-panel-${index}`}
               >
-                {isCardVariant ? (
-                  <StudioServiceCard
-                    service={service}
-                    sectionTitle={sectionTitle}
-                    underlineSrc={underlineSrc}
-                    bulletSrc={bulletSrc}
-                    index={index}
-                    showHeading={false}
-                  />
-                ) : (
-                  <ServicePanel service={service} underlineSrc={underlineSrc} bulletSrc={bulletSrc} />
-                )}
+                <ServicePanel service={service} underlineSrc={underlineSrc} bulletSrc={bulletSrc} />
               </div>
             ))}
           </div>
