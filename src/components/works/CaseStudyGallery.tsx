@@ -21,10 +21,12 @@ export default function CaseStudyGallery({ images }: CaseStudyGalleryProps) {
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes="(min-width: 1200px) 534px, (min-width: 768px) 50vw, 100vw"
+                sizes="(min-width: 1200px) 534px, 50vw"
                 className="case-study-gallery__image"
               />
-              {image.videoSrc ? <CaseStudyGalleryVideo src={image.videoSrc} /> : null}
+              {image.videoSrc ? (
+                <CaseStudyGalleryVideo src={image.videoSrc} label={image.alt} />
+              ) : null}
             </figure>
           ))}
         </div>

@@ -35,7 +35,7 @@ export default function CaseStudyTextSection({
                   src={image.src}
                   alt={image.alt}
                   fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
+                  sizes="50vw"
                   className="case-study-section__figure-image"
                 />
               </figure>

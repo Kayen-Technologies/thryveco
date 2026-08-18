@@ -62,6 +62,8 @@ import * as migration_20260810_140000_mya_art_workshop_gallery_videos from './20
 import * as migration_20260817_183000_unify_cta_label_book_a_discovery_call from './20260817_183000_unify_cta_label_book_a_discovery_call';
 import * as migration_20260817_223800_refresh_studio_svc02_front_image from './20260817_223800_refresh_studio_svc02_front_image';
 import * as migration_20260817_224400_refresh_studio_svc03_front_image from './20260817_224400_refresh_studio_svc03_front_image';
+import * as migration_20260818_123900_refresh_psi_gallery_video_audio from './20260818_123900_refresh_psi_gallery_video_audio';
+import * as migration_20260818_124500_refresh_naya_mya_gallery_video_audio from './20260818_124500_refresh_naya_mya_gallery_video_audio';
 
 export const migrations = [
   {
@@ -378,5 +380,15 @@ export const migrations = [
     up: migration_20260817_224400_refresh_studio_svc03_front_image.up,
     down: migration_20260817_224400_refresh_studio_svc03_front_image.down,
     name: '20260817_224400_refresh_studio_svc03_front_image'
+  },
+  {
+    up: migration_20260818_123900_refresh_psi_gallery_video_audio.up,
+    down: migration_20260818_123900_refresh_psi_gallery_video_audio.down,
+    name: '20260818_123900_refresh_psi_gallery_video_audio'
+  },
+  {
+    up: migration_20260818_124500_refresh_naya_mya_gallery_video_audio.up,
+    down: migration_20260818_124500_refresh_naya_mya_gallery_video_audio.down,
+    name: '20260818_124500_refresh_naya_mya_gallery_video_audio'
   },
 ];

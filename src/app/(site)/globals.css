@@ -54,10 +54,10 @@
     calc(var(--spacing-nav-h) + 1.5rem),
     clamp(9rem, 28vw, 11rem)
   );
-  --text-section: clamp(3rem, 4vw, 3.5rem);
-  --text-intro-heading: 3.5rem; /* 56px — Figma intro headline */
+  --text-section: clamp(2rem, 4vw, 2.5rem);
+  --text-intro-heading: 2.5rem; /* 40px — section / intro headline */
   --text-quote: clamp(2.5rem, 6vw, 5.5rem);
-  --text-marquee: clamp(3.5rem, 12vw, 12.5rem);
+  --text-marquee: clamp(2.5rem, 12vw, 12.5rem);
   --text-marquee-desktop: 12.5rem; /* 200px — Figma marquee word */
   --marquee-height: clamp(
     420px,
@@ -516,7 +516,7 @@ h6 {
 
 .home-intro__headline {
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 5vw, var(--text-intro-heading));
+  font-size: clamp(2rem, 5vw, var(--text-intro-heading));
   font-weight: 400;
   letter-spacing: var(--tracking-heading);
   line-height: 1.2;
@@ -1274,7 +1274,7 @@ h6 {
 .final-cta__headline {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+  font-size: 2.5rem;
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: 0.02em;
@@ -1723,11 +1723,11 @@ h6 {
 
   .about-hero__headline {
     max-width: 559px;
-    font-size: clamp(3.5rem, 7vw, 6.25rem);
+    font-size: clamp(2.5rem, 7vw, 6.25rem);
   }
 
   .about-hero__tagline {
-    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-size: clamp(2rem, 4.5vw, 2.5rem);
   }
 }
 
@@ -1747,7 +1747,7 @@ h6 {
 
   .about-hero__headline {
     max-width: 559px;
-    font-size: clamp(3.5rem, 7vw, var(--text-hero-desktop));
+    font-size: clamp(2.5rem, 7vw, var(--text-hero-desktop));
   }
 
   .about-hero__tagline {
@@ -1842,7 +1842,7 @@ h6 {
   }
 
   .about-meet__name {
-    font-size: clamp(3.5rem, 7vw, 5rem);
+    font-size: clamp(2.5rem, 7vw, 5rem);
   }
 
   .about-meet__collage {
@@ -1945,7 +1945,7 @@ h6 {
   }
 
   .about-meet__name {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
 
   .about-meet__collage {
@@ -2512,7 +2512,7 @@ h6 {
 .journal-entries__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-size: clamp(2.25rem, 6vw, 2.5rem);
   font-weight: 400;
   line-height: 1;
   color: var(--color-text);
@@ -2647,7 +2647,7 @@ h6 {
 
 @media (min-width: 1024px) {
   .journal-entries__title {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
 
   .journal-entry-card__body {
@@ -2751,7 +2751,7 @@ h6 {
 .journal-article-hero__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-size: clamp(2.25rem, 6vw, 2.5rem);
   font-weight: 400;
   line-height: 1;
   letter-spacing: var(--tracking-heading);
@@ -2935,7 +2935,7 @@ h6 {
 
 @media (min-width: 1024px) {
   .journal-article-hero__title {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
 
   .journal-article-body__heading,
@@ -3263,7 +3263,7 @@ h6 {
 .works-portfolio__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-size: 2.5rem;
   font-weight: 400;
   line-height: 1.2;
   text-align: center;
@@ -3560,7 +3560,7 @@ html:has(.works-page) {
 .case-study-hero__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-size: 2.5rem;
   font-weight: 400;
   line-height: 1;
   letter-spacing: var(--tracking-heading);
@@ -3794,6 +3794,44 @@ html:has(.works-page) {
   opacity: 1;
 }
 
+/* Sits above the absolutely filled video and still. Dark scrim rather than a
+   flat fill because it lands on both bright interiors and near-black frames. */
+.case-study-gallery__sound {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(20, 8, 10, 0.55);
+  color: #ffffff;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: background 0.25s ease;
+}
+
+.case-study-gallery__sound:hover {
+  background: rgba(20, 8, 10, 0.82);
+}
+
+.case-study-gallery__sound:focus-visible {
+  background: rgba(20, 8, 10, 0.82);
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.case-study-gallery__sound svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
 .case-study-quote {
   position: relative;
   padding: 6.25rem clamp(1.5rem, 12vw, 12.5rem);
@@ -3894,6 +3932,41 @@ html:has(.works-page) {
   .case-study-gallery__figure:nth-child(4n + 2),
   .case-study-gallery__figure:nth-child(4n + 3) {
     grid-row: auto;
+  }
+}
+
+/* Two-up on phones for both the section pairs and the gallery. Half a phone's
+   width against the 400px height above would crop these to a ~0.4 sliver, so a
+   single portrait ratio drives every tile here — which also flattens the
+   gallery's mixed landscape/portrait ratios into one even grid. Must follow the
+   max-width:1023 rule it overrides. */
+@media (max-width: 767px) {
+  .case-study-section__images,
+  .case-study-gallery__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .case-study-section__figure,
+  .case-study-gallery__figure,
+  .case-study-gallery__figure:nth-child(4n + 2),
+  .case-study-gallery__figure:nth-child(4n + 3) {
+    aspect-ratio: 2 / 3;
+    height: auto;
+  }
+
+  /* Half-width tiles, so the control tucks in tighter without dropping below a
+     comfortable touch target. */
+  .case-study-gallery__sound {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .case-study-gallery__sound svg {
+    width: 1rem;
+    height: 1rem;
   }
 }
 
@@ -4057,7 +4130,7 @@ html:has(.works-page) {
 .studio-services__title {
   margin: 0 0 1.5rem;
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-size: clamp(2.25rem, 6vw, 2.5rem);
   font-weight: 400;
   line-height: 1;
   color: var(--color-text);
@@ -4665,7 +4738,7 @@ html:has(.works-page) {
 .studio-how__title {
   margin: 0 0 clamp(2rem, 5vw, 3.5rem);
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 400;
   line-height: 1;
   color: var(--color-text);
@@ -4777,47 +4850,57 @@ html:has(.works-page) {
   .studio-how__title {
     margin-bottom: clamp(1.25rem, 3vh, 2.5rem);
     padding-inline: var(--spacing-container-x-mobile);
-    font-size: 3.5rem;
+    font-size: 40px;
     text-align: center;
   }
 
-  /* Pack panel, photo and pills together and let the leftover screen height
-     fall below them, rather than opening a gap between photo and pills. */
+  /* Two-up split with the numbers beneath: the burgundy copy card and the step
+     photo share a row inside the gutter, pills span the full width below. */
   .studio-how__layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-content: start;
-    gap: 0;
+    column-gap: 16px;
+    row-gap: clamp(1.25rem, 3vh, 2.5rem);
+    padding-inline: var(--spacing-container-x-mobile);
   }
 
   .studio-how__panel {
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: center;
     gap: 0;
     min-height: 0;
-    padding: clamp(2rem, 5vh, 5rem) 24px;
+    padding: 24px 16px;
     text-align: center;
   }
 
   .studio-how__copy {
     align-items: center;
-    gap: 24px;
+    gap: 16px;
   }
 
+  /* Half-width column, so the display size has to come down or "Discovery"
+     alone overruns the card. */
   .studio-how__step-title {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
   }
 
-  /* Needs a definite height: the step photos are absolutely positioned fills,
-     so an auto height collapses the box to zero. Scales with the viewport so
-     the stack keeps landing inside one screen. */
+  .studio-how__step-description {
+    font-size: 0.9375rem;
+  }
+
   .studio-how__media {
-    margin-top: 24px;
-    min-height: 0;
-    height: clamp(11rem, 32vh, 20rem);
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
   }
 
   /* Six 64px pills on an 88px pitch run past the gutter, so the strip scrolls
      and the clipped pill is the affordance — as drawn. */
   .studio-how__steps {
-    margin-top: clamp(1.25rem, 3vh, 2.5rem);
-    padding-inline: var(--spacing-container-x-mobile);
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 0;
     flex-wrap: nowrap;
     gap: 24px;
     overflow-x: auto;
@@ -4925,6 +5008,31 @@ html:has(.works-page) {
   }
 }
 
+/* The phone composition is content-led rather than viewport-led. Keeping the
+   shared 100dvh rule here made the compact two-column layout absorb hundreds
+   of pixels of empty space below the pills. */
+@media (max-width: 767px) {
+  .studio-how__inner {
+    height: auto;
+    max-height: none;
+  }
+
+  .studio-how__layout {
+    flex: none;
+  }
+
+  /* Must sit after the max-width:1023 reset above, which zeroes this min-height.
+     The floor is the drawn crop derived from the column width (two columns plus
+     a 16px gutter each side and a 16px gap), and stretch takes the photo the
+     rest of the way when a longer step title makes the burgundy card taller.
+     A plain aspect-ratio would beat stretch and leave the photo short. */
+  .studio-how__media {
+    align-self: stretch;
+    height: auto;
+    min-height: calc((100vw - 3rem) / 2 * 1.75);
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .studio-how {
     --studio-how-panel-pad-y: clamp(2rem, 6vh, 5rem);
@@ -4989,7 +5097,7 @@ html:has(.works-page) {
   }
 
   .studio-hero__headline {
-    font-size: clamp(3.5rem, 7vw, var(--text-hero-desktop));
+    font-size: clamp(2.5rem, 7vw, var(--text-hero-desktop));
   }
 
   .studio-services--scroll {
@@ -5015,7 +5123,7 @@ html:has(.works-page) {
 
   .studio-services--scroll .studio-services__title {
     margin-bottom: 1.5rem;
-    font-size: clamp(2rem, 5vh, 3.5rem);
+    font-size: clamp(2rem, 5vh, 2.5rem);
   }
 
   .studio-services--scroll .studio-services__label {
@@ -5195,7 +5303,7 @@ html:has(.works-page) {
 
   .studio-how__title {
     margin-bottom: clamp(1rem, 2.5vh, 2.5rem);
-    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    font-size: clamp(2.25rem, 4vw, 2.5rem);
   }
 
   .studio-how__layout {

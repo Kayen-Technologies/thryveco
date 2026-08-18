@@ -21,9 +21,9 @@ export const fonts = {
 
 export const typography = {
   hero:    "clamp(2.75rem, 8vw, 6.25rem)",
-  section: "clamp(2rem, 4vw, 3.5rem)",
+  section: "clamp(2rem, 4vw, 2.5rem)",
   quote:   "clamp(2.5rem, 6vw, 5.5rem)",
-  marquee: "clamp(3.5rem, 12vw, 12.5rem)",
+  marquee: "clamp(2.5rem, 12vw, 12.5rem)",
   body:    "1rem",
   lead:    "1.25rem",
   leadingSection: 1.15,
