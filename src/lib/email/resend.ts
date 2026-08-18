@@ -17,14 +17,21 @@ export function getResendClient(): Resend {
 }
 
 export function getContactToEmail(): string {
-  return process.env.CONTACT_TO_EMAIL ?? "hello@thryve&co.agency";
+  return process.env.CONTACT_TO_EMAIL ?? "hello@thryveco.agency";
 }
 
 export function getContactFromEmail(): string {
-  return (
-    process.env.CONTACT_FROM_EMAIL ??
-    "Thryve Co. <onboarding@resend.dev>"
-  );
+  const from = process.env.CONTACT_FROM_EMAIL;
+
+  // No resend.dev fallback: it silently downgrades sends to sandbox mode,
+  // which only delivers to the Resend account owner.
+  if (!from) {
+    throw new Error(
+      "CONTACT_FROM_EMAIL is not configured. Set it to an address on a domain verified in Resend.",
+    );
+  }
+
+  return from;
 }
 
 export function escapeHtml(value: string): string {
